@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "doesh",
+    "name": "Доешь",
     "slug": "doesh",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "scheme": "doesh",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "bundleIdentifier": "com.doesh.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +17,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.doesh.app"
     },
     "web": {
       "output": "static",
@@ -31,6 +32,16 @@
           "backgroundColor": "#208AEF",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
+        }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "«Доешь» слушает микрофон, чтобы вы могли продиктовать продукты вместо ручного ввода.",
+          "speechRecognitionPermission": "«Доешь» распознаёт речь, чтобы превратить надиктованный список в продукты холодильника.",
+          "androidSpeechServicePackages": [
+            "com.google.android.googlequicksearchbox"
+          ]
         }
       ]
     ],
