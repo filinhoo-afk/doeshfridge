@@ -119,6 +119,15 @@ describe('parseSpeech', () => {
     ]);
   });
 
+  it('считает «палки» и «куски» штуками, а не граммами по умолчанию', () => {
+    expect(parseSpeech('три палки колбасы').items).toEqual([
+      { ingredientId: 'sausage', quantity: 3, unit: 'шт' },
+    ]);
+    expect(parseSpeech('два куска сыра').items).toEqual([
+      { ingredientId: 'cheese', quantity: 2, unit: 'шт' },
+    ]);
+  });
+
   it('не падает на пустой строке', () => {
     expect(parseSpeech('')).toEqual({ items: [], unrecognized: [] });
     expect(parseSpeech('   ...   ')).toEqual({ items: [], unrecognized: [] });

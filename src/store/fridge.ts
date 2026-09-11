@@ -4,15 +4,22 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { isPantry, type Unit } from '@/data/ingredients';
 import type { Recipe } from '@/data/recipes';
-import { defaultExpiryDate } from '@/data/shelf-life';
+import {
+  addBatch,
+  consume,
+  removeBatch,
+  setExpiry,
+  setQuantity,
+  type Batch,
+} from '@/lib/batches';
 
 export type FridgeItem = {
   id: string;
   ingredientId: string;
-  quantity: number | null;
+  /** Одна единица на все партии: складывать граммы со штуками нельзя. */
   unit: Unit | null;
-  addedAt: string;
-  expiresAt: string | null;
+  /** Не бывает пустым: вместе с последней партией уходит и продукт. */
+  batches: Batch[];
 };
 
 /** Позиция до попадания в холодильник: с экрана распознавания или из поиска. */
@@ -27,15 +34,61 @@ type FridgeState = {
   assumePantry: boolean;
   hydrated: boolean;
   addItems: (drafts: DraftItem[]) => void;
-  updateItem: (id: string, patch: Partial<Pick<FridgeItem, 'quantity' | 'unit' | 'expiresAt'>>) => void;
+  /** Срок на `count` единиц партии; меньше всей партии — отделяет их в новую. */
+  setBatchExpiry: (
+    itemId: string,
+    batchId: string,
+    expiresAt: string | null,
+    count: number | null,
+  ) => void;
+  setBatchQuantity: (itemId: string, batchId: string, quantity: number | null) => void;
+  addItemBatch: (itemId: string, quantity: number, expiresAt: string | null) => void;
+  removeItemBatch: (itemId: string, batchId: string) => void;
   removeItem: (id: string) => void;
   consumeRecipe: (recipe: Recipe) => void;
   clearAll: () => void;
   setAssumePantry: (value: boolean) => void;
 };
 
+type PersistedFridge = Pick<FridgeState, 'items' | 'assumePantry'>;
+
 function createId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+/** Меняет партии одного продукта; продукт без партий удаляется. */
+function updateBatches(
+  items: FridgeItem[],
+  itemId: string,
+  update: (batches: Batch[]) => Batch[],
+): FridgeItem[] {
+  return items.flatMap((item) => {
+    if (item.id !== itemId) {
+      return [item];
+    }
+    const batches = update(item.batches);
+    return batches.length > 0 ? [{ ...item, batches }] : [];
+  });
+}
+
+/**
+ * Докладывает купленное к продукту. Новое приходит без срока — пользователь
+ * укажет его сам, если захочет, — поэтому прибавляется к бессрочной партии.
+ * Количество в других единицах сложить нельзя: тогда продукт не меняется.
+ */
+function absorbDraft(item: FridgeItem, draft: DraftItem): FridgeItem {
+  const unit = item.unit ?? draft.unit;
+  if (draft.quantity === null) {
+    return { ...item, unit };
+  }
+  if (item.unit !== null && draft.unit !== null && item.unit !== draft.unit) {
+    return item;
+  }
+  return {
+    ...item,
+    unit,
+    batches: addBatch(item.batches, { id: createId(), quantity: draft.quantity, expiresAt: null }),
+  };
 }
 
 /**
@@ -55,6 +108,34 @@ export function itemsUsedByRecipe(recipe: Recipe, items: FridgeItem[]): FridgeIt
   return items.filter((item) => required.has(item.ingredientId));
 }
 
+type LegacyItem = {
+  id: string;
+  ingredientId: string;
+  quantity: number | null;
+  unit: Unit | null;
+};
+
+/**
+ * Версия 0 хранила у продукта одно количество и один срок, угаданный по
+ * категории. Срок отбрасывается: пользователь его не вводил, а новое правило —
+ * «без срока, пока не указан». Количество переезжает в единственную партию.
+ */
+export function migrateFridge(persisted: unknown, version: number): PersistedFridge {
+  const state = (persisted ?? {}) as Partial<PersistedFridge> & { items?: unknown[] };
+  if (version >= 1) {
+    return { items: (state.items ?? []) as FridgeItem[], assumePantry: state.assumePantry ?? true };
+  }
+  return {
+    assumePantry: state.assumePantry ?? true,
+    items: ((state.items ?? []) as LegacyItem[]).map((item) => ({
+      id: item.id,
+      ingredientId: item.ingredientId,
+      unit: item.unit,
+      batches: [{ id: createId(), quantity: item.quantity, expiresAt: null }],
+    })),
+  };
+}
+
 export const useFridge = create<FridgeState>()(
   persist(
     (set) => ({
@@ -64,46 +145,49 @@ export const useFridge = create<FridgeState>()(
 
       addItems: (drafts) =>
         set((state) => {
-          const items = [...state.items];
+          let items = [...state.items];
 
           for (const draft of drafts) {
-            const index = items.findIndex((item) => item.ingredientId === draft.ingredientId);
-
-            if (index === -1) {
+            const existing = items.find((item) => item.ingredientId === draft.ingredientId);
+            if (existing) {
+              items = items.map((item) => (item.id === existing.id ? absorbDraft(item, draft) : item));
+            } else {
               items.push({
                 id: createId(),
                 ingredientId: draft.ingredientId,
-                quantity: draft.quantity,
                 unit: draft.unit,
-                addedAt: new Date().toISOString(),
-                expiresAt: defaultExpiryDate(draft.ingredientId),
+                batches: [{ id: createId(), quantity: draft.quantity, expiresAt: null }],
               });
-              continue;
             }
-
-            // Продукт уже есть: докладываем количество и обновляем срок,
-            // считая, что в холодильник поставили свежую упаковку.
-            const existing = items[index];
-            const sameUnit = existing.unit === draft.unit;
-            const quantity =
-              existing.quantity !== null && draft.quantity !== null && sameUnit
-                ? existing.quantity + draft.quantity
-                : existing.quantity ?? draft.quantity;
-
-            items[index] = {
-              ...existing,
-              quantity,
-              unit: existing.quantity === null ? draft.unit : existing.unit,
-              expiresAt: defaultExpiryDate(draft.ingredientId),
-            };
           }
 
           return { items };
         }),
 
-      updateItem: (id, patch) =>
+      setBatchExpiry: (itemId, batchId, expiresAt, count) =>
         set((state) => ({
-          items: state.items.map((item) => (item.id === id ? { ...item, ...patch } : item)),
+          items: updateBatches(state.items, itemId, (batches) =>
+            setExpiry(batches, batchId, expiresAt, count, createId),
+          ),
+        })),
+
+      setBatchQuantity: (itemId, batchId, quantity) =>
+        set((state) => ({
+          items: updateBatches(state.items, itemId, (batches) =>
+            setQuantity(batches, batchId, quantity),
+          ),
+        })),
+
+      addItemBatch: (itemId, quantity, expiresAt) =>
+        set((state) => ({
+          items: updateBatches(state.items, itemId, (batches) =>
+            addBatch(batches, { id: createId(), quantity, expiresAt }),
+          ),
+        })),
+
+      removeItemBatch: (itemId, batchId) =>
+        set((state) => ({
+          items: updateBatches(state.items, itemId, (batches) => removeBatch(batches, batchId)),
         })),
 
       removeItem: (id) =>
@@ -111,34 +195,27 @@ export const useFridge = create<FridgeState>()(
 
       consumeRecipe: (recipe) =>
         set((state) => {
-          const amountByIngredient = new Map(
+          const used = new Map(
             recipe.ingredients
               .filter((ingredient) => !ingredient.optional && !isPantry(ingredient.ingredientId))
               .map((ingredient) => [ingredient.ingredientId, ingredient]),
           );
 
-          const items: FridgeItem[] = [];
-
-          for (const item of state.items) {
-            const used = amountByIngredient.get(item.ingredientId);
-            if (!used) {
-              items.push(item);
-              continue;
-            }
-
-            // Вычесть можно только когда известны обе величины в одних единицах.
-            // Иначе честнее убрать продукт целиком, чем показывать неверный остаток.
-            if (item.quantity === null || used.amount === undefined || used.unit !== item.unit) {
-              continue;
-            }
-
-            const left = item.quantity - used.amount;
-            if (left > 0) {
-              items.push({ ...item, quantity: left });
-            }
-          }
-
-          return { items };
+          return {
+            items: state.items.flatMap((item) => {
+              const ingredient = used.get(item.ingredientId);
+              if (!ingredient) {
+                return [item];
+              }
+              // Вычесть можно, только когда рецепт меряет в тех же единицах.
+              const amount =
+                ingredient.amount !== undefined && ingredient.unit === item.unit
+                  ? ingredient.amount
+                  : null;
+              const batches = consume(item.batches, amount);
+              return batches.length > 0 ? [{ ...item, batches }] : [];
+            }),
+          };
         }),
 
       clearAll: () => set({ items: [] }),
@@ -147,8 +224,10 @@ export const useFridge = create<FridgeState>()(
     }),
     {
       name: 'doesh-fridge',
+      version: 1,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({ items: state.items, assumePantry: state.assumePantry }),
+      migrate: migrateFridge,
       onRehydrateStorage: () => () => {
         useFridge.setState({ hydrated: true });
       },

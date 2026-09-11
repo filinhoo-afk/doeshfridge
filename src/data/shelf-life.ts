@@ -1,33 +1,45 @@
-import { CATEGORY_ORDER, getIngredient, type Category } from './ingredients';
-
 /**
- * Сроки хранения по умолчанию, в днях после добавления в холодильник.
- * Это подсказка, а не истина: пользователь правит дату вручную.
+ * Сроки годности: сколько дней осталось, как это назвать и как показать дату.
+ *
+ * Сроков по умолчанию нет — продукт хранится бессрочно, пока пользователь сам
+ * не укажет дату. Раньше срок угадывался по категории («молочное — 5 дней»),
+ * но угаданная дата выглядела так же, как настоящая, и только путала.
  */
-const SHELF_LIFE_DAYS: Record<Category, number> = {
-  молочное: 5,
-  мясо: 2,
-  рыба: 2,
-  овощи: 10,
-  зелень: 4,
-  фрукты: 7,
-  крупы: 365,
-  бакалея: 180,
-  заморозка: 90,
-};
-
-/** Базовые продукты (соль, мука, масло) не протухают — срок им не ставим. */
-export function defaultExpiryDate(ingredientId: string, from: Date = new Date()): string | null {
-  const ingredient = getIngredient(ingredientId);
-  if (!ingredient || ingredient.pantry) {
-    return null;
-  }
-  const expires = new Date(from);
-  expires.setDate(expires.getDate() + SHELF_LIFE_DAYS[ingredient.category]);
-  return expires.toISOString();
-}
 
 export type ExpiryStatus = 'expired' | 'soon' | 'ok';
+
+/** До какого запаса срок показывается цветной меткой, дальше — просто датой. */
+const VISIBLE_DAYS = 7;
+
+const MONTHS = [
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
+];
+
+const MONTHS_SHORT = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
+/**
+ * Срок на выбранный календарный день. Время ставится на полдень: полночь при
+ * переводе в UTC и обратно может уехать на соседние сутки.
+ */
+export function expiryOnDate(date: Date): string {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12).toISOString();
+}
+
+/** Срок через `days` дней от сегодня: «Завтра» — 1, «Неделя» — 7. */
+export function expiryInDays(days: number, from: Date = new Date()): string {
+  return expiryOnDate(new Date(from.getFullYear(), from.getMonth(), from.getDate() + days));
+}
 
 /** Целых дней до истечения срока; отрицательное — просрочено. */
 export function daysUntil(isoDate: string, now: Date = new Date()): number {
@@ -53,12 +65,9 @@ export function expiryStatus(isoDate: string | null, now: Date = new Date()): Ex
   return days <= 3 ? 'soon' : 'ok';
 }
 
-/** До какого запаса срок вообще стоит показывать. */
-const VISIBLE_DAYS = 7;
-
 /**
- * Метка срока или `null`, если до конца ещё далеко. Бейдж «ещё 180 дн.» на пачке
- * крупы — шум: метка должна означать «этим стоит заняться».
+ * Метка срока или `null`, если до конца ещё далеко. Цветная метка должна
+ * означать «этим стоит заняться», поэтому дальние сроки показываются датой.
  */
 export function expiryLabel(isoDate: string | null, now: Date = new Date()): string | null {
   if (!isoDate) {
@@ -80,4 +89,13 @@ export function expiryLabel(isoDate: string | null, now: Date = new Date()): str
   return days <= VISIBLE_DAYS ? `ещё ${days} дн.` : null;
 }
 
-export { CATEGORY_ORDER };
+/** «до 26 сентября»; год дописывается, только если он не текущий. */
+export function formatExpiryDate(
+  isoDate: string,
+  { short = false, now = new Date() }: { short?: boolean; now?: Date } = {},
+): string {
+  const date = new Date(isoDate);
+  const month = (short ? MONTHS_SHORT : MONTHS)[date.getMonth()];
+  const year = date.getFullYear() === now.getFullYear() ? '' : ` ${date.getFullYear()}`;
+  return `до ${date.getDate()} ${month}${year}`;
+}

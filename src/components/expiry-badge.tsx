@@ -8,13 +8,15 @@ import { ThemedText } from './themed-text';
 
 type ExpiryBadgeProps = {
   expiresAt: string | null;
+  /** Уточнение перед меткой: «1 шт» → «1 шт истекает завтра». */
+  prefix?: string;
 };
 
 /**
- * Метка срока годности. На подбор рецептов не влияет — только подсказывает,
- * что съесть в первую очередь.
+ * Цветная метка близкого срока. Для дальних сроков и продуктов без срока
+ * ничего не рисует: метка должна означать «этим стоит заняться».
  */
-export function ExpiryBadge({ expiresAt }: ExpiryBadgeProps) {
+export function ExpiryBadge({ expiresAt, prefix }: ExpiryBadgeProps) {
   const theme = useTheme();
   const label = expiryLabel(expiresAt);
 
@@ -32,7 +34,7 @@ export function ExpiryBadge({ expiresAt }: ExpiryBadgeProps) {
   return (
     <View style={[styles.badge, { backgroundColor: palette.background }]}>
       <ThemedText type="small" style={[styles.label, { color: palette.text }]}>
-        {label}
+        {prefix ? `${prefix} ${label}` : label}
       </ThemedText>
     </View>
   );

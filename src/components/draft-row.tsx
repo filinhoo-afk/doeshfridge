@@ -1,12 +1,13 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { getIngredient, ingredientName, type Unit } from '@/data/ingredients';
+import { getIngredient, ingredientName } from '@/data/ingredients';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { formatQuantity } from '@/lib/format';
+import { formatQuantity, quantityStep } from '@/lib/format';
 import type { DraftItem } from '@/store/fridge';
 
+import { StepperButton } from './stepper-button';
 import { ThemedText } from './themed-text';
 
 type DraftRowProps = {
@@ -15,15 +16,10 @@ type DraftRowProps = {
   onRemove: () => void;
 };
 
-/** Шаг изменения количества: штуки по одной, вес и объём — по 50. */
-function stepFor(unit: Unit | null): number {
-  return unit === 'г' || unit === 'мл' ? 50 : 1;
-}
-
 export function DraftRow({ draft, onChange, onRemove }: DraftRowProps) {
   const theme = useTheme();
   const unit = draft.unit ?? getIngredient(draft.ingredientId)?.defaultUnit ?? null;
-  const step = stepFor(unit);
+  const step = quantityStep(unit);
 
   const change = (delta: number) => {
     // Первое нажатие «+» задаёт количество продукту, добавленному без него.
@@ -60,29 +56,6 @@ export function DraftRow({ draft, onChange, onRemove }: DraftRowProps) {
   );
 }
 
-function StepperButton({
-  icon,
-  onPress,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  onPress: () => void;
-}) {
-  const theme = useTheme();
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      hitSlop={Spacing.two}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.stepperButton,
-        { backgroundColor: theme.backgroundSelected, opacity: pressed ? 0.6 : 1 },
-      ]}>
-      <Ionicons name={icon} size={16} color={theme.text} />
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
@@ -101,13 +74,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
-  },
-  stepperButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   quantity: {
     minWidth: 58,

@@ -21,6 +21,11 @@ function formatNumber(value: number): string {
   return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace('.', ',');
 }
 
+/** Шаг изменения количества: штуки по одной, вес и объём — по 50. */
+export function quantityStep(unit: Unit | null): number {
+  return unit === 'г' || unit === 'мл' ? 50 : 1;
+}
+
 /** «25 минут» с правильным окончанием. */
 export function formatMinutes(minutes: number): string {
   return `${minutes} ${plural(minutes, 'минута', 'минуты', 'минут')}`;

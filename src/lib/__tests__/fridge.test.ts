@@ -1,5 +1,7 @@
 import { getRecipe, type Recipe } from '@/data/recipes';
-import { itemsUsedByRecipe, useFridge, type FridgeItem } from '@/store/fridge';
+import { expiryInDays } from '@/data/shelf-life';
+import { sortByExpiry, totalQuantity } from '@/lib/batches';
+import { itemsUsedByRecipe, migrateFridge, useFridge, type FridgeItem } from '@/store/fridge';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   // eslint-disable-next-line @typescript-eslint/no-require-imports -- штатный способ подменить нативный модуль в jest
@@ -14,14 +16,20 @@ function recipe(id: string): Recipe {
   return found;
 }
 
-function quantityOf(ingredientId: string): number | null | undefined {
-  return useFridge
-    .getState()
-    .items.find((item: FridgeItem) => item.ingredientId === ingredientId)?.quantity;
+function item(ingredientId: string): FridgeItem | undefined {
+  return useFridge.getState().items.find((candidate) => candidate.ingredientId === ingredientId);
 }
 
-function has(ingredientId: string): boolean {
-  return useFridge.getState().items.some((item) => item.ingredientId === ingredientId);
+function total(ingredientId: string): number | null | undefined {
+  const found = item(ingredientId);
+  return found ? totalQuantity(found.batches) : undefined;
+}
+
+/** Ставит срок на `count` единиц бессрочной партии продукта. */
+function dateSome(ingredientId: string, days: number, count: number | null) {
+  const found = item(ingredientId)!;
+  const undated = found.batches.find((batch) => batch.expiresAt === null)!;
+  useFridge.getState().setBatchExpiry(found.id, undated.id, expiryInDays(days), count);
 }
 
 beforeEach(() => {
@@ -29,12 +37,21 @@ beforeEach(() => {
 });
 
 describe('addItems', () => {
-  it('складывает количество, когда продукт уже лежит в холодильнике', () => {
+  it('кладёт новый продукт одной партией без срока', () => {
+    useFridge.getState().addItems([{ ingredientId: 'milk', quantity: 900, unit: 'мл' }]);
+
+    expect(item('milk')?.batches).toEqual([
+      expect.objectContaining({ quantity: 900, expiresAt: null }),
+    ]);
+  });
+
+  it('складывает количество в бессрочную партию', () => {
     useFridge.getState().addItems([{ ingredientId: 'egg', quantity: 3, unit: 'шт' }]);
     useFridge.getState().addItems([{ ingredientId: 'egg', quantity: 2, unit: 'шт' }]);
 
     expect(useFridge.getState().items).toHaveLength(1);
-    expect(quantityOf('egg')).toBe(5);
+    expect(item('egg')?.batches).toHaveLength(1);
+    expect(total('egg')).toBe(5);
   });
 
   it('не плодит дубликаты при добавлении без количества', () => {
@@ -42,18 +59,37 @@ describe('addItems', () => {
     useFridge.getState().addItems([{ ingredientId: 'milk', quantity: 500, unit: 'мл' }]);
 
     expect(useFridge.getState().items).toHaveLength(1);
-    expect(quantityOf('milk')).toBe(500);
+    expect(total('milk')).toBe(500);
   });
 
-  it('проставляет срок годности скоропортящимся и не проставляет базовым', () => {
-    useFridge.getState().addItems([
-      { ingredientId: 'milk', quantity: null, unit: null },
-      { ingredientId: 'salt', quantity: null, unit: null },
-    ]);
+  it('не трогает партии со сроком: докупленное ложится отдельно, без срока', () => {
+    useFridge.getState().addItems([{ ingredientId: 'sausage', quantity: 1, unit: 'шт' }]);
+    dateSome('sausage', 1, null);
+    useFridge.getState().addItems([{ ingredientId: 'sausage', quantity: 2, unit: 'шт' }]);
 
-    const items = useFridge.getState().items;
-    expect(items.find((item) => item.ingredientId === 'milk')?.expiresAt).not.toBeNull();
-    expect(items.find((item) => item.ingredientId === 'salt')?.expiresAt).toBeNull();
+    const batches = sortByExpiry(item('sausage')!.batches);
+    expect(batches.map((batch) => [batch.quantity, batch.expiresAt !== null])).toEqual([
+      [1, true],
+      [2, false],
+    ]);
+  });
+});
+
+describe('setBatchExpiry', () => {
+  it('раскладывает три палки колбасы по трём срокам', () => {
+    useFridge.getState().addItems([{ ingredientId: 'sausage', quantity: 3, unit: 'шт' }]);
+    dateSome('sausage', 1, 1);
+    dateSome('sausage', 15, 1);
+    dateSome('sausage', 30, null);
+
+    const batches = sortByExpiry(item('sausage')!.batches);
+    expect(batches.map((batch) => batch.quantity)).toEqual([1, 1, 1]);
+    expect(batches.map((batch) => batch.expiresAt)).toEqual([
+      expiryInDays(1),
+      expiryInDays(15),
+      expiryInDays(30),
+    ]);
+    expect(total('sausage')).toBe(3);
   });
 });
 
@@ -63,14 +99,32 @@ describe('consumeRecipe', () => {
     useFridge.getState().addItems([{ ingredientId: 'egg', quantity: 10, unit: 'шт' }]);
     useFridge.getState().consumeRecipe(recipe('omlet'));
 
-    expect(quantityOf('egg')).toBe(6);
+    expect(total('egg')).toBe(6);
   });
 
   it('убирает продукт, когда он израсходован полностью', () => {
     useFridge.getState().addItems([{ ingredientId: 'egg', quantity: 4, unit: 'шт' }]);
     useFridge.getState().consumeRecipe(recipe('omlet'));
 
-    expect(has('egg')).toBe(false);
+    expect(item('egg')).toBeUndefined();
+  });
+
+  it('сначала расходует то, что испортится раньше', () => {
+    useFridge.getState().addItems([{ ingredientId: 'egg', quantity: 10, unit: 'шт' }]);
+    dateSome('egg', 1, 2);
+    useFridge.getState().consumeRecipe(recipe('omlet'));
+
+    // Два завтрашних яйца съедены первыми, из бессрочных взяли ещё два.
+    expect(item('egg')!.batches).toEqual([expect.objectContaining({ quantity: 6, expiresAt: null })]);
+  });
+
+  it('при несовпадении единиц убирает только ближайшую партию', () => {
+    // Оливье меряет колбасу в граммах, а в холодильнике она в штуках.
+    useFridge.getState().addItems([{ ingredientId: 'sausage', quantity: 3, unit: 'шт' }]);
+    dateSome('sausage', 1, 1);
+    useFridge.getState().consumeRecipe(recipe('olivie'));
+
+    expect(item('sausage')!.batches).toEqual([expect.objectContaining({ quantity: 2, expiresAt: null })]);
   });
 
   it('не трогает базовые продукты — их расход рецептами не указан', () => {
@@ -82,8 +136,8 @@ describe('consumeRecipe', () => {
     ]);
     useFridge.getState().consumeRecipe(recipe('sharlotka'));
 
-    expect(quantityOf('flour')).toBe(1000);
-    expect(quantityOf('apple')).toBe(2);
+    expect(total('flour')).toBe(1000);
+    expect(total('apple')).toBe(2);
   });
 
   it('не трогает продукты не из рецепта', () => {
@@ -93,7 +147,51 @@ describe('consumeRecipe', () => {
     ]);
     useFridge.getState().consumeRecipe(recipe('omlet'));
 
-    expect(quantityOf('buckwheat')).toBe(500);
+    expect(total('buckwheat')).toBe(500);
+  });
+});
+
+describe('migrateFridge', () => {
+  it('переносит количество в партию и сбрасывает угаданный срок', () => {
+    const migrated = migrateFridge(
+      {
+        assumePantry: false,
+        items: [
+          {
+            id: 'x',
+            ingredientId: 'milk',
+            quantity: 900,
+            unit: 'мл',
+            addedAt: '2026-09-10T10:00:00.000Z',
+            expiresAt: '2026-09-15T10:00:00.000Z',
+          },
+        ],
+      },
+      0,
+    );
+
+    expect(migrated.assumePantry).toBe(false);
+    expect(migrated.items).toEqual([
+      {
+        id: 'x',
+        ingredientId: 'milk',
+        unit: 'мл',
+        batches: [expect.objectContaining({ quantity: 900, expiresAt: null })],
+      },
+    ]);
+  });
+
+  it('не трогает данные новой версии', () => {
+    const current = {
+      assumePantry: true,
+      items: [{ id: 'x', ingredientId: 'egg', unit: 'шт', batches: [{ id: 'b', quantity: 2, expiresAt: null }] }],
+    };
+
+    expect(migrateFridge(current, 1)).toEqual(current);
+  });
+
+  it('переживает пустое хранилище', () => {
+    expect(migrateFridge(undefined, 0)).toEqual({ assumePantry: true, items: [] });
   });
 });
 
@@ -106,7 +204,7 @@ describe('itemsUsedByRecipe', () => {
     ]);
 
     const used = itemsUsedByRecipe(recipe('sharlotka'), useFridge.getState().items).map(
-      (item) => item.ingredientId,
+      (candidate) => candidate.ingredientId,
     );
 
     expect(used).toEqual(expect.arrayContaining(['egg', 'apple']));

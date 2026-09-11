@@ -8,21 +8,24 @@ import { ProductRow } from '@/components/product-row';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { CATEGORY_ORDER, getIngredient, type Category } from '@/data/ingredients';
-import { daysUntil } from '@/data/shelf-life';
 import { useTheme } from '@/hooks/use-theme';
+import { nearestDated } from '@/lib/batches';
 import { formatProducts } from '@/lib/format';
 import { useFridge, type FridgeItem } from '@/store/fridge';
 
 type Section = { title: Category; data: FridgeItem[] };
 
-/** Внутри категории — сначала то, что испортится раньше. */
+/** Внутри категории — сначала то, что испортится раньше, бессрочное в конце. */
 function byExpiry(a: FridgeItem, b: FridgeItem): number {
-  if (a.expiresAt && b.expiresAt) {
-    return daysUntil(a.expiresAt) - daysUntil(b.expiresAt);
+  const first = nearestDated(a.batches)?.expiresAt ?? null;
+  const second = nearestDated(b.batches)?.expiresAt ?? null;
+  if (first && second) {
+    return first.localeCompare(second);
   }
-  if (a.expiresAt) return -1;
-  if (b.expiresAt) return 1;
-  return 0;
+  if (first) {
+    return -1;
+  }
+  return second ? 1 : 0;
 }
 
 function groupByCategory(items: FridgeItem[]): Section[] {
@@ -52,7 +55,6 @@ export default function FridgeScreen() {
   const theme = useTheme();
   const items = useFridge((state) => state.items);
   const hydrated = useFridge((state) => state.hydrated);
-  const removeItem = useFridge((state) => state.removeItem);
 
   const sections = useMemo(() => groupByCategory(items), [items]);
 
@@ -86,17 +88,15 @@ export default function FridgeScreen() {
             {section.title.toUpperCase()}
           </ThemedText>
         )}
-        renderItem={({ item }) => <ProductRow item={item} onRemove={removeItem} />}
+        renderItem={({ item }) => (
+          <ProductRow item={item} onPress={(id) => router.push(`/product/${id}`)} />
+        )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
 
       <View
         style={[styles.footer, { backgroundColor: theme.background, borderTopColor: theme.border }]}>
-        <PrimaryButton
-          title="Продиктовать"
-          icon="mic"
-          onPress={() => router.push('/voice')}
-        />
+        <PrimaryButton title="Продиктовать" icon="mic" onPress={() => router.push('/voice')} />
       </View>
     </View>
   );

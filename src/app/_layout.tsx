@@ -16,6 +16,7 @@ export default function RootLayout() {
             options={{ presentation: 'modal', title: 'Что в холодильнике?' }}
           />
           <Stack.Screen name="recipe/[id]" options={{ title: 'Рецепт' }} />
+          <Stack.Screen name="product/[id]" options={{ title: 'Продукт' }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
