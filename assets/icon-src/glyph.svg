@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Знак «Доешь»: буква «Д», нарисованная как холодильник.
+       Корпус — «П» без нижней перекладины, основание с ножками — нижняя часть «Д».
+       Внутри граница морозилки и ручка двери. Знак белый: фон подкладывает
+       scripts/build-icons.mjs, чтобы один исходник годился для всех иконок. -->
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 83 V31 H84 V83" stroke-width="10"/>
+    <path d="M34 97 V85 H94 V97" stroke-width="10"/>
+    <path d="M44 51 H84" stroke-width="6"/>
+    <path d="M74 59 V73" stroke-width="6"/>
+  </g>
+</svg>
