@@ -89,6 +89,14 @@ export function expiryLabel(isoDate: string | null, now: Date = new Date()): str
   return days <= VISIBLE_DAYS ? `ещё ${days} дн.` : null;
 }
 
+/** «сегодня», «завтра», «через 3 дн.» — для коротких упоминаний срока. */
+export function formatDaysLeft(days: number): string {
+  if (days <= 0) {
+    return 'сегодня';
+  }
+  return days === 1 ? 'завтра' : `через ${days} дн.`;
+}
+
 /** «до 26 сентября»; год дописывается, только если он не текущий. */
 export function formatExpiryDate(
   isoDate: string,

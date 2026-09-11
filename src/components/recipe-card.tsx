@@ -2,10 +2,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ingredientName } from '@/data/ingredients';
+import { formatDaysLeft } from '@/data/shelf-life';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { formatMinutes, formatProducts } from '@/lib/format';
-import type { RecipeMatch } from '@/lib/match';
+import type { RecipeMatch, UrgentIngredient } from '@/lib/match';
 
 import { ThemedText } from './themed-text';
 
@@ -14,9 +15,21 @@ type RecipeCardProps = {
   onPress: (recipeId: string) => void;
 };
 
+/** Сколько срочных продуктов называть по имени, остальные — «и ещё N». */
+const URGENT_SHOWN = 2;
+
+/** «скоро испортится: колбаса — завтра, молоко — через 2 дн.» */
+function urgentLine(urgent: UrgentIngredient[]): string {
+  const shown = urgent
+    .slice(0, URGENT_SHOWN)
+    .map((item) => `${ingredientName(item.ingredientId)} — ${formatDaysLeft(item.days)}`);
+  const rest = urgent.length - shown.length;
+  return `скоро испортится: ${shown.join(', ')}${rest > 0 ? ` и ещё ${rest}` : ''}`;
+}
+
 export function RecipeCard({ match, onPress }: RecipeCardProps) {
   const theme = useTheme();
-  const { recipe, have, missing } = match;
+  const { recipe, have, missing, urgent } = match;
 
   return (
     <Pressable
@@ -46,8 +59,17 @@ export function RecipeCard({ match, onPress }: RecipeCardProps) {
         </View>
       </View>
 
+      {urgent.length > 0 ? (
+        <View style={styles.metaItem}>
+          <Ionicons name="hourglass-outline" size={14} color={theme.warning} />
+          <ThemedText type="small" themeColor="warning" style={styles.grow}>
+            {urgentLine(urgent)}
+          </ThemedText>
+        </View>
+      ) : null}
+
       {missing.length > 0 ? (
-        <ThemedText type="small" style={{ color: theme.warning }}>
+        <ThemedText type="small" themeColor="warning">
           не хватает: {missing.map(ingredientName).join(', ')}
         </ThemedText>
       ) : null}
@@ -74,5 +96,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.one,
+  },
+  grow: {
+    flex: 1,
   },
 });

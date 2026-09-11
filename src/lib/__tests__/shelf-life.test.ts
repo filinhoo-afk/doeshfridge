@@ -4,6 +4,7 @@ import {
   expiryLabel,
   expiryOnDate,
   expiryStatus,
+  formatDaysLeft,
   formatExpiryDate,
 } from '@/data/shelf-life';
 
@@ -88,5 +89,13 @@ describe('formatExpiryDate', () => {
 
   it('дописывает год, только если он не текущий', () => {
     expect(formatExpiryDate(local(2027, 1, 3), { now: today })).toBe('до 3 января 2027');
+  });
+});
+
+describe('formatDaysLeft', () => {
+  it('называет срок по-человечески', () => {
+    expect(formatDaysLeft(0)).toBe('сегодня');
+    expect(formatDaysLeft(1)).toBe('завтра');
+    expect(formatDaysLeft(3)).toBe('через 3 дн.');
   });
 });

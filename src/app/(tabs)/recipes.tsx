@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { matchRecipes, type RecipeMatch } from '@/lib/match';
-import { availableIds, useFridge } from '@/store/fridge';
+import { availableIds, expiringSoon, useFridge } from '@/store/fridge';
 
 type Section = { title: string; hint?: string; data: RecipeMatch[] };
 
@@ -20,9 +20,17 @@ export default function RecipesScreen() {
   const hydrated = useFridge((state) => state.hydrated);
 
   const sections = useMemo<Section[]>(() => {
-    const groups = matchRecipes(availableIds(items), { assumePantry });
+    const groups = matchRecipes(availableIds(items), {
+      assumePantry,
+      expiring: expiringSoon(items),
+    });
 
     return [
+      {
+        title: 'Пора доесть',
+        hint: 'Эти рецепты используют то, что скоро испортится',
+        data: groups.urgent,
+      },
       { title: 'Можно готовить сейчас', data: groups.ready },
       { title: 'Не хватает одного', data: groups.missingOne },
       { title: 'Почти получается', data: groups.almost },
@@ -56,9 +64,19 @@ export default function RecipesScreen() {
           )
         }
         renderSectionHeader={({ section }) => (
-          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionHeader}>
-            {section.title.toUpperCase()}
-          </ThemedText>
+          <View style={styles.sectionHeader}>
+            <ThemedText
+              type="smallBold"
+              themeColor={section.hint ? 'warning' : 'textSecondary'}
+              style={styles.sectionTitle}>
+              {section.title.toUpperCase()}
+            </ThemedText>
+            {section.hint ? (
+              <ThemedText type="small" themeColor="textSecondary">
+                {section.hint}
+              </ThemedText>
+            ) : null}
+          </View>
         )}
         renderItem={({ item }) => (
           <RecipeCard match={item} onPress={(id) => router.push(`/recipe/${id}`)} />
@@ -80,6 +98,9 @@ const styles = StyleSheet.create({
   sectionHeader: {
     paddingTop: Spacing.four,
     paddingBottom: Spacing.two,
+    gap: Spacing.half,
+  },
+  sectionTitle: {
     letterSpacing: 0.6,
   },
   separator: {

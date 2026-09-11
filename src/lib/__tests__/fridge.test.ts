@@ -1,7 +1,13 @@
 import { getRecipe, type Recipe } from '@/data/recipes';
 import { expiryInDays } from '@/data/shelf-life';
 import { sortByExpiry, totalQuantity } from '@/lib/batches';
-import { itemsUsedByRecipe, migrateFridge, useFridge, type FridgeItem } from '@/store/fridge';
+import {
+  expiringSoon,
+  itemsUsedByRecipe,
+  migrateFridge,
+  useFridge,
+  type FridgeItem,
+} from '@/store/fridge';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   // eslint-disable-next-line @typescript-eslint/no-require-imports -- штатный способ подменить нативный модуль в jest
@@ -148,6 +154,24 @@ describe('consumeRecipe', () => {
     useFridge.getState().consumeRecipe(recipe('omlet'));
 
     expect(total('buckwheat')).toBe(500);
+  });
+});
+
+describe('expiringSoon', () => {
+  it('берёт ближайший скорый срок и пропускает далёкие, просроченные и бессрочные', () => {
+    useFridge.getState().addItems([
+      { ingredientId: 'sausage', quantity: 3, unit: 'шт' },
+      { ingredientId: 'milk', quantity: 900, unit: 'мл' },
+      { ingredientId: 'cheese', quantity: 200, unit: 'г' },
+      { ingredientId: 'egg', quantity: 10, unit: 'шт' },
+    ]);
+    dateSome('sausage', 2, 1);
+    dateSome('sausage', 1, 1); // ещё ближе — берётся именно этот
+    dateSome('milk', 10, null); // далеко
+    dateSome('cheese', -1, null); // просрочен: не поднимает рецепты
+    // У яиц срока нет вовсе.
+
+    expect([...expiringSoon(useFridge.getState().items).entries()]).toEqual([['sausage', 1]]);
   });
 });
 

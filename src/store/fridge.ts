@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { isPantry, type Unit } from '@/data/ingredients';
 import type { Recipe } from '@/data/recipes';
+import { daysUntil, expiryStatus } from '@/data/shelf-life';
 import {
   addBatch,
   consume,
@@ -242,4 +243,30 @@ export const useFridge = create<FridgeState>()(
  */
 export function availableIds(items: FridgeItem[]): Set<string> {
   return new Set(items.map((item) => item.ingredientId));
+}
+
+/**
+ * Что скоро испортится: id продукта → дней до ближайшего срока. Порог тот же,
+ * что у жёлтой метки в холодильнике: что там подсвечено, то и поднимает рецепты.
+ *
+ * Просроченное сюда не попадает: приложение не должно подталкивать готовить
+ * из испорченного. Как и `availableIds`, оборачивайте в `useMemo` по `items`.
+ */
+export function expiringSoon(items: FridgeItem[], now: Date = new Date()): Map<string, number> {
+  const result = new Map<string, number>();
+
+  for (const item of items) {
+    for (const batch of item.batches) {
+      if (!batch.expiresAt || expiryStatus(batch.expiresAt, now) !== 'soon') {
+        continue;
+      }
+      const days = daysUntil(batch.expiresAt, now);
+      const nearest = result.get(item.ingredientId);
+      if (nearest === undefined || days < nearest) {
+        result.set(item.ingredientId, days);
+      }
+    }
+  }
+
+  return result;
 }
