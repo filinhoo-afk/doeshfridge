@@ -41,6 +41,11 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# фото блюд: листы для выбора кандидатов и свои исходники (в них бывает GPS в EXIF);
+# в репозиторий попадают только готовые webp из assets/recipes без метаданных
+.photo-review/
+scripts/photos/own/
+
 example
 
 # generated native folders

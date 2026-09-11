@@ -8,6 +8,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { formatMinutes, formatProducts } from '@/lib/format';
 import type { RecipeMatch, UrgentIngredient } from '@/lib/match';
 
+import { RecipeThumb } from './recipe-photo';
 import { ThemedText } from './themed-text';
 
 type RecipeCardProps = {
@@ -43,15 +44,20 @@ export function RecipeCard({ match, onPress, favorite = false, note }: RecipeCar
         styles.card,
         { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },
       ]}>
-      <View style={styles.titleRow}>
-        <ThemedText style={[styles.title, styles.grow]}>{recipe.title}</ThemedText>
-        {favorite ? (
-          <Ionicons name="heart" size={16} color={theme.accent} accessibilityLabel="В избранном" />
-        ) : null}
+      <View style={styles.top}>
+        <RecipeThumb recipeId={recipe.id} />
+        <View style={[styles.body, styles.grow]}>
+          <View style={styles.titleRow}>
+            <ThemedText style={[styles.title, styles.grow]}>{recipe.title}</ThemedText>
+            {favorite ? (
+              <Ionicons name="heart" size={16} color={theme.accent} accessibilityLabel="В избранном" />
+            ) : null}
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {recipe.description}
+          </ThemedText>
+        </View>
       </View>
-      <ThemedText type="small" themeColor="textSecondary">
-        {recipe.description}
-      </ThemedText>
 
       <View style={styles.meta}>
         <View style={styles.metaItem}>
@@ -99,6 +105,13 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     borderRadius: Spacing.three,
     padding: Spacing.three,
+  },
+  top: {
+    flexDirection: 'row',
+    gap: Spacing.three,
+  },
+  body: {
+    gap: Spacing.one,
   },
   titleRow: {
     flexDirection: 'row',

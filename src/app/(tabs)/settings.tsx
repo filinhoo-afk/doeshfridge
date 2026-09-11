@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, AppState, Linking, ScrollView, StyleSheet, Switch, View } from 'react-native';
 
@@ -5,6 +6,7 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { INGREDIENTS } from '@/data/ingredients';
+import { RECIPE_PHOTOS } from '@/data/recipe-photos';
 import { RECIPES } from '@/data/recipes';
 import { useTheme } from '@/hooks/use-theme';
 import { formatProducts } from '@/lib/format';
@@ -20,6 +22,8 @@ import { useFridge } from '@/store/fridge';
 const PANTRY_NAMES = INGREDIENTS.filter((ingredient) => ingredient.pantry)
   .map((ingredient) => ingredient.name)
   .join(', ');
+
+const PHOTO_COUNT = Object.values(RECIPE_PHOTOS).filter((photo) => photo.credit).length;
 
 /** Разрешение на уведомления; перечитывается, когда пользователь возвращается из системных настроек. */
 function useReminderPermission() {
@@ -51,6 +55,7 @@ function useReminderPermission() {
 
 export default function SettingsScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const items = useFridge((state) => state.items);
   const assumePantry = useFridge((state) => state.assumePantry);
   const setAssumePantry = useFridge((state) => state.setAssumePantry);
@@ -167,6 +172,14 @@ export default function SettingsScreen() {
           {RECIPES.length} рецептов и {INGREDIENTS.length} продуктов в справочнике. Всё хранится на
           устройстве: без аккаунта, без интернета, без отправки данных куда-либо.
         </ThemedText>
+        {PHOTO_COUNT > 0 ? (
+          <PrimaryButton
+            title="Авторы фото блюд"
+            icon="images-outline"
+            variant="outline"
+            onPress={() => router.push('/photo-credits')}
+          />
+        ) : null}
       </View>
 
       <PrimaryButton

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/primary-button';
+import { RecipeHero } from '@/components/recipe-photo';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { ingredientName, isPantry } from '@/data/ingredients';
@@ -98,6 +99,7 @@ export default function RecipeScreen() {
       <ScrollView
         style={{ backgroundColor: theme.background }}
         contentContainerStyle={styles.content}>
+        <RecipeHero recipeId={recipe.id} />
         <View style={styles.header}>
           <ThemedText type="subtitle">{recipe.title}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
@@ -108,6 +110,15 @@ export default function RecipeScreen() {
             <MetaItem icon="people-outline" text={formatServings(recipe.servings)} />
           </View>
         </View>
+
+        {recipe.equipment?.length ? (
+          <View style={styles.section}>
+            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
+              ПОНАДОБИТСЯ
+            </ThemedText>
+            <ThemedText>{recipe.equipment.join(', ')}</ThemedText>
+          </View>
+        ) : null}
 
         <View style={styles.section}>
           <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
@@ -141,6 +152,17 @@ export default function RecipeScreen() {
           })}
         </View>
 
+        {recipe.prep?.length ? (
+          <View style={styles.section}>
+            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
+              ПОДГОТОВКА
+            </ThemedText>
+            {recipe.prep.map((line) => (
+              <ThemedText key={line}>{line}</ThemedText>
+            ))}
+          </View>
+        ) : null}
+
         <View style={styles.section}>
           <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
             ПРИГОТОВЛЕНИЕ
@@ -155,6 +177,20 @@ export default function RecipeScreen() {
             </View>
           ))}
         </View>
+
+        {recipe.tips?.length ? (
+          <View style={styles.section}>
+            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
+              СОВЕТЫ
+            </ThemedText>
+            {recipe.tips.map((tip) => (
+              <View key={tip} style={styles.tipRow}>
+                <ThemedText themeColor="accent">•</ThemedText>
+                <ThemedText style={styles.stepText}>{tip}</ThemedText>
+              </View>
+            ))}
+          </View>
+        ) : null}
 
         <PrimaryButton title="Приготовил" icon="checkmark-done" onPress={confirmCooked} />
       </ScrollView>
@@ -223,6 +259,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tipRow: {
+    flexDirection: 'row',
+    gap: Spacing.two,
   },
   stepText: {
     flex: 1,

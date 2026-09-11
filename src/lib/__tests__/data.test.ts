@@ -59,3 +59,16 @@ describe('база рецептов', () => {
     }
   });
 });
+
+describe('подробные рецепты', () => {
+  it('у каждого рецепта есть посуда, не меньше 4 шагов и советы', () => {
+    for (const recipe of RECIPES) {
+      expect({
+        id: recipe.id,
+        equipment: (recipe.equipment ?? []).length > 0,
+        steps: recipe.steps.length >= 4,
+        tips: (recipe.tips ?? []).length > 0,
+      }).toEqual({ id: recipe.id, equipment: true, steps: true, tips: true });
+    }
+  });
+});

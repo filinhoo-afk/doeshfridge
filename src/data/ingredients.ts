@@ -59,6 +59,8 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'mozzarella', name: 'моцарелла', forms: ['моцареллы', 'моцареллу'], category: 'молочное', defaultUnit: 'г' },
   { id: 'parmesan', name: 'пармезан', forms: ['пармезана', 'пармезаном'], category: 'молочное', defaultUnit: 'г' },
   { id: 'cream_cheese', name: 'творожный сыр', forms: ['творожного сыра', 'крем сыр', 'сливочный сыр'], category: 'молочное', defaultUnit: 'г' },
+  { id: 'suluguni', name: 'сулугуни', forms: ['сыр сулугуни', 'адыгейский сыр', 'адыгейского сыра'], category: 'молочное', defaultUnit: 'г' },
+  { id: 'processed_cheese', name: 'плавленый сыр', forms: ['плавленого сыра', 'плавленый сырок', 'плавленые сырки', 'сырок', 'сырки'], category: 'молочное', defaultUnit: 'г' },
   { id: 'butter', name: 'сливочное масло', forms: ['сливочного масла', 'масло сливочное', 'сливочным маслом'], category: 'молочное', defaultUnit: 'г' },
   { id: 'condensed_milk', name: 'сгущёнка', forms: ['сгущенка', 'сгущенки', 'сгущенное молоко'], category: 'молочное', defaultUnit: 'г' },
   { id: 'egg', name: 'яйца', forms: ['яйцо', 'яиц', 'яйцам', 'яйцами', 'яичко', 'яички'], category: 'молочное', defaultUnit: 'шт' },
@@ -76,6 +78,9 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'sausage', name: 'колбаса', forms: ['колбасы', 'колбасу', 'колбаска'], category: 'мясо', defaultUnit: 'г' },
   { id: 'ham', name: 'ветчина', forms: ['ветчины', 'ветчину'], category: 'мясо', defaultUnit: 'г' },
   { id: 'liver', name: 'печень', forms: ['печени', 'печенка', 'куриная печень'], category: 'мясо', defaultUnit: 'г' },
+  { id: 'lamb', name: 'баранина', forms: ['баранины', 'баранину', 'ягненок', 'ягнятина'], category: 'мясо', defaultUnit: 'г' },
+  { id: 'chicken_wings', name: 'куриные крылья', forms: ['крылья', 'крыльев', 'крылышки', 'куриные крылышки'], category: 'мясо', defaultUnit: 'г' },
+  { id: 'salo', name: 'сало', forms: ['сала', 'шпик', 'шпика'], category: 'мясо', defaultUnit: 'г' },
 
   // ── Рыба ──────────────────────────────────────────────────────────────────
   { id: 'fish', name: 'рыба', forms: ['рыбы', 'рыбу', 'рыбное филе', 'филе рыбы'], category: 'рыба', defaultUnit: 'г' },
@@ -85,6 +90,10 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'herring', name: 'селёдка', forms: ['селедка', 'селедки', 'сельдь', 'сельди'], category: 'рыба', defaultUnit: 'шт' },
   { id: 'shrimp', name: 'креветки', forms: ['креветок', 'креветками', 'креветка'], category: 'рыба', defaultUnit: 'г' },
   { id: 'crab_sticks', name: 'крабовые палочки', forms: ['крабовых палочек', 'крабовым палочкам'], category: 'рыба', defaultUnit: 'уп' },
+  { id: 'mackerel', name: 'скумбрия', forms: ['скумбрии', 'скумбрию'], category: 'рыба', defaultUnit: 'г' },
+  { id: 'squid', name: 'кальмары', forms: ['кальмар', 'кальмаров', 'кальмара'], category: 'рыба', defaultUnit: 'г' },
+  { id: 'mussels', name: 'мидии', forms: ['мидий', 'мидиями'], category: 'рыба', defaultUnit: 'г' },
+  { id: 'canned_fish', name: 'рыбные консервы', forms: ['рыбных консервов', 'сайра', 'сайры', 'шпроты', 'шпрот', 'горбуша в собственном соку'], category: 'рыба', defaultUnit: 'уп' },
 
   // ── Овощи ─────────────────────────────────────────────────────────────────
   { id: 'potato', name: 'картофель', forms: ['картошка', 'картошки', 'картошку', 'картофеля', 'картофелина', 'картоха'], category: 'овощи', defaultUnit: 'г' },
@@ -114,6 +123,12 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'ginger', name: 'имбирь', forms: ['имбиря', 'имбирем', 'корень имбиря'], category: 'овощи', defaultUnit: 'г' },
   { id: 'olives', name: 'оливки', forms: ['оливок', 'маслины', 'маслин'], category: 'овощи', defaultUnit: 'уп' },
   { id: 'pickles', name: 'солёные огурцы', forms: ['соленые огурцы', 'соленых огурцов', 'маринованные огурцы', 'корнишоны'], category: 'овощи', defaultUnit: 'шт' },
+  { id: 'sauerkraut', name: 'квашеная капуста', forms: ['квашеной капусты', 'квашеную капусту', 'кислая капуста', 'кислой капусты'], category: 'овощи', defaultUnit: 'г' },
+  { id: 'chinese_cabbage', name: 'пекинская капуста', forms: ['пекинской капусты', 'пекинку', 'пекинка'], category: 'овощи', defaultUnit: 'шт' },
+  { id: 'leek', name: 'лук-порей', forms: ['порей', 'порея', 'лука порея'], category: 'овощи', defaultUnit: 'шт' },
+  { id: 'sweet_potato', name: 'батат', forms: ['батата', 'бататы', 'сладкий картофель'], category: 'овощи', defaultUnit: 'г' },
+  { id: 'green_beans', name: 'стручковая фасоль', forms: ['стручковой фасоли', 'спаржевая фасоль', 'зеленая фасоль'], category: 'овощи', defaultUnit: 'г' },
+  { id: 'tofu', name: 'тофу', forms: ['соевый сыр'], category: 'овощи', defaultUnit: 'г' },
 
   // ── Зелень ────────────────────────────────────────────────────────────────
   { id: 'dill', name: 'укроп', forms: ['укропа', 'укропом'], category: 'зелень', defaultUnit: 'уп' },
@@ -123,6 +138,7 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'lettuce', name: 'листья салата', forms: ['салат', 'салата', 'салатные листья', 'айсберг', 'латук', 'руккола'], category: 'зелень', defaultUnit: 'уп' },
   { id: 'spinach', name: 'шпинат', forms: ['шпината', 'шпинатом'], category: 'зелень', defaultUnit: 'г' },
   { id: 'mint', name: 'мята', forms: ['мяты', 'мяту'], category: 'зелень', defaultUnit: 'уп' },
+  { id: 'sorrel', name: 'щавель', forms: ['щавеля', 'щавелем'], category: 'зелень', defaultUnit: 'уп' },
 
   // ── Фрукты ────────────────────────────────────────────────────────────────
   { id: 'apple', name: 'яблоки', forms: ['яблоко', 'яблок', 'яблочко'], category: 'фрукты', defaultUnit: 'шт' },
@@ -136,6 +152,10 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'berries', name: 'ягоды', forms: ['ягод', 'ягодами', 'замороженные ягоды', 'смородина', 'малина', 'черника'], category: 'фрукты', defaultUnit: 'г' },
   { id: 'raisins', name: 'изюм', forms: ['изюма', 'изюмом'], category: 'фрукты', defaultUnit: 'г' },
   { id: 'nuts', name: 'орехи', forms: ['орехов', 'орех', 'грецкие орехи', 'грецких орехов', 'миндаль', 'фундук', 'арахис'], category: 'фрукты', defaultUnit: 'г' },
+  { id: 'prunes', name: 'чернослив', forms: ['чернослива', 'черносливом'], category: 'фрукты', defaultUnit: 'г' },
+  { id: 'dried_apricots', name: 'курага', forms: ['кураги', 'курагу', 'курагой'], category: 'фрукты', defaultUnit: 'г' },
+  { id: 'pineapple', name: 'ананасы', forms: ['ананас', 'ананаса', 'ананасов', 'консервированные ананасы'], category: 'фрукты', defaultUnit: 'уп' },
+  { id: 'pomegranate', name: 'гранат', forms: ['граната', 'гранатовые зерна', 'зерна граната'], category: 'фрукты', defaultUnit: 'шт' },
 
   // ── Крупы и макароны ──────────────────────────────────────────────────────
   { id: 'rice', name: 'рис', forms: ['риса', 'рисом', 'рисовая крупа'], category: 'крупы', defaultUnit: 'г' },
@@ -148,6 +168,10 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'bulgur', name: 'булгур', forms: ['булгура'], category: 'крупы', defaultUnit: 'г' },
   { id: 'lentils', name: 'чечевица', forms: ['чечевицы', 'чечевицу'], category: 'крупы', defaultUnit: 'г' },
   { id: 'semolina', name: 'манка', forms: ['манки', 'манная крупа'], category: 'крупы', defaultUnit: 'г' },
+  { id: 'chickpeas', name: 'нут', forms: ['нута', 'нутом', 'турецкий горох'], category: 'крупы', defaultUnit: 'г' },
+  { id: 'split_peas', name: 'горох', forms: ['гороха', 'колотый горох', 'горох колотый'], category: 'крупы', defaultUnit: 'г' },
+  { id: 'quinoa', name: 'киноа', forms: ['кинои'], category: 'крупы', defaultUnit: 'г' },
+  { id: 'rice_noodles', name: 'рисовая лапша', forms: ['рисовой лапши', 'фунчоза', 'фунчозы', 'лапша удон', 'удон', 'гречневая лапша', 'лапша соба'], category: 'крупы', defaultUnit: 'г' },
 
   // ── Бакалея ───────────────────────────────────────────────────────────────
   { id: 'bread', name: 'хлеб', forms: ['хлеба', 'батон', 'батона', 'багет', 'булка', 'тост', 'тосты'], category: 'бакалея', defaultUnit: 'шт' },
@@ -168,6 +192,10 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'gelatin', name: 'желатин', forms: ['желатина'], category: 'бакалея', defaultUnit: 'г' },
   { id: 'tea', name: 'чай', forms: ['чая', 'заварка'], category: 'бакалея', defaultUnit: 'уп' },
   { id: 'coffee', name: 'кофе', forms: [], category: 'бакалея', defaultUnit: 'г' },
+  { id: 'coconut_milk', name: 'кокосовое молоко', forms: ['кокосового молока', 'кокосовые сливки'], category: 'бакалея', defaultUnit: 'мл' },
+  { id: 'sesame', name: 'кунжут', forms: ['кунжута', 'семена кунжута'], category: 'бакалея', defaultUnit: 'г' },
+  { id: 'starch', name: 'крахмал', forms: ['крахмала', 'картофельный крахмал', 'кукурузный крахмал'], category: 'бакалея', defaultUnit: 'г' },
+  { id: 'kvass', name: 'квас', forms: ['кваса', 'квасом'], category: 'бакалея', defaultUnit: 'мл' },
 
   // ── Бакалея, базовые (pantry) ─────────────────────────────────────────────
   { id: 'salt', name: 'соль', forms: ['соли', 'солью'], category: 'бакалея', defaultUnit: 'г', pantry: true },
@@ -185,6 +213,9 @@ export const INGREDIENTS: Ingredient[] = [
   { id: 'cinnamon', name: 'корица', forms: ['корицы', 'корицей'], category: 'бакалея', defaultUnit: 'г', pantry: true },
   { id: 'vanilla', name: 'ванилин', forms: ['ванильный сахар', 'ваниль'], category: 'бакалея', defaultUnit: 'г', pantry: true },
   { id: 'herbs', name: 'сушёные травы', forms: ['прованские травы', 'сушеные травы', 'орегано', 'тимьян', 'розмарин', 'итальянские травы'], category: 'бакалея', defaultUnit: 'г', pantry: true },
+  { id: 'cumin', name: 'зира', forms: ['зиры', 'кумин', 'тмин'], category: 'бакалея', defaultUnit: 'г', pantry: true },
+  { id: 'turmeric', name: 'куркума', forms: ['куркумы'], category: 'бакалея', defaultUnit: 'г', pantry: true },
+  { id: 'khmeli_suneli', name: 'хмели-сунели', forms: ['хмели сунели', 'уцхо сунели'], category: 'бакалея', defaultUnit: 'г', pantry: true },
 
   // ── Заморозка ─────────────────────────────────────────────────────────────
   { id: 'frozen_veg', name: 'замороженные овощи', forms: ['овощная смесь', 'замороженных овощей', 'мексиканская смесь'], category: 'заморозка', defaultUnit: 'г' },

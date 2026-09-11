@@ -1,0 +1,619 @@
+{
+  "omlet": {
+    "title": "Омлет",
+    "queries": [
+      "omelette plate",
+      "omelette"
+    ],
+    "file": "File:Omelette-Plate.jpg"
+  },
+  "yaichnica_pomidory": {
+    "title": "Яичница с помидорами",
+    "queries": [
+      "fried eggs tomatoes",
+      "eggs with tomatoes pan"
+    ],
+    "file": "File:Hunan cuisine, stir-fried tomato with eggs.jpg"
+  },
+  "syrniki": {
+    "title": "Сырники",
+    "queries": [
+      "syrniki"
+    ],
+    "file": "File:Syrniki6.jpg"
+  },
+  "ovsyanka": {
+    "title": "Овсянка на молоке",
+    "queries": [
+      "oatmeal porridge bowl",
+      "porridge oats"
+    ],
+    "file": "File:Oatmeal porridge 1-minute with additional ingredients.jpg"
+  },
+  "tvorog_yagody": {
+    "title": "Творог с ягодами",
+    "queries": [
+      "cottage cheese berries",
+      "tvorog berries"
+    ],
+    "file": "File:Summer Desert (176103799).jpeg"
+  },
+  "bliny": {
+    "title": "Блины",
+    "queries": [
+      "blini",
+      "russian pancakes"
+    ],
+    "file": "File:50 блінкоў на талерцы 240 мм.jpg"
+  },
+  "oladi_kefir": {
+    "title": "Оладьи на кефире",
+    "queries": [
+      "oladyi",
+      "oladi pancakes"
+    ],
+    "file": "File:ОладкиУкраїнські.jpg"
+  },
+  "grenki": {
+    "title": "Сладкие гренки",
+    "queries": [
+      "french toast"
+    ],
+    "file": "File:French toast 001.jpg"
+  },
+  "tost_avokado": {
+    "title": "Тост с авокадо",
+    "queries": [
+      "avocado toast egg",
+      "avocado toast"
+    ],
+    "file": "File:Avocado toast with eggs (28508171495).jpg"
+  },
+  "yogurt_granola": {
+    "title": "Йогурт с овсянкой",
+    "queries": [
+      "yogurt granola",
+      "yogurt oats honey"
+    ],
+    "file": "File:Granola, yogurt, fruit. (16696981528).jpg"
+  },
+  "borsch": {
+    "title": "Борщ",
+    "queries": [
+      "borscht",
+      "borsch"
+    ],
+    "file": "File:Borscht served.jpg"
+  },
+  "shchi": {
+    "title": "Щи",
+    "queries": [
+      "shchi",
+      "cabbage soup russian"
+    ],
+    "file": "File:Shchi.jpg"
+  },
+  "kurinyi_sup": {
+    "title": "Куриный суп с лапшой",
+    "queries": [
+      "chicken noodle soup"
+    ],
+    "file": "File:Chicken Noodle Soup US.jpg"
+  },
+  "gribnoy_sup": {
+    "title": "Грибной суп",
+    "queries": [
+      "mushroom cream soup",
+      "mushroom soup"
+    ],
+    "file": "File:Cream of mushroom soup.jpg"
+  },
+  "syrnyi_sup": {
+    "title": "Сырный суп",
+    "queries": [
+      "cheese soup chicken",
+      "cheese soup"
+    ],
+    "file": "File:Kremostsuppe (cream cheese soup).jpg"
+  },
+  "rassolnik": {
+    "title": "Рассольник",
+    "queries": [
+      "rassolnik"
+    ],
+    "file": "File:Rassolnik.jpg"
+  },
+  "chechevichnyi_sup": {
+    "title": "Чечевичный суп",
+    "queries": [
+      "red lentil soup",
+      "lentil soup"
+    ],
+    "file": "File:Bowl of lentil soup with green and red lentils.jpg"
+  },
+  "tomatnyi_sup": {
+    "title": "Томатный крем-суп",
+    "queries": [
+      "tomato cream soup",
+      "tomato soup"
+    ],
+    "file": "File:Vegan tomato bisque.jpg"
+  },
+  "uha": {
+    "title": "Уха",
+    "queries": [
+      "ukha",
+      "fish soup russian"
+    ],
+    "file": "File:Уха из осетра 01.jpg"
+  },
+  "okroshka": {
+    "title": "Окрошка",
+    "queries": [
+      "okroshka"
+    ],
+    "file": "File:Окрошка Okroshka 05.jpg"
+  },
+  "kurica_s_kartoshkoy": {
+    "title": "Курица с картошкой",
+    "queries": [
+      "roast chicken potatoes",
+      "baked chicken with potatoes"
+    ],
+    "file": "File:02023 0151 Roasted Chicken and Potatoes.jpg"
+  },
+  "kurica_v_smetane": {
+    "title": "Курица в сметане",
+    "queries": [
+      "chicken sour cream sauce",
+      "chicken in cream sauce"
+    ],
+    "none": true
+  },
+  "kurica_teriyaki": {
+    "title": "Курица в соевом соусе",
+    "queries": [
+      "teriyaki chicken",
+      "chicken soy sauce"
+    ],
+    "file": "File:Chicken teriyaki.jpg"
+  },
+  "kurica_karri": {
+    "title": "Курица карри",
+    "queries": [
+      "chicken curry rice",
+      "chicken curry"
+    ],
+    "file": "File:Friday dinner - Curry chicken with bell peppers and rice - 02.jpg"
+  },
+  "nagetsy": {
+    "title": "Наггетсы",
+    "queries": [
+      "chicken nuggets"
+    ],
+    "file": "File:Chicken Nuggets.jpg"
+  },
+  "plov_kurinyi": {
+    "title": "Плов с курицей",
+    "queries": [
+      "plov chicken",
+      "plov"
+    ],
+    "file": "File:Polu.jpg"
+  },
+  "zhulien": {
+    "title": "Жульен",
+    "queries": [
+      "julienne mushrooms cocotte",
+      "julienne dish mushrooms"
+    ],
+    "file": "File:Julienne 18.jpg"
+  },
+  "kotlety": {
+    "title": "Котлеты",
+    "queries": [
+      "kotlety",
+      "kotleta"
+    ],
+    "file": "File:2023 Kotlety mielone.jpg"
+  },
+  "tefteli": {
+    "title": "Тефтели",
+    "queries": [
+      "meatballs tomato sauce",
+      "tefteli"
+    ],
+    "file": "File:Liat Portal for Foodie Disorder - Meatballs in tomato sauce.jpg"
+  },
+  "makarony_po_flotski": {
+    "title": "Макароны по-флотски",
+    "queries": [
+      "makarony po-flotski",
+      "pasta with minced meat"
+    ],
+    "file": "File:Navy-style 2020-01-30 Макароны «по-флотски».jpg"
+  },
+  "bolognese": {
+    "title": "Болоньезе",
+    "queries": [
+      "spaghetti bolognese"
+    ],
+    "file": "File:Spaghetti Bolognese.jpg"
+  },
+  "lenivye_golubcy": {
+    "title": "Ленивые голубцы",
+    "queries": [
+      "golubtsy",
+      "cabbage rolls"
+    ],
+    "none": true
+  },
+  "gulyash": {
+    "title": "Гуляш",
+    "queries": [
+      "beef goulash",
+      "goulash"
+    ],
+    "file": "File:Goulash hungarian.jpg"
+  },
+  "svinina_v_duhovke": {
+    "title": "Свинина в духовке",
+    "queries": [
+      "roast pork",
+      "baked pork loin"
+    ],
+    "file": "File:Roast Pork with gravy, May 2024.jpg"
+  },
+  "pechen_v_smetane": {
+    "title": "Печень в сметане",
+    "queries": [
+      "liver sour cream",
+      "fried liver onions"
+    ],
+    "file": "File:Fried liver, Erfurt (P1032731).jpg"
+  },
+  "kartofelnaya_zapekanka": {
+    "title": "Картофельная запеканка",
+    "queries": [
+      "cottage pie",
+      "shepherd's pie"
+    ],
+    "file": "File:Shepherds pie - The Kew Greenhouse Cafe 2025-05-14.jpg"
+  },
+  "farshirovannyi_perec": {
+    "title": "Фаршированный перец",
+    "queries": [
+      "stuffed peppers"
+    ],
+    "file": "File:2025.09.02 Stuffed Peppers Paprika in Belarus by Dina Panayotis.jpg"
+  },
+  "losos_v_duhovke": {
+    "title": "Лосось в духовке",
+    "queries": [
+      "baked salmon lemon",
+      "baked salmon"
+    ],
+    "file": "File:Սաղմոն.JPG"
+  },
+  "treska_v_klyare": {
+    "title": "Треска в кляре",
+    "queries": [
+      "battered cod",
+      "fish in batter"
+    ],
+    "file": "File:Beer Battered Cod - The Hummingbird 2026-05-05.jpg"
+  },
+  "ryba_pod_marinadom": {
+    "title": "Рыба под маринадом",
+    "queries": [
+      "ryba pod marinadom",
+      "fish carrot marinade",
+      "fish under marinade"
+    ],
+    "none": true
+  },
+  "krevetki_chesnok": {
+    "title": "Креветки с чесноком",
+    "queries": [
+      "garlic shrimp",
+      "gambas al ajillo"
+    ],
+    "file": "File:Gambas Al Ajillo (Spanish Garlic Shrimp).jpg"
+  },
+  "pasta_tunec": {
+    "title": "Паста с тунцом",
+    "queries": [
+      "tuna pasta tomatoes",
+      "tuna pasta"
+    ],
+    "file": "File:Pasta with tuna & vegetables (5746832862).jpg"
+  },
+  "carbonara": {
+    "title": "Карбонара",
+    "queries": [
+      "spaghetti carbonara"
+    ],
+    "file": "File:Espaguetis carbonara.jpg"
+  },
+  "pasta_slivochnaya": {
+    "title": "Паста в сливочном соусе",
+    "queries": [
+      "pasta cream sauce",
+      "fettuccine alfredo"
+    ],
+    "file": "File:Cream sauce pasta.jpg"
+  },
+  "grechka_s_gribami": {
+    "title": "Гречка с грибами",
+    "queries": [
+      "buckwheat mushrooms",
+      "buckwheat porridge"
+    ],
+    "none": true
+  },
+  "risotto_gribnoe": {
+    "title": "Ризотто с грибами",
+    "queries": [
+      "mushroom risotto"
+    ],
+    "file": "File:Mushroom Risotto (4790048714).jpg"
+  },
+  "plov_ovoshnoy": {
+    "title": "Овощной плов",
+    "queries": [
+      "vegetable pilaf",
+      "vegetarian plov"
+    ],
+    "file": "File:Vegetable pulav.JPG"
+  },
+  "bulgur_ovoshi": {
+    "title": "Булгур с овощами",
+    "queries": [
+      "bulgur vegetables",
+      "bulgur pilaf"
+    ],
+    "file": "File:Child Care Recipes (Team Nutiriton) (20211103-FNS-UNC-6079).jpg"
+  },
+  "kuskus_salat": {
+    "title": "Кускус с фетой",
+    "queries": [
+      "couscous salad feta",
+      "couscous salad"
+    ],
+    "file": "File:Couscous and lentil salad (3658113458).jpg"
+  },
+  "ragu_ovoshnoe": {
+    "title": "Овощное рагу",
+    "queries": [
+      "vegetable stew",
+      "vegetable ragout"
+    ],
+    "file": "File:Irish stew.jpg"
+  },
+  "draniki": {
+    "title": "Драники",
+    "queries": [
+      "draniki",
+      "potato pancakes"
+    ],
+    "file": "File:Frische, selbstgemachte Reibekuchen-8786.jpg"
+  },
+  "kabachkovye_oladi": {
+    "title": "Кабачковые оладьи",
+    "queries": [
+      "zucchini fritters",
+      "zucchini pancakes"
+    ],
+    "file": "File:Zucchini Fritters - Lunch at Yanyali Fehmi Lokantasi (6421047753).jpg"
+  },
+  "ovoshi_v_duhovke": {
+    "title": "Овощи в духовке",
+    "queries": [
+      "roasted vegetables",
+      "roast vegetables tray"
+    ],
+    "file": "File:Roasted Vegetables (2897937502).jpg"
+  },
+  "tushenaya_kapusta": {
+    "title": "Тушёная капуста",
+    "queries": [
+      "braised cabbage",
+      "stewed cabbage"
+    ],
+    "none": true
+  },
+  "pure": {
+    "title": "Картофельное пюре",
+    "queries": [
+      "mashed potatoes"
+    ],
+    "file": "File:Sous vide mashed potatoes.jpg"
+  },
+  "omlet_s_ovoshami": {
+    "title": "Овощной омлет",
+    "queries": [
+      "vegetable omelette",
+      "omelette vegetables"
+    ],
+    "file": "File:Egga (عجة البيض ) (cropped).jpg"
+  },
+  "shakshuka": {
+    "title": "Шакшука",
+    "queries": [
+      "shakshuka"
+    ],
+    "file": "File:Shakshuka by Calliopejen1.jpg"
+  },
+  "tvorozhnaya_zapekanka": {
+    "title": "Творожная запеканка",
+    "queries": [
+      "tvorog zapekanka",
+      "cottage cheese casserole",
+      "zapekanka"
+    ],
+    "file": "File:Recipes cottage cheese pie named misa.jpg"
+  },
+  "griby_zharenye": {
+    "title": "Жареные грибы",
+    "queries": [
+      "fried mushrooms onions",
+      "fried mushrooms"
+    ],
+    "none": true
+  },
+  "olivie": {
+    "title": "Оливье",
+    "queries": [
+      "olivier salad"
+    ],
+    "file": "File:2023 Sałatka jarzynowa (1).jpg"
+  },
+  "vinegret": {
+    "title": "Винегрет",
+    "queries": [
+      "vinegret salad",
+      "beetroot vinaigrette salad"
+    ],
+    "file": "File:Vinaigrette salad.jpg"
+  },
+  "grecheskiy": {
+    "title": "Греческий салат",
+    "queries": [
+      "greek salad"
+    ],
+    "file": "File:Greek Salad Choriatiki.jpg"
+  },
+  "cezar": {
+    "title": "Цезарь",
+    "queries": [
+      "caesar salad chicken",
+      "caesar salad"
+    ],
+    "file": "File:Chicken Caesar salad - Auckland, New Zealand.jpg"
+  },
+  "krabovyi_salat": {
+    "title": "Крабовый салат",
+    "queries": [
+      "crab stick salad",
+      "crab salad corn"
+    ],
+    "none": true
+  },
+  "salat_ogurcy_pomidory": {
+    "title": "Огурцы и помидоры",
+    "queries": [
+      "cucumber tomato salad",
+      "tomato cucumber salad"
+    ],
+    "file": "File:Cucumber onion and tomato salad with mint coriander and lemon.jpg"
+  },
+  "salat_shpinat_avokado": {
+    "title": "Шпинат и авокадо",
+    "queries": [
+      "spinach avocado salad"
+    ],
+    "file": "File:Liat Portal for Foodie Disorder - Healthy Breakfast with Boiled Egg, Avocado, and Israeli Salad.jpg"
+  },
+  "salat_iz_kapusty": {
+    "title": "Капуста с морковью",
+    "queries": [
+      "cabbage carrot salad",
+      "coleslaw"
+    ],
+    "file": "File:Vegetable salad 13.jpg"
+  },
+  "sharlotka": {
+    "title": "Шарлотка",
+    "queries": [
+      "sharlotka",
+      "apple sponge cake"
+    ],
+    "file": "File:Кусні шарлотки.JPG"
+  },
+  "bananovyi_hleb": {
+    "title": "Банановый хлеб",
+    "queries": [
+      "banana bread"
+    ],
+    "file": "File:Banana bread slices.jpg"
+  },
+  "ovsyanoe_pechenye": {
+    "title": "Овсяное печенье",
+    "queries": [
+      "oatmeal cookies",
+      "oat cookies"
+    ],
+    "file": "File:Oatmeal Cookies with orange zest, golden raisins, and chocolate chips.jpg"
+  },
+  "brownie": {
+    "title": "Брауни",
+    "queries": [
+      "chocolate brownie",
+      "brownies"
+    ],
+    "file": "File:Chocolate brownies without table.jpg"
+  },
+  "sloenyi_pirog_yabloki": {
+    "title": "Слоёный пирог с яблоками",
+    "queries": [
+      "apple galette",
+      "apple puff pastry"
+    ],
+    "file": "File:Apple galette (3926990412).jpg"
+  },
+  "blinchiki_s_tvorogom": {
+    "title": "Блинчики с творогом",
+    "queries": [
+      "blintzes",
+      "nalysnyky",
+      "crepes cottage cheese"
+    ],
+    "file": "File:Cooking frozen blintzes in a frying pan.jpg"
+  },
+  "lavash_rulet": {
+    "title": "Рулет из лаваша",
+    "queries": [
+      "lavash roll",
+      "tortilla roll-ups"
+    ],
+    "none": true
+  },
+  "goryachie_buterbrody": {
+    "title": "Горячие бутерброды",
+    "queries": [
+      "open sandwich melted cheese",
+      "hot sandwich cheese ham"
+    ],
+    "file": "File:Tunafish and Emmenthaler cheese sandwich with tomato and black pepper on multigrain toast - Massachusetts.jpg"
+  },
+  "kartofel_po_derevenski": {
+    "title": "Картофель по-деревенски",
+    "queries": [
+      "potato wedges"
+    ],
+    "file": "File:Potato wedges at Mensa Paderborn (11956794164).jpg"
+  },
+  "pelmeni": {
+    "title": "Пельмени",
+    "queries": [
+      "pelmeni"
+    ],
+    "file": "File:Pelmeni Russian.jpg"
+  },
+  "frittata_ostatki": {
+    "title": "Фриттата",
+    "queries": [
+      "frittata potato",
+      "frittata"
+    ],
+    "file": "File:-2019-10-27 Potato & onion frittata, Cromer.JPG"
+  },
+  "ovoshi_wok": {
+    "title": "Овощи вок",
+    "queries": [
+      "vegetable stir fry",
+      "stir fried vegetables"
+    ],
+    "file": "File:Stir Fry Vegetables in Pan - 49826637657.jpg"
+  }
+}
