@@ -3,6 +3,7 @@ import { expiryInDays } from '@/data/shelf-life';
 import { sortByExpiry, totalQuantity } from '@/lib/batches';
 import {
   expiringSoon,
+  expiryDigest,
   itemsUsedByRecipe,
   migrateFridge,
   useFridge,
@@ -175,6 +176,53 @@ describe('expiringSoon', () => {
   });
 });
 
+describe('removeItems и removeExpired', () => {
+  it('удаляет выбранные продукты целиком', () => {
+    useFridge.getState().addItems([
+      { ingredientId: 'egg', quantity: 10, unit: 'шт' },
+      { ingredientId: 'milk', quantity: 900, unit: 'мл' },
+      { ingredientId: 'cheese', quantity: 200, unit: 'г' },
+    ]);
+    useFridge.getState().removeItems([item('egg')!.id, item('milk')!.id]);
+
+    expect(useFridge.getState().items.map((candidate) => candidate.ingredientId)).toEqual(['cheese']);
+  });
+
+  it('выбрасывает только просроченные партии, свежие остаются', () => {
+    useFridge.getState().addItems([
+      { ingredientId: 'sausage', quantity: 3, unit: 'шт' },
+      { ingredientId: 'sour_cream', quantity: 200, unit: 'г' },
+    ]);
+    dateSome('sausage', -1, 1); // одна палка просрочена
+    dateSome('sausage', 5, 1); // одна свежая, ещё одна без срока
+    dateSome('sour_cream', -2, null); // сметана просрочена целиком
+    useFridge.getState().removeExpired();
+
+    expect(total('sausage')).toBe(2);
+    expect(item('sour_cream')).toBeUndefined();
+  });
+});
+
+describe('expiryDigest', () => {
+  it('раскладывает сроки на просроченное и скорое, дальнее пропускает', () => {
+    useFridge.getState().addItems([
+      { ingredientId: 'sausage', quantity: 3, unit: 'шт' },
+      { ingredientId: 'milk', quantity: 900, unit: 'мл' },
+      { ingredientId: 'egg', quantity: 10, unit: 'шт' },
+    ]);
+    dateSome('sausage', -1, 1);
+    dateSome('sausage', 2, 1);
+    dateSome('milk', 10, null); // далеко — не в сводке
+    // У яиц срока нет.
+
+    const { expired, soon } = expiryDigest(useFridge.getState().items);
+    expect(expired.map((entry) => [entry.ingredientId, entry.days, entry.quantity])).toEqual([
+      ['sausage', -1, 1],
+    ]);
+    expect(soon.map((entry) => [entry.ingredientId, entry.days])).toEqual([['sausage', 2]]);
+  });
+});
+
 describe('migrateFridge', () => {
   it('переносит количество в партию и сбрасывает угаданный срок', () => {
     const migrated = migrateFridge(
@@ -211,11 +259,16 @@ describe('migrateFridge', () => {
       items: [{ id: 'x', ingredientId: 'egg', unit: 'шт', batches: [{ id: 'b', quantity: 2, expiresAt: null }] }],
     };
 
-    expect(migrateFridge(current, 1)).toEqual(current);
+    // Напоминания появились позже данных — у старых записей их включает умолчание.
+    expect(migrateFridge(current, 1)).toEqual({ ...current, remindersEnabled: true });
   });
 
   it('переживает пустое хранилище', () => {
-    expect(migrateFridge(undefined, 0)).toEqual({ assumePantry: true, items: [] });
+    expect(migrateFridge(undefined, 0)).toEqual({
+      assumePantry: true,
+      remindersEnabled: true,
+      items: [],
+    });
   });
 });
 

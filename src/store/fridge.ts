@@ -8,6 +8,7 @@ import { daysUntil, expiryStatus } from '@/data/shelf-life';
 import {
   addBatch,
   consume,
+  dropExpired,
   removeBatch,
   setExpiry,
   setQuantity,
@@ -33,6 +34,8 @@ export type DraftItem = {
 type FridgeState = {
   items: FridgeItem[];
   assumePantry: boolean;
+  /** Системные напоминания о сроках: в день срока и наутро после. */
+  remindersEnabled: boolean;
   hydrated: boolean;
   addItems: (drafts: DraftItem[]) => void;
   /** Срок на `count` единиц партии; меньше всей партии — отделяет их в новую. */
@@ -46,12 +49,17 @@ type FridgeState = {
   addItemBatch: (itemId: string, quantity: number, expiresAt: string | null) => void;
   removeItemBatch: (itemId: string, batchId: string) => void;
   removeItem: (id: string) => void;
+  /** Удаляет выбранные продукты целиком, со всеми партиями. */
+  removeItems: (ids: string[]) => void;
+  /** Убирает только просроченные партии; свежие партии тех же продуктов остаются. */
+  removeExpired: () => void;
   consumeRecipe: (recipe: Recipe) => void;
   clearAll: () => void;
   setAssumePantry: (value: boolean) => void;
+  setRemindersEnabled: (value: boolean) => void;
 };
 
-type PersistedFridge = Pick<FridgeState, 'items' | 'assumePantry'>;
+type PersistedFridge = Pick<FridgeState, 'items' | 'assumePantry' | 'remindersEnabled'>;
 
 function createId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -123,11 +131,15 @@ type LegacyItem = {
  */
 export function migrateFridge(persisted: unknown, version: number): PersistedFridge {
   const state = (persisted ?? {}) as Partial<PersistedFridge> & { items?: unknown[] };
+  const settings = {
+    assumePantry: state.assumePantry ?? true,
+    remindersEnabled: state.remindersEnabled ?? true,
+  };
   if (version >= 1) {
-    return { items: (state.items ?? []) as FridgeItem[], assumePantry: state.assumePantry ?? true };
+    return { ...settings, items: (state.items ?? []) as FridgeItem[] };
   }
   return {
-    assumePantry: state.assumePantry ?? true,
+    ...settings,
     items: ((state.items ?? []) as LegacyItem[]).map((item) => ({
       id: item.id,
       ingredientId: item.ingredientId,
@@ -142,6 +154,7 @@ export const useFridge = create<FridgeState>()(
     (set) => ({
       items: [],
       assumePantry: true,
+      remindersEnabled: true,
       hydrated: false,
 
       addItems: (drafts) =>
@@ -194,6 +207,20 @@ export const useFridge = create<FridgeState>()(
       removeItem: (id) =>
         set((state) => ({ items: state.items.filter((item) => item.id !== id) })),
 
+      removeItems: (ids) =>
+        set((state) => {
+          const doomed = new Set(ids);
+          return { items: state.items.filter((item) => !doomed.has(item.id)) };
+        }),
+
+      removeExpired: () =>
+        set((state) => ({
+          items: state.items.flatMap((item) => {
+            const batches = dropExpired(item.batches);
+            return batches.length > 0 ? [{ ...item, batches }] : [];
+          }),
+        })),
+
       consumeRecipe: (recipe) =>
         set((state) => {
           const used = new Map(
@@ -222,12 +249,18 @@ export const useFridge = create<FridgeState>()(
       clearAll: () => set({ items: [] }),
 
       setAssumePantry: (value) => set({ assumePantry: value }),
+
+      setRemindersEnabled: (value) => set({ remindersEnabled: value }),
     }),
     {
       name: 'doesh-fridge',
       version: 1,
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({ items: state.items, assumePantry: state.assumePantry }),
+      partialize: (state) => ({
+        items: state.items,
+        assumePantry: state.assumePantry,
+        remindersEnabled: state.remindersEnabled,
+      }),
       migrate: migrateFridge,
       onRehydrateStorage: () => () => {
         useFridge.setState({ hydrated: true });
@@ -269,4 +302,49 @@ export function expiringSoon(items: FridgeItem[], now: Date = new Date()): Map<s
   }
 
   return result;
+}
+
+export type DigestEntry = {
+  itemId: string;
+  ingredientId: string;
+  quantity: number | null;
+  unit: Unit | null;
+  /** Дней до срока; отрицательное — просрочено. */
+  days: number;
+};
+
+export type ExpiryDigest = {
+  /** Пора выбросить — самое давнее первым. */
+  expired: DigestEntry[];
+  /** Истекает в ближайшие дни — самое срочное первым. */
+  soon: DigestEntry[];
+};
+
+/** Сводка для плашки в холодильнике: по записи на каждую партию с близким или вышедшим сроком. */
+export function expiryDigest(items: FridgeItem[], now: Date = new Date()): ExpiryDigest {
+  const expired: DigestEntry[] = [];
+  const soon: DigestEntry[] = [];
+
+  for (const item of items) {
+    for (const batch of item.batches) {
+      if (!batch.expiresAt) {
+        continue;
+      }
+      const status = expiryStatus(batch.expiresAt, now);
+      if (status === 'ok') {
+        continue;
+      }
+      const entry = {
+        itemId: item.id,
+        ingredientId: item.ingredientId,
+        quantity: batch.quantity,
+        unit: item.unit,
+        days: daysUntil(batch.expiresAt, now),
+      };
+      (status === 'expired' ? expired : soon).push(entry);
+    }
+  }
+
+  const byDays = (a: DigestEntry, b: DigestEntry) => a.days - b.days;
+  return { expired: expired.sort(byDays), soon: soon.sort(byDays) };
 }

@@ -3,8 +3,11 @@ import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { useExpiryReminders } from '@/hooks/use-expiry-reminders';
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  useExpiryReminders();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { matchRecipes, type RecipeMatch } from '@/lib/match';
+import { useCookbook } from '@/store/cookbook';
 import { availableIds, expiringSoon, useFridge } from '@/store/fridge';
 
 type Section = { title: string; hint?: string; data: RecipeMatch[] };
@@ -18,6 +19,8 @@ export default function RecipesScreen() {
   const items = useFridge((state) => state.items);
   const assumePantry = useFridge((state) => state.assumePantry);
   const hydrated = useFridge((state) => state.hydrated);
+  const favorites = useCookbook((state) => state.favorites);
+  const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
 
   const sections = useMemo<Section[]>(() => {
     const groups = matchRecipes(availableIds(items), {
@@ -79,7 +82,11 @@ export default function RecipesScreen() {
           </View>
         )}
         renderItem={({ item }) => (
-          <RecipeCard match={item} onPress={(id) => router.push(`/recipe/${id}`)} />
+          <RecipeCard
+            match={item}
+            favorite={favoriteIds.has(item.recipe.id)}
+            onPress={(id) => router.push(`/recipe/${id}`)}
+          />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />

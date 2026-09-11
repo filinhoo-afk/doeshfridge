@@ -1,6 +1,7 @@
 import {
   addBatch,
   consume,
+  dropExpired,
   mergeSameExpiry,
   nearestDated,
   setExpiry,
@@ -155,5 +156,18 @@ describe('setQuantity, addBatch, mergeSameExpiry', () => {
     expect(mergeSameExpiry([batch('a', null, null), batch('b', 500, null)])).toEqual([
       batch('a', 500, null),
     ]);
+  });
+});
+
+describe('dropExpired', () => {
+  it('убирает только партии с вышедшим сроком — сегодняшние ещё годны', () => {
+    const batches = [
+      batch('old', 1, inDays(-1)),
+      batch('today', 1, inDays(0)),
+      batch('fresh', 1, inDays(3)),
+      batch('undated', 2, null),
+    ];
+
+    expect(dropExpired(batches).map((item) => item.id)).toEqual(['today', 'fresh', 'undated']);
   });
 });

@@ -13,6 +13,10 @@ import { ThemedText } from './themed-text';
 type RecipeCardProps = {
   match: RecipeMatch;
   onPress: (recipeId: string) => void;
+  /** Показать сердечко у названия. */
+  favorite?: boolean;
+  /** Строка-пометка внизу, например «готовили 5 раз». */
+  note?: string;
 };
 
 /** Сколько срочных продуктов называть по имени, остальные — «и ещё N». */
@@ -27,7 +31,7 @@ function urgentLine(urgent: UrgentIngredient[]): string {
   return `скоро испортится: ${shown.join(', ')}${rest > 0 ? ` и ещё ${rest}` : ''}`;
 }
 
-export function RecipeCard({ match, onPress }: RecipeCardProps) {
+export function RecipeCard({ match, onPress, favorite = false, note }: RecipeCardProps) {
   const theme = useTheme();
   const { recipe, have, missing, urgent } = match;
 
@@ -39,7 +43,12 @@ export function RecipeCard({ match, onPress }: RecipeCardProps) {
         styles.card,
         { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },
       ]}>
-      <ThemedText style={styles.title}>{recipe.title}</ThemedText>
+      <View style={styles.titleRow}>
+        <ThemedText style={[styles.title, styles.grow]}>{recipe.title}</ThemedText>
+        {favorite ? (
+          <Ionicons name="heart" size={16} color={theme.accent} accessibilityLabel="В избранном" />
+        ) : null}
+      </View>
       <ThemedText type="small" themeColor="textSecondary">
         {recipe.description}
       </ThemedText>
@@ -57,6 +66,14 @@ export function RecipeCard({ match, onPress }: RecipeCardProps) {
             задействует {formatProducts(have.length)}
           </ThemedText>
         </View>
+        {note ? (
+          <View style={styles.metaItem}>
+            <Ionicons name="repeat-outline" size={14} color={theme.textSecondary} />
+            <ThemedText type="small" themeColor="textSecondary">
+              {note}
+            </ThemedText>
+          </View>
+        ) : null}
       </View>
 
       {urgent.length > 0 ? (
@@ -82,6 +99,11 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     borderRadius: Spacing.three,
     padding: Spacing.three,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
   },
   title: {
     fontWeight: '700',

@@ -15,6 +15,9 @@ import { ThemedText } from './themed-text';
 type ProductRowProps = {
   item: FridgeItem;
   onPress: (id: string) => void;
+  /** Режим выбора: вместо стрелки в карточку — отметка. */
+  selecting?: boolean;
+  selected?: boolean;
 };
 
 /** «ещё 2 партии · последняя до 11 окт». Последняя дата — только если сроки есть у всех. */
@@ -30,7 +33,7 @@ function otherBatchesLine(item: FridgeItem): string | null {
   return allDated && latest ? `${text} · последняя ${formatExpiryDate(latest, { short: true })}` : text;
 }
 
-export function ProductRow({ item, onPress }: ProductRowProps) {
+export function ProductRow({ item, onPress, selecting = false, selected = false }: ProductRowProps) {
   const theme = useTheme();
   const name = ingredientName(item.ingredientId);
   const quantity = formatQuantity(totalQuantity(item.batches), item.unit);
@@ -47,13 +50,25 @@ export function ProductRow({ item, onPress }: ProductRowProps) {
 
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${name}, открыть`}
+      accessibilityRole={selecting ? 'checkbox' : 'button'}
+      accessibilityState={selecting ? { checked: selected } : undefined}
+      accessibilityLabel={selecting ? name : `${name}, открыть`}
       onPress={() => onPress(item.id)}
       style={({ pressed }) => [
         styles.row,
-        { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },
+        {
+          backgroundColor: selected ? theme.backgroundSelected : theme.backgroundElement,
+          opacity: pressed ? 0.7 : 1,
+        },
       ]}>
+      {selecting ? (
+        <Ionicons
+          name={selected ? 'checkmark-circle' : 'ellipse-outline'}
+          size={24}
+          color={selected ? theme.accent : theme.textSecondary}
+        />
+      ) : null}
+
       <View style={styles.info}>
         <View style={styles.titleRow}>
           <ThemedText style={styles.name}>{name}</ThemedText>
@@ -77,7 +92,7 @@ export function ProductRow({ item, onPress }: ProductRowProps) {
         ) : null}
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
+      {selecting ? null : <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />}
     </Pressable>
   );
 }

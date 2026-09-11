@@ -1,19 +1,23 @@
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
-import { SectionList, StyleSheet, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Alert, Pressable, SectionList, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/empty-state';
+import { ExpiryBanner } from '@/components/expiry-banner';
 import { PrimaryButton } from '@/components/primary-button';
 import { ProductRow } from '@/components/product-row';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
-import { CATEGORY_ORDER, getIngredient, type Category } from '@/data/ingredients';
+import { CATEGORY_ORDER, getIngredient, ingredientName, type Category } from '@/data/ingredients';
 import { useTheme } from '@/hooks/use-theme';
 import { nearestDated } from '@/lib/batches';
 import { formatProducts } from '@/lib/format';
-import { useFridge, type FridgeItem } from '@/store/fridge';
+import { expiryDigest, useFridge, type FridgeItem } from '@/store/fridge';
 
 type Section = { title: Category; data: FridgeItem[] };
+
+/** Сколько названий показывать в подтверждении, остальные — «и ещё N». */
+const NAMES_IN_ALERT = 5;
 
 /** Внутри категории — сначала то, что испортится раньше, бессрочное в конце. */
 function byExpiry(a: FridgeItem, b: FridgeItem): number {
@@ -50,17 +54,76 @@ function groupByCategory(items: FridgeItem[]): Section[] {
   }));
 }
 
+/** «молоко, яйца, сыр и ещё 2» — чтобы подтверждение не растягивалось на весь экран. */
+function shortList(names: string[]): string {
+  const unique = [...new Set(names)];
+  const shown = unique.slice(0, NAMES_IN_ALERT).join(', ');
+  const rest = unique.length - NAMES_IN_ALERT;
+  return rest > 0 ? `${shown} и ещё ${rest}` : shown;
+}
+
 export default function FridgeScreen() {
   const router = useRouter();
   const theme = useTheme();
   const items = useFridge((state) => state.items);
   const hydrated = useFridge((state) => state.hydrated);
+  const removeItems = useFridge((state) => state.removeItems);
+  const removeExpired = useFridge((state) => state.removeExpired);
+
+  // null — обычный режим, множество — режим выбора с отмеченными продуктами.
+  const [selected, setSelected] = useState<Set<string> | null>(null);
 
   const sections = useMemo(() => groupByCategory(items), [items]);
+  const digest = useMemo(() => expiryDigest(items), [items]);
 
   if (!hydrated) {
     return <View style={[styles.screen, { backgroundColor: theme.background }]} />;
   }
+
+  const allSelected = selected !== null && items.length > 0 && selected.size === items.length;
+
+  const toggle = (id: string) =>
+    setSelected((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+
+  const confirmDelete = () => {
+    if (!selected || selected.size === 0) {
+      return;
+    }
+    const names = items
+      .filter((item) => selected.has(item.id))
+      .map((item) => ingredientName(item.ingredientId));
+    Alert.alert(`Удалить ${formatProducts(selected.size)}?`, `${shortList(names)}. Отменить это нельзя.`, [
+      { text: 'Отмена', style: 'cancel' },
+      {
+        text: 'Удалить',
+        style: 'destructive',
+        onPress: () => {
+          removeItems([...selected]);
+          setSelected(null);
+        },
+      },
+    ]);
+  };
+
+  const confirmThrowAway = () => {
+    const names = digest.expired.map((entry) => ingredientName(entry.ingredientId));
+    Alert.alert(
+      'Выбросить просроченное?',
+      `${shortList(names)}. Уйдут только просроченные партии — свежие останутся в холодильнике.`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        { text: 'Выбросить', style: 'destructive', onPress: removeExpired },
+      ],
+    );
+  };
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>
@@ -71,9 +134,33 @@ export default function FridgeScreen() {
         stickySectionHeadersEnabled={false}
         ListHeaderComponent={
           items.length > 0 ? (
-            <ThemedText type="small" themeColor="textSecondary" style={styles.counter}>
-              {formatProducts(items.length)}
-            </ThemedText>
+            <View style={styles.listHeader}>
+              {selected ? null : (
+                <ExpiryBanner
+                  digest={digest}
+                  onThrowAway={confirmThrowAway}
+                  onCook={() => router.navigate('/recipes')}
+                />
+              )}
+              <View style={styles.toolbar}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  {selected ? `Выбрано: ${selected.size}` : formatProducts(items.length)}
+                </ThemedText>
+                <View style={styles.grow} />
+                {selected ? (
+                  <TextButton
+                    label={allSelected ? 'Снять все' : 'Выбрать все'}
+                    onPress={() =>
+                      setSelected(allSelected ? new Set() : new Set(items.map((item) => item.id)))
+                    }
+                  />
+                ) : null}
+                <TextButton
+                  label={selected ? 'Отмена' : 'Выбрать'}
+                  onPress={() => setSelected(selected ? null : new Set())}
+                />
+              </View>
+            </View>
           ) : null
         }
         ListEmptyComponent={
@@ -89,16 +176,47 @@ export default function FridgeScreen() {
           </ThemedText>
         )}
         renderItem={({ item }) => (
-          <ProductRow item={item} onPress={(id) => router.push(`/product/${id}`)} />
+          <ProductRow
+            item={item}
+            selecting={selected !== null}
+            selected={selected?.has(item.id) ?? false}
+            onPress={(id) => (selected ? toggle(id) : router.push(`/product/${id}`))}
+          />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
 
       <View
         style={[styles.footer, { backgroundColor: theme.background, borderTopColor: theme.border }]}>
-        <PrimaryButton title="Продиктовать" icon="mic" onPress={() => router.push('/voice')} />
+        {selected ? (
+          <PrimaryButton
+            title={selected.size > 0 ? `Удалить ${formatProducts(selected.size)}` : 'Отметьте продукты'}
+            icon="trash-outline"
+            variant="danger"
+            disabled={selected.size === 0}
+            onPress={confirmDelete}
+          />
+        ) : (
+          <PrimaryButton title="Продиктовать" icon="mic" onPress={() => router.push('/voice')} />
+        )}
       </View>
     </View>
+  );
+}
+
+function TextButton({ label, onPress }: { label: string; onPress: () => void }) {
+  const theme = useTheme();
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      hitSlop={Spacing.two}
+      onPress={onPress}
+      style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
+      <ThemedText type="small" style={[styles.textButton, { color: theme.accent }]}>
+        {label}
+      </ThemedText>
+    </Pressable>
   );
 }
 
@@ -110,8 +228,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingBottom: Spacing.four,
   },
-  counter: {
-    paddingVertical: Spacing.two,
+  listHeader: {
+    gap: Spacing.three,
+    paddingTop: Spacing.two,
+  },
+  toolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    paddingVertical: Spacing.one,
+  },
+  grow: {
+    flex: 1,
+  },
+  textButton: {
+    fontWeight: '600',
   },
   sectionHeader: {
     paddingTop: Spacing.three,

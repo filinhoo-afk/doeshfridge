@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
@@ -11,6 +11,7 @@ import { getRecipe } from '@/data/recipes';
 import { useTheme } from '@/hooks/use-theme';
 import { formatMinutes, formatQuantity, formatServings } from '@/lib/format';
 import { matchRecipe } from '@/lib/match';
+import { useCookbook } from '@/store/cookbook';
 import { availableIds, itemsUsedByRecipe, useFridge } from '@/store/fridge';
 
 export default function RecipeScreen() {
@@ -21,6 +22,9 @@ export default function RecipeScreen() {
   const items = useFridge((state) => state.items);
   const assumePantry = useFridge((state) => state.assumePantry);
   const consumeRecipe = useFridge((state) => state.consumeRecipe);
+  const isFavorite = useCookbook((state) => state.favorites.includes(id));
+  const toggleFavorite = useCookbook((state) => state.toggleFavorite);
+  const recordCooked = useCookbook((state) => state.recordCooked);
 
   const recipe = getRecipe(id);
 
@@ -42,8 +46,19 @@ export default function RecipeScreen() {
   const confirmCooked = () => {
     const used = itemsUsedByRecipe(recipe, items);
 
+    // Приготовить можно и без продуктов из холодильника — готовка всё равно
+    // считается для «Часто готовлю», просто списывать нечего.
     if (used.length === 0) {
-      Alert.alert('Нечего списывать', 'Ни один продукт из этого рецепта не лежит в холодильнике.');
+      Alert.alert('Приготовили?', 'Из холодильника ничего не спишется: продуктов этого рецепта в нём нет.', [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Да',
+          onPress: () => {
+            recordCooked(recipe.id);
+            router.back();
+          },
+        },
+      ]);
       return;
     }
 
@@ -56,6 +71,7 @@ export default function RecipeScreen() {
           text: 'Списать',
           onPress: () => {
             consumeRecipe(recipe);
+            recordCooked(recipe.id);
             router.back();
           },
         },
@@ -65,7 +81,20 @@ export default function RecipeScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: recipe.title }} />
+      <Stack.Screen
+        options={{
+          title: recipe.title,
+          headerRight: () => (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+              hitSlop={Spacing.two}
+              onPress={() => toggleFavorite(recipe.id)}>
+              <Ionicons name={isFavorite ? 'heart' : 'heart-outline'} size={24} color={theme.accent} />
+            </Pressable>
+          ),
+        }}
+      />
       <ScrollView
         style={{ backgroundColor: theme.background }}
         contentContainerStyle={styles.content}>

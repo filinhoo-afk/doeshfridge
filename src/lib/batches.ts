@@ -6,6 +6,8 @@
  * список партий и возвращают новый, ничего не меняя на месте.
  */
 
+import { daysUntil } from '@/data/shelf-life';
+
 export type Batch = {
   id: string;
   /**
@@ -129,6 +131,15 @@ export function setQuantity(batches: Batch[], batchId: string, quantity: number 
 
 export function removeBatch(batches: Batch[], batchId: string): Batch[] {
   return batches.filter((batch) => batch.id !== batchId);
+}
+
+/**
+ * «Выбросить просроченное»: убирает только партии с вышедшим сроком. Свежие
+ * партии того же продукта остаются — из трёх палок колбасы, где просрочена
+ * одна, в мусор идёт одна.
+ */
+export function dropExpired(batches: Batch[], now: Date = new Date()): Batch[] {
+  return batches.filter((batch) => batch.expiresAt === null || daysUntil(batch.expiresAt, now) >= 0);
 }
 
 /**
