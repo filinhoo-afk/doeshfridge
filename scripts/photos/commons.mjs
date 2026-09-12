@@ -44,15 +44,34 @@ export async function politeFetch(url, { minInterval = 1500, binary = false } = 
   throw new Error(`не удалось получить ${url}`);
 }
 
-/** Имя автора из extmetadata: там HTML со ссылками — оставляем текст. */
-export function plainArtist(html) {
-  return String(html ?? '')
-    .replace(/<[^>]+>/g, '')
+const MAX_AUTHOR_LENGTH = 80;
+
+const decodeEntities = (text) =>
+  text
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#0?39;/g, "'")
+    .replace(/&nbsp;/g, ' ');
+
+/**
+ * Имя автора из extmetadata. Там HTML, и авторы иногда вписывают в поле
+ * целые абзацы с условиями и контактами. Берём текст первой ссылки — обычно
+ * это имя, — убираем e-mail и адреса сайтов: чужие контакты не должны
+ * попасть ни в приложение, ни в репозиторий.
+ */
+export function plainArtist(html) {
+  const raw = String(html ?? '');
+  const firstLink = raw.match(/<a\b[^>]*>([^<]+)<\/a>/i)?.[1];
+  let text = decodeEntities(firstLink ?? raw.replace(/<[^>]+>/g, ' '))
+    .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, '')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/\(\s*\)/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+  if (text.length > MAX_AUTHOR_LENGTH) {
+    text = `${text.slice(0, MAX_AUTHOR_LENGTH).replace(/\s+\S*$/, '')}…`;
+  }
+  return text;
 }
 
 export function isAllowedLicense(shortName) {

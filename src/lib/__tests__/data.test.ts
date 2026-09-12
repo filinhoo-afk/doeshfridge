@@ -30,6 +30,14 @@ describe('база рецептов', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it('содержит 500 рецептов с разными названиями', () => {
+    const titles = RECIPES.map((recipe) => recipe.title.toLowerCase());
+    const repeated = titles.filter((title, index) => titles.indexOf(title) !== index);
+
+    expect(RECIPES.length).toBe(500);
+    expect(repeated).toEqual([]);
+  });
+
   it('ссылается только на существующие ингредиенты', () => {
     const unknown = RECIPES.flatMap((recipe) =>
       recipe.ingredients

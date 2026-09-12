@@ -29,7 +29,10 @@ const escapeXml = (text) =>
 
 const sources = JSON.parse(fs.readFileSync(SOURCES, 'utf8'));
 const only = process.argv.slice(2);
-const ids = Object.keys(sources).filter((id) => (only.length ? only.includes(id) : !sources[id].file));
+// Рецепты, у которых фото уже выбрано или отмечено «нет подходящего» (none), пропускаем.
+const ids = Object.keys(sources).filter((id) =>
+  only.length ? only.includes(id) : !sources[id].file && !sources[id].none && !sources[id].own,
+);
 
 fs.mkdirSync(OUT, { recursive: true });
 const CACHE = path.join(OUT, 'candidates.json');

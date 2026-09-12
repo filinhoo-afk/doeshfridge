@@ -9,6 +9,7 @@
  *
  *   node scripts/photos/fetch.mjs           только новые
  *   node scripts/photos/fetch.mjs --force   пересобрать все
+ *   node scripts/photos/fetch.mjs --meta    обновить авторов и лицензии, не скачивая снимки
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,6 +28,7 @@ const HEIGHT = 360;
 const QUALITY = 70;
 
 const force = process.argv.includes('--force');
+const metaOnly = process.argv.includes('--meta');
 const sources = JSON.parse(fs.readFileSync(SOURCES, 'utf8'));
 fs.mkdirSync(ASSETS, { recursive: true });
 
@@ -60,15 +62,18 @@ for (const [id, entry] of Object.entries(sources)) {
   }
 
   if (!entry.file) continue;
-  if (!force && fs.existsSync(target) && entry.author) continue;
+  const refreshMeta = metaOnly && fs.existsSync(target);
+  if (!force && !refreshMeta && fs.existsSync(target) && entry.author) continue;
 
   const info = await fileInfo(entry.file);
   if (!info) {
     console.warn(`${id}: файл ${entry.file} не найден или не подходит по лицензии`);
     continue;
   }
-  const buffer = await politeFetch(info.thumb, { minInterval: 300, binary: true });
-  await toWebp(buffer, entry, target);
+  if (!refreshMeta) {
+    const buffer = await politeFetch(info.thumb, { minInterval: 300, binary: true });
+    await toWebp(buffer, entry, target);
+  }
   Object.assign(entry, {
     author: info.author,
     license: info.license,
@@ -83,6 +88,8 @@ fs.writeFileSync(SOURCES, JSON.stringify(sources, null, 2) + '\n');
 
 // Удаляем webp, которые больше ни к чему не привязаны.
 for (const name of fs.readdirSync(ASSETS)) {
+  // CREDITS.md и прочее не трогаем — чистим только картинки.
+  if (!name.endsWith('.webp')) continue;
   const id = path.parse(name).name;
   const entry = sources[id];
   if (!entry || !(entry.own || entry.author)) {
@@ -126,6 +133,25 @@ export type RecipePhoto = {
 export const RECIPE_PHOTOS: Readonly<Record<string, RecipePhoto>> = {
 ${lines.join('\n')}
 };
+`,
+);
+
+// Список авторов рядом с фото: лицензии CC BY и CC BY-SA требуют указывать
+// автора и там, где распространяются сами файлы, — то есть и в репозитории.
+const credits = Object.entries(sources)
+  .filter(([id, entry]) => entry.author && fs.existsSync(path.join(ASSETS, `${id}.webp`)))
+  .map(([id, entry]) => `| ${id}.webp | ${entry.author.replace(/\|/g, '/')} | [${entry.license}](${entry.licenseUrl}) | [Commons](${entry.page}) |`);
+fs.writeFileSync(
+  path.join(ASSETS, 'CREDITS.md'),
+  `# Фото блюд
+
+Снимки взяты с Wikimedia Commons и уменьшены до 480×360 с кадрированием. Каждый файл
+распространяется на условиях своей лицензии, указанной ниже; для CC BY-SA производные
+изображения распространяются на тех же условиях. Список генерирует \`scripts/photos/fetch.mjs\`.
+
+| Файл | Автор | Лицензия | Источник |
+|---|---|---|---|
+${credits.join('\n')}
 `,
 );
 
