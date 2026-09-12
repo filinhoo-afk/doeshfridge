@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { CATEGORY_ORDER, getIngredient, ingredientName, type Category } from '@/data/ingredients';
 import { useTheme } from '@/hooks/use-theme';
+import { useWelcome } from '@/hooks/use-welcome';
 import { nearestDated } from '@/lib/batches';
 import { formatProducts } from '@/lib/format';
 import { expiryDigest, useFridge, type FridgeItem } from '@/store/fridge';
@@ -69,6 +70,8 @@ export default function FridgeScreen() {
   const hydrated = useFridge((state) => state.hydrated);
   const removeItems = useFridge((state) => state.removeItems);
   const removeExpired = useFridge((state) => state.removeExpired);
+
+  useWelcome();
 
   // null — обычный режим, множество — режим выбора с отмеченными продуктами.
   const [selected, setSelected] = useState<Set<string> | null>(null);

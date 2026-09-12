@@ -21,6 +21,7 @@ export default function RootLayout() {
           <Stack.Screen name="recipe/[id]" options={{ title: 'Рецепт' }} />
           <Stack.Screen name="product/[id]" options={{ title: 'Продукт' }} />
           <Stack.Screen name="photo-credits" options={{ title: 'Авторы фото' }} />
+          <Stack.Screen name="welcome" options={{ presentation: 'modal', headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

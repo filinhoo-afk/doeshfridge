@@ -183,6 +183,13 @@ export default function SettingsScreen() {
       </View>
 
       <PrimaryButton
+        title="Как это работает"
+        icon="help-circle-outline"
+        variant="outline"
+        onPress={() => router.push('/welcome')}
+      />
+
+      <PrimaryButton
         title="Очистить холодильник"
         icon="trash-outline"
         variant="danger"
