@@ -110,6 +110,11 @@ function compareUrgent(a: RecipeMatch, b: RecipeMatch): number {
   );
 }
 
+/** Порядок для списка найденного: полезнее и быстрее — выше. */
+export function sortMatches(matches: RecipeMatch[]): RecipeMatch[] {
+  return [...matches].sort(compareMatches);
+}
+
 export function matchRecipes(
   available: ReadonlySet<string>,
   options: MatchOptions,

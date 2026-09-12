@@ -1,13 +1,16 @@
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
-import { SectionList, StyleSheet, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Pressable, SectionList, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/empty-state';
 import { RecipeCard } from '@/components/recipe-card';
+import { RecipeFilterBar } from '@/components/recipe-filter-bar';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
+import { RECIPES } from '@/data/recipes';
 import { useTheme } from '@/hooks/use-theme';
-import { matchRecipes, type RecipeMatch } from '@/lib/match';
+import { matchRecipe, matchRecipes, sortMatches, type RecipeMatch } from '@/lib/match';
+import { EMPTY_FILTERS, filterRecipes, isFilterActive } from '@/lib/recipe-filter';
 import { useCookbook } from '@/store/cookbook';
 import { availableIds, expiringSoon, useFridge } from '@/store/fridge';
 
@@ -21,13 +24,24 @@ export default function RecipesScreen() {
   const hydrated = useFridge((state) => state.hydrated);
   const favorites = useCookbook((state) => state.favorites);
   const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
+
+  const searching = isFilterActive(filters);
 
   const sections = useMemo<Section[]>(() => {
-    const groups = matchRecipes(availableIds(items), {
-      assumePantry,
-      expiring: expiringSoon(items),
-    });
+    const available = availableIds(items);
+    const options = { assumePantry, expiring: expiringSoon(items) };
 
+    // С фильтрами показываем всю базу, а не только то, что собирается из
+    // холодильника: человек ищет рецепт, а не подбор под содержимое полки.
+    if (searching) {
+      const found = sortMatches(
+        filterRecipes(RECIPES, filters).map((recipe) => matchRecipe(recipe, available, options)),
+      );
+      return found.length > 0 ? [{ title: `Найдено: ${found.length}`, data: found }] : [];
+    }
+
+    const groups = matchRecipes(available, options);
     return [
       {
         title: 'Пора доесть',
@@ -38,11 +52,31 @@ export default function RecipesScreen() {
       { title: 'Не хватает одного', data: groups.missingOne },
       { title: 'Почти получается', data: groups.almost },
     ].filter((section) => section.data.length > 0);
-  }, [items, assumePantry]);
+  }, [items, assumePantry, filters, searching]);
 
   if (!hydrated) {
     return <View style={[styles.screen, { backgroundColor: theme.background }]} />;
   }
+
+  const emptyState = searching ? (
+    <EmptyState
+      icon="search-outline"
+      title="Ничего не нашлось"
+      description="Попробуйте другое слово или снимите часть фильтров — в базе 500 рецептов."
+    />
+  ) : items.length === 0 ? (
+    <EmptyState
+      icon="basket-outline"
+      title="Сначала наполните холодильник"
+      description="Продиктуйте продукты на вкладке «Холодильник» — здесь появятся рецепты из того, что есть. Или найдите любой рецепт через поиск."
+    />
+  ) : (
+    <EmptyState
+      icon="search-outline"
+      title="Пока ничего не подобралось"
+      description="Из этих продуктов не собирается ни один рецепт целиком. Добавьте ещё пару позиций — например, яйца, лук или макароны."
+    />
+  );
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>
@@ -51,29 +85,30 @@ export default function RecipesScreen() {
         keyExtractor={(match) => match.recipe.id}
         contentContainerStyle={styles.content}
         stickySectionHeadersEnabled={false}
-        ListEmptyComponent={
-          items.length === 0 ? (
-            <EmptyState
-              icon="basket-outline"
-              title="Сначала наполните холодильник"
-              description="Продиктуйте продукты на вкладке «Холодильник» — здесь появятся рецепты из того, что есть."
-            />
-          ) : (
-            <EmptyState
-              icon="search-outline"
-              title="Пока ничего не подобралось"
-              description="Из этих продуктов не собирается ни один рецепт целиком. Добавьте ещё пару позиций — например, яйца, лук или макароны."
-            />
-          )
-        }
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        ListHeaderComponent={<RecipeFilterBar filters={filters} onChange={setFilters} />}
+        ListEmptyComponent={emptyState}
         renderSectionHeader={({ section }) => (
           <View style={styles.sectionHeader}>
-            <ThemedText
-              type="smallBold"
-              themeColor={section.hint ? 'warning' : 'textSecondary'}
-              style={styles.sectionTitle}>
-              {section.title.toUpperCase()}
-            </ThemedText>
+            <View style={styles.sectionTitleRow}>
+              <ThemedText
+                type="smallBold"
+                themeColor={section.hint ? 'warning' : 'textSecondary'}
+                style={styles.sectionTitle}>
+                {section.title.toUpperCase()}
+              </ThemedText>
+              {searching ? (
+                <Pressable
+                  accessibilityRole="button"
+                  hitSlop={Spacing.two}
+                  onPress={() => setFilters(EMPTY_FILTERS)}>
+                  <ThemedText type="smallBold" themeColor="accent">
+                    Сбросить
+                  </ThemedText>
+                </Pressable>
+              ) : null}
+            </View>
             {section.hint ? (
               <ThemedText type="small" themeColor="textSecondary">
                 {section.hint}
@@ -106,6 +141,12 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.four,
     paddingBottom: Spacing.two,
     gap: Spacing.half,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.two,
   },
   sectionTitle: {
     letterSpacing: 0.6,

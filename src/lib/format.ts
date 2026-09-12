@@ -36,6 +36,11 @@ export function formatServings(servings: number): string {
   return `${servings} ${plural(servings, 'порция', 'порции', 'порций')}`;
 }
 
+/** «на 4 порции», «на 1 порцию» — винительный падеж для фраз вроде «пересчитано на …». */
+export function formatServingsFor(servings: number): string {
+  return `${servings} ${plural(servings, 'порцию', 'порции', 'порций')}`;
+}
+
 export function formatProducts(count: number): string {
   return `${count} ${plural(count, 'продукт', 'продукта', 'продуктов')}`;
 }

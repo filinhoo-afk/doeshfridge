@@ -1,17 +1,19 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { RecipeHero } from '@/components/recipe-photo';
+import { StepperButton } from '@/components/stepper-button';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { ingredientName, isPantry } from '@/data/ingredients';
 import { getRecipe } from '@/data/recipes';
 import { useTheme } from '@/hooks/use-theme';
-import { formatMinutes, formatQuantity, formatServings } from '@/lib/format';
+import { formatMinutes, formatQuantity, formatServings, formatServingsFor } from '@/lib/format';
 import { matchRecipe } from '@/lib/match';
+import { MAX_SERVINGS, MIN_SERVINGS, scaleRecipe } from '@/lib/scale';
 import { useCookbook } from '@/store/cookbook';
 import { availableIds, itemsUsedByRecipe, useFridge } from '@/store/fridge';
 
@@ -28,13 +30,21 @@ export default function RecipeScreen() {
   const recordCooked = useCookbook((state) => state.recordCooked);
 
   const recipe = getRecipe(id);
+  // 0 — «сколько написано в рецепте»: своё число появляется только после нажатия.
+  const [chosenServings, setChosenServings] = useState(0);
+  const servings = chosenServings || recipe?.servings || 1;
 
   const match = useMemo(
     () => (recipe ? matchRecipe(recipe, availableIds(items), { assumePantry }) : null),
     [recipe, items, assumePantry],
   );
 
-  if (!recipe || !match) {
+  const scaled = useMemo(
+    () => (recipe ? scaleRecipe(recipe, servings) : null),
+    [recipe, servings],
+  );
+
+  if (!recipe || !match || !scaled) {
     return (
       <View style={[styles.missing, { backgroundColor: theme.background }]}>
         <ThemedText>Рецепт не найден.</ThemedText>
@@ -45,7 +55,8 @@ export default function RecipeScreen() {
   const available = availableIds(items);
 
   const confirmCooked = () => {
-    const used = itemsUsedByRecipe(recipe, items);
+    // Списываем по пересчитанному рецепту: сварили на шестерых — ушло больше.
+    const used = itemsUsedByRecipe(scaled, items);
 
     // Приготовить можно и без продуктов из холодильника — готовка всё равно
     // считается для «Часто готовлю», просто списывать нечего.
@@ -71,7 +82,7 @@ export default function RecipeScreen() {
         {
           text: 'Списать',
           onPress: () => {
-            consumeRecipe(recipe);
+            consumeRecipe(scaled);
             recordCooked(recipe.id);
             router.back();
           },
@@ -107,7 +118,22 @@ export default function RecipeScreen() {
           </ThemedText>
           <View style={styles.meta}>
             <MetaItem icon="time-outline" text={formatMinutes(recipe.timeMinutes)} />
-            <MetaItem icon="people-outline" text={formatServings(recipe.servings)} />
+            <View style={styles.servings}>
+              <Ionicons name="people-outline" size={14} color={theme.textSecondary} />
+              <ThemedText type="small" themeColor="textSecondary" style={styles.servingsValue}>
+                {formatServings(servings)}
+              </ThemedText>
+              <StepperButton
+                icon="remove"
+                accessibilityLabel="Меньше порций"
+                onPress={() => setChosenServings(Math.max(MIN_SERVINGS, servings - 1))}
+              />
+              <StepperButton
+                icon="add"
+                accessibilityLabel="Больше порций"
+                onPress={() => setChosenServings(Math.min(MAX_SERVINGS, servings + 1))}
+              />
+            </View>
           </View>
         </View>
 
@@ -125,7 +151,14 @@ export default function RecipeScreen() {
             ИНГРЕДИЕНТЫ
           </ThemedText>
 
-          {recipe.ingredients.map((ingredient) => {
+          {servings !== recipe.servings ? (
+            <ThemedText type="small" themeColor="textSecondary">
+              Количества пересчитаны на {formatServingsFor(servings)}. В шагах ниже остались
+              исходные — рецепт написан на {formatServingsFor(recipe.servings)}.
+            </ThemedText>
+          ) : null}
+
+          {scaled.ingredients.map((ingredient) => {
             const pantry = assumePantry && isPantry(ingredient.ingredientId);
             const present = available.has(ingredient.ingredientId);
             const counted = !ingredient.optional && !pantry;
@@ -227,6 +260,14 @@ const styles = StyleSheet.create({
   meta: {
     flexDirection: 'row',
     gap: Spacing.three,
+  },
+  servings: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  servingsValue: {
+    minWidth: 72,
   },
   metaItem: {
     flexDirection: 'row',
