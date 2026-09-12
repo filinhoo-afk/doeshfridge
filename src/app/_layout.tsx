@@ -4,10 +4,12 @@ import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useExpiryReminders } from '@/hooks/use-expiry-reminders';
+import { usePhotoCache } from '@/hooks/use-photo-cache';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   useExpiryReminders();
+  usePhotoCache();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -11,6 +11,7 @@
  *   node scripts/photos/fetch.mjs --force   пересобрать все
  *   node scripts/photos/fetch.mjs --meta    обновить авторов и лицензии, не скачивая снимки
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -98,18 +99,35 @@ for (const name of fs.readdirSync(ASSETS)) {
   }
 }
 
-const quote = (text) => JSON.stringify(text ?? '');
-const lines = Object.entries(sources)
+/**
+ * Подпись набора фотографий: меняется, когда меняется хоть одна картинка.
+ * По ней приложение понимает, что пора сбросить кэш изображений, — иначе после
+ * обновления к рецепту прилипает чужой снимок (см. src/hooks/use-photo-cache.ts).
+ */
+function photosVersion(ids) {
+  const hash = crypto.createHash('sha1');
+  for (const id of ids) {
+    hash.update(id);
+    hash.update(fs.readFileSync(path.join(ASSETS, `${id}.webp`)));
+  }
+  return hash.digest('hex').slice(0, 12);
+}
+
+const withPhoto = Object.entries(sources)
   .filter(([id, entry]) => (entry.own || entry.author) && fs.existsSync(path.join(ASSETS, `${id}.webp`)))
-  .map(([id, entry]) => {
-    const source = `require('../../assets/recipes/${id}.webp')`;
-    if (entry.own) return `  ${id}: { source: ${source} },`;
-    return (
-      `  ${id}: {\n    source: ${source},\n    credit: {\n` +
-      `      author: ${quote(entry.author)},\n      license: ${quote(entry.license)},\n` +
-      `      licenseUrl: ${quote(entry.licenseUrl)},\n      page: ${quote(entry.page)},\n    },\n  },`
-    );
-  });
+  .map(([id]) => id);
+
+const quote = (text) => JSON.stringify(text ?? '');
+const lines = withPhoto.map((id) => {
+  const entry = sources[id];
+  const source = `require('../../assets/recipes/${id}.webp')`;
+  if (entry.own) return `  ${id}: { source: ${source} },`;
+  return (
+    `  ${id}: {\n    source: ${source},\n    credit: {\n` +
+    `      author: ${quote(entry.author)},\n      license: ${quote(entry.license)},\n` +
+    `      licenseUrl: ${quote(entry.licenseUrl)},\n      page: ${quote(entry.page)},\n    },\n  },`
+  );
+});
 
 fs.writeFileSync(
   GENERATED,
@@ -129,6 +147,9 @@ export type RecipePhoto = {
   /** Нет у собственных фото автора приложения. */
   credit?: PhotoCredit;
 };
+
+/** Подпись набора фотографий; меняется при любой правке картинок. */
+export const PHOTOS_VERSION = '${photosVersion(withPhoto)}';
 
 export const RECIPE_PHOTOS: Readonly<Record<string, RecipePhoto>> = {
 ${lines.join('\n')}
