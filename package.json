@@ -51,7 +51,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest",
-    "icons": "node scripts/build-icons.mjs"
+    "icons": "node scripts/build-icons.mjs",
+    "apk": "cd android && .\\gradlew.bat assembleRelease -PreactNativeArchitectures=arm64-v8a,x86_64 -PreactNativeDevServerIp=127.0.0.1"
   },
   "private": true,
   "jest": {

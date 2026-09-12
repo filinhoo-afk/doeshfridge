@@ -18,10 +18,20 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before 
 npx expo run:android     # первая сборка 10-20 минут, дальше секунды
 npm test                 # юнит-тесты разбора речи и подбора рецептов
 npx tsc --noEmit         # типы
+npm run apk              # релизный APK в android/app/build/outputs/apk/release
 ```
 
 `android/` не в гите: нативный проект генерируется из `app.json` (Continuous Native
 Generation). После правки плагинов или разрешений — `npx expo prebuild --platform android --clean`.
+
+Поэтому список архитектур для релиза живёт в `npm run apk`, а не в `android/gradle.properties`:
+собираем только `arm64-v8a` (все телефоны с 2015 года) и `x86_64` (эмулятор). `x86` и
+`armeabi-v7a` выкинуты — это минус 38 МБ в APK (115 → 77) и ни одного живого устройства.
+Там же `-PreactNativeDevServerIp=127.0.0.1`: без него Gradle-плагин React Native зашивает
+в ресурсы релиза локальный IP машины, на которой собирали.
+
+`SYSTEM_ALERT_WINDOW` (рисование поверх чужих окон) шаблон Expo добавляет ради отладочного меню
+RN — приложению оно не нужно, поэтому снято через `android.blockedPermissions` в `app.json`.
 
 ## Где что лежит
 
