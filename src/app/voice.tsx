@@ -8,6 +8,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
+  Easing,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -15,11 +16,14 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DraftRow } from '@/components/draft-row';
 import { EmptyState } from '@/components/empty-state';
 import { IngredientSearch } from '@/components/ingredient-search';
+import { ListGroup } from '@/components/list-group';
 import { PrimaryButton } from '@/components/primary-button';
+import { Tag } from '@/components/tag';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -32,6 +36,12 @@ type Phase = 'idle' | 'recording' | 'review';
 
 /** Сколько названий отдаём распознавателю как подсказки. Больше Android игнорирует. */
 const MAX_HINTS = 100;
+
+/** Пример фразы на экране записи: показывает, что можно с количествами и без запятых. */
+const EXAMPLE = ['молоко', 'три яйца', 'помидоры', 'куриное филе'];
+
+const MIC_SIZE = 96;
+const HALO_SIZE = 168;
 
 const ERROR_MESSAGES: Partial<Record<ExpoSpeechRecognitionErrorCode, string>> = {
   'not-allowed': 'Нет доступа к микрофону. Разрешите его в настройках приложения.',
@@ -54,7 +64,9 @@ export default function VoiceScreen() {
   const theme = useTheme();
   const addItems = useFridge((state) => state.addItems);
   // «Добавить вручную» из холодильника: микрофон не нужен — сразу к списку и поиску.
-  const manual = useLocalSearchParams<{ mode?: string }>().mode === 'manual';
+  // Состояние, а не константа: передумать можно и на экране записи.
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const [manual, setManual] = useState(mode === 'manual');
 
   const [phase, setPhase] = useState<Phase>(manual ? 'review' : 'idle');
   const [transcript, setTranscript] = useState('');
@@ -178,6 +190,10 @@ export default function VoiceScreen() {
           transcript={transcript}
           onStart={start}
           onStop={() => ExpoSpeechRecognitionModule.stop()}
+          onManual={() => {
+            setManual(true);
+            setPhase('review');
+          }}
         />
       )}
     </KeyboardAvoidingView>
@@ -189,52 +205,94 @@ function RecordPhase({
   transcript,
   onStart,
   onStop,
+  onManual,
 }: {
   phase: Phase;
   transcript: string;
   onStart: () => void;
   onStop: () => void;
+  onManual: () => void;
 }) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const recording = phase === 'recording';
   // useState, а не useRef: значение анимации нужно создать один раз, но читать
   // ref во время рендера нельзя (React Compiler справедливо на это ругается).
-  const [pulse] = useState(() => new Animated.Value(1));
+  const [ripple] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     if (!recording) {
-      pulse.setValue(1);
+      ripple.setValue(0);
       return;
     }
 
+    // Волна расходится от кнопки и гаснет: видно, что микрофон слушает,
+    // а сама кнопка стоит на месте и в неё легко попасть.
     const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 1.15, duration: 700, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 1, duration: 700, useNativeDriver: true }),
-      ]),
+      Animated.timing(ripple, {
+        toValue: 1,
+        duration: 1400,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
     );
     animation.start();
 
     return () => animation.stop();
-  }, [recording, pulse]);
+  }, [recording, ripple]);
+
+  const rippleStyle = {
+    opacity: ripple.interpolate({ inputRange: [0, 1], outputRange: [0.7, 0] }),
+    transform: [
+      { scale: ripple.interpolate({ inputRange: [0, 1], outputRange: [MIC_SIZE / HALO_SIZE, 1] }) },
+    ],
+  };
 
   return (
-    <View style={styles.recordScreen}>
-      <View style={styles.transcriptArea}>
+    <View style={[styles.recordScreen, { paddingBottom: insets.bottom + Spacing.three }]}>
+      {/* Прокрутка — для длинной диктовки: иначе текст наезжает на кнопку микрофона. */}
+      <ScrollView style={styles.transcriptArea} contentContainerStyle={styles.transcriptContent}>
         {transcript ? (
-          <ThemedText type="subtitle" style={styles.transcript}>
-            {transcript}
+          <View style={[styles.transcriptCard, { backgroundColor: theme.backgroundElement }]}>
+            <ThemedText type="subtitle" style={styles.centered}>
+              {transcript}
+            </ThemedText>
+          </View>
+        ) : recording ? (
+          <ThemedText type="subtitle" themeColor="textSecondary" style={styles.centered}>
+            Слушаю…
           </ThemedText>
         ) : (
-          <ThemedText type="small" themeColor="textSecondary" style={styles.transcript}>
-            {recording
-              ? 'Слушаю…'
-              : 'Перечислите продукты вслух — можно одним предложением:\n«молоко, три яйца, помидоры и куриное филе»'}
-          </ThemedText>
+          <View style={styles.hint}>
+            <ThemedText type="subtitle" style={styles.centered}>
+              Перечислите продукты вслух
+            </ThemedText>
+            <ThemedText themeColor="textSecondary" style={styles.centered}>
+              Одним предложением, с количеством или без. Например:
+            </ThemedText>
+            {/* Не TagRow: тот прижимает метки влево, а здесь всё по центру. */}
+            <View style={styles.example}>
+              {EXAMPLE.map((word) => (
+                <Tag key={word} label={word} />
+              ))}
+            </View>
+          </View>
         )}
-      </View>
+      </ScrollView>
 
-      <Animated.View style={{ transform: [{ scale: pulse }] }}>
+      <View style={styles.micArea}>
+        <View
+          style={[
+            styles.halo,
+            { backgroundColor: recording ? theme.backgroundDanger : theme.accentSoft },
+          ]}
+        />
+        {recording ? (
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.halo, { backgroundColor: theme.danger }, rippleStyle]}
+          />
+        ) : null}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={recording ? 'Остановить запись' : 'Начать запись'}
@@ -245,11 +303,27 @@ function RecordPhase({
           ]}>
           <Ionicons name={recording ? 'stop' : 'mic'} size={40} color={theme.onAccent} />
         </Pressable>
-      </Animated.View>
+      </View>
 
       <ThemedText type="small" themeColor="textSecondary">
         {recording ? 'Нажмите, когда закончите' : 'Нажмите и говорите'}
       </ThemedText>
+
+      {/* Пока идёт запись, ссылка пропадает: случайное нажатие не должно обрывать диктовку. */}
+      <View style={styles.manualLink}>
+        {recording ? null : (
+          <Pressable
+            accessibilityRole="button"
+            hitSlop={Spacing.two}
+            onPress={onManual}
+            style={({ pressed }) => [styles.linkRow, { opacity: pressed ? 0.6 : 1 }]}>
+            <Ionicons name="create-outline" size={18} color={theme.accent} />
+            <ThemedText style={[styles.linkText, { color: theme.accent }]}>
+              Ввести вручную
+            </ThemedText>
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -283,6 +357,7 @@ function ReviewPhase({
   onSubmit: () => void;
 }) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -297,12 +372,14 @@ function ReviewPhase({
         ) : null}
 
         {transcript ? (
-          <View style={[styles.banner, { backgroundColor: theme.backgroundElement }]}>
-            <Ionicons name="chatbubble-ellipses-outline" size={20} color={theme.textSecondary} />
-            <ThemedText type="small" themeColor="textSecondary" style={styles.bannerText}>
-              {transcript}
-            </ThemedText>
-          </View>
+          <ListGroup title="Вы сказали">
+            <View style={styles.quoteRow}>
+              <Ionicons name="chatbubble-ellipses-outline" size={20} color={theme.accent} />
+              <ThemedText themeColor="textSecondary" style={styles.bannerText}>
+                «{transcript}»
+              </ThemedText>
+            </View>
+          </ListGroup>
         ) : null}
 
         {manual ? (
@@ -315,22 +392,17 @@ function ReviewPhase({
         ) : null}
 
         {drafts.length > 0 ? (
-          <>
-            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-              {/* Не «распознано»: в списке лежит и то, что добавлено руками. */}
-              В СПИСКЕ — {formatProducts(drafts.length).toUpperCase()}
-            </ThemedText>
-            <View style={styles.draftList}>
-              {drafts.map((draft, index) => (
-                <DraftRow
-                  key={draft.ingredientId}
-                  draft={draft}
-                  onChange={(next) => onChangeDraft(index, next)}
-                  onRemove={() => onRemoveDraft(index)}
-                />
-              ))}
-            </View>
-          </>
+          // Не «распознано»: в списке лежит и то, что добавлено руками.
+          <ListGroup title={`В списке — ${formatProducts(drafts.length)}`}>
+            {drafts.map((draft, index) => (
+              <DraftRow
+                key={draft.ingredientId}
+                draft={draft}
+                onChange={(next) => onChangeDraft(index, next)}
+                onRemove={() => onRemoveDraft(index)}
+              />
+            ))}
+          </ListGroup>
         ) : manual && !transcript ? null : (
           <EmptyState
             icon="help-circle-outline"
@@ -340,10 +412,9 @@ function ReviewPhase({
         )}
 
         {unrecognized.length > 0 ? (
-          <View style={styles.unrecognized}>
-            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-              НЕ ПОНЯЛ
-            </ThemedText>
+          <ListGroup
+            title="Не понял"
+            footer="Найдите эти продукты в поиске ниже или уберите, нажав на них.">
             <View style={styles.chips}>
               {unrecognized.map((phrase, index) => (
                 <Pressable
@@ -351,7 +422,10 @@ function ReviewPhase({
                   accessibilityRole="button"
                   accessibilityLabel={`Убрать «${phrase}»`}
                   onPress={() => onDismissUnrecognized(index)}
-                  style={[styles.chip, { backgroundColor: theme.backgroundWarning }]}>
+                  style={({ pressed }) => [
+                    styles.chip,
+                    { backgroundColor: theme.backgroundWarning, opacity: pressed ? 0.6 : 1 },
+                  ]}>
                   <ThemedText type="small" style={{ color: theme.warning }}>
                     {phrase}
                   </ThemedText>
@@ -359,26 +433,34 @@ function ReviewPhase({
                 </Pressable>
               ))}
             </View>
-            <ThemedText type="small" themeColor="textSecondary">
-              Найдите эти продукты в поиске ниже или уберите, нажав на них.
-            </ThemedText>
-          </View>
+          </ListGroup>
         ) : null}
 
         {manual ? null : <IngredientSearch onPick={onAddManual} exclude={alreadyAdded} />}
       </ScrollView>
 
-      <View style={[styles.footer, { borderTopColor: theme.border }]}>
-        <PrimaryButton
-          title={transcript ? 'Продиктовать ещё' : 'Продиктовать'}
-          icon="mic-outline"
-          variant="outline"
+      <View
+        style={[
+          styles.footer,
+          { borderTopColor: theme.border, paddingBottom: insets.bottom + Spacing.three },
+        ]}>
+        {/* Микрофон — круглой кнопкой: главное действие здесь «Добавить», и на
+            узком экране две широкие кнопки рядом не помещаются. */}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={transcript ? 'Продиктовать ещё' : 'Продиктовать'}
           onPress={onRecordMore}
-        />
+          style={({ pressed }) => [
+            styles.roundButton,
+            { backgroundColor: theme.accentSoft, opacity: pressed ? 0.7 : 1 },
+          ]}>
+          <Ionicons name="mic" size={24} color={theme.accent} />
+        </Pressable>
         <PrimaryButton
           title={drafts.length > 0 ? `Добавить ${formatProducts(drafts.length)}` : 'Готово'}
           icon="checkmark"
           onPress={onSubmit}
+          style={styles.grow}
         />
       </View>
     </>
@@ -392,27 +474,71 @@ const styles = StyleSheet.create({
   recordScreen: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     gap: Spacing.four,
-    padding: Spacing.four,
+    padding: Spacing.three,
   },
   transcriptArea: {
-    minHeight: 140,
+    flex: 1,
+    alignSelf: 'stretch',
+  },
+  transcriptContent: {
+    flexGrow: 1,
     justifyContent: 'center',
   },
-  transcript: {
+  transcriptCard: {
+    borderRadius: Spacing.three,
+    padding: Spacing.four,
+  },
+  hint: {
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+  },
+  example: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: Spacing.two,
+    marginTop: Spacing.two,
+  },
+  centered: {
     textAlign: 'center',
   },
-  micButton: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+  micArea: {
+    width: HALO_SIZE,
+    height: HALO_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  halo: {
+    position: 'absolute',
+    width: HALO_SIZE,
+    height: HALO_SIZE,
+    borderRadius: HALO_SIZE / 2,
+  },
+  micButton: {
+    width: MIC_SIZE,
+    height: MIC_SIZE,
+    borderRadius: MIC_SIZE / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  manualLink: {
+    minHeight: 48,
+    justifyContent: 'center',
+  },
+  linkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
+  linkText: {
+    fontWeight: '600',
+  },
   reviewContent: {
     padding: Spacing.three,
-    gap: Spacing.three,
+    gap: Spacing.four,
   },
   banner: {
     flexDirection: 'row',
@@ -424,19 +550,17 @@ const styles = StyleSheet.create({
   bannerText: {
     flex: 1,
   },
-  sectionTitle: {
-    letterSpacing: 0.6,
-  },
-  draftList: {
-    gap: Spacing.two,
-  },
-  unrecognized: {
-    gap: Spacing.two,
+  quoteRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.three,
+    padding: Spacing.three,
   },
   chips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.two,
+    padding: Spacing.three,
   },
   chip: {
     flexDirection: 'row',
@@ -447,8 +571,21 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.two,
-    padding: Spacing.three,
+    paddingTop: Spacing.three,
+    paddingHorizontal: Spacing.three,
     borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  roundButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  grow: {
+    flex: 1,
   },
 });

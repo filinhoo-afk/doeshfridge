@@ -7,6 +7,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { formatQuantity, quantityStep } from '@/lib/format';
 import type { DraftItem } from '@/store/fridge';
 
+import { CategoryIcon } from './category-icon';
 import { StepperButton } from './stepper-button';
 import { ThemedText } from './themed-text';
 
@@ -16,9 +17,11 @@ type DraftRowProps = {
   onRemove: () => void;
 };
 
+/** Строка черновика внутри ListGroup: подложку и разделители даёт группа. */
 export function DraftRow({ draft, onChange, onRemove }: DraftRowProps) {
   const theme = useTheme();
-  const unit = draft.unit ?? getIngredient(draft.ingredientId)?.defaultUnit ?? null;
+  const ingredient = getIngredient(draft.ingredientId);
+  const unit = draft.unit ?? ingredient?.defaultUnit ?? null;
   const step = quantityStep(unit);
 
   const change = (delta: number) => {
@@ -33,13 +36,17 @@ export function DraftRow({ draft, onChange, onRemove }: DraftRowProps) {
   };
 
   return (
-    <View style={[styles.row, { backgroundColor: theme.backgroundElement }]}>
-      <ThemedText style={styles.name}>{ingredientName(draft.ingredientId)}</ThemedText>
+    <View style={styles.row}>
+      {ingredient ? <CategoryIcon category={ingredient.category} /> : null}
+      <ThemedText style={styles.name} numberOfLines={2}>
+        {ingredientName(draft.ingredientId)}
+      </ThemedText>
 
       <View style={styles.stepper}>
         <StepperButton icon="remove" onPress={() => change(-step)} />
         <ThemedText type="small" themeColor="textSecondary" style={styles.quantity}>
-          {formatQuantity(draft.quantity, draft.unit) || '—'}
+          {/* Не «—»: между кнопками «−» и «+» прочерк сам выглядит как минус. */}
+          {formatQuantity(draft.quantity, draft.unit) || 'кол-во'}
         </ThemedText>
         <StepperButton icon="add" onPress={() => change(step)} />
       </View>
@@ -61,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
-    borderRadius: Spacing.three,
+    minHeight: 52,
     paddingVertical: Spacing.two,
     paddingLeft: Spacing.three,
     paddingRight: Spacing.two,
@@ -69,6 +76,7 @@ const styles = StyleSheet.create({
   name: {
     flex: 1,
     fontWeight: '600',
+    marginLeft: Spacing.one,
   },
   stepper: {
     flexDirection: 'row',
