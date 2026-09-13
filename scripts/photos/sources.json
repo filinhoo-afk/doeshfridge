@@ -13,22 +13,14 @@
       "fried eggs tomatoes",
       "eggs with tomatoes pan"
     ],
-    "file": "File:Hunan cuisine, stir-fried tomato with eggs.jpg",
-    "author": "Huangdan2060",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Hunan_cuisine,_stir-fried_tomato_with_eggs.jpg"
+    "own": true
   },
   "syrniki": {
     "title": "Сырники",
     "queries": [
       "syrniki"
     ],
-    "file": "File:Syrniki6.jpg",
-    "author": "Off-shell",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Syrniki6.jpg"
+    "own": true
   },
   "ovsyanka": {
     "title": "Овсянка на молоке",
@@ -44,11 +36,7 @@
       "cottage cheese berries",
       "tvorog berries"
     ],
-    "file": "File:Summer Desert (176103799).jpeg",
-    "author": "Anna",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Summer_Desert_(176103799).jpeg"
+    "own": true
   },
   "bliny": {
     "title": "Блины",
@@ -79,11 +67,7 @@
       "avocado toast egg",
       "avocado toast"
     ],
-    "file": "File:Avocado toast with eggs (28508171495).jpg",
-    "author": "Luca Nebuloni",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Avocado_toast_with_eggs_(28508171495).jpg"
+    "own": true
   },
   "yogurt_granola": {
     "title": "Йогурт с овсянкой",
@@ -91,11 +75,7 @@
       "yogurt granola",
       "yogurt oats honey"
     ],
-    "file": "File:Granola, yogurt, fruit. (16696981528).jpg",
-    "author": "Arnold Gatilao",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Granola,_yogurt,_fruit._(16696981528).jpg"
+    "own": true
   },
   "borsch": {
     "title": "Борщ",
@@ -111,11 +91,7 @@
       "shchi",
       "cabbage soup russian"
     ],
-    "file": "File:Shchi.jpg",
-    "author": "Victoria Vasilieva",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Shchi.jpg"
+    "own": true
   },
   "kurinyi_sup": {
     "title": "Куриный суп с лапшой",
@@ -138,11 +114,7 @@
       "cheese soup chicken",
       "cheese soup"
     ],
-    "file": "File:Kremostsuppe (cream cheese soup).jpg",
-    "author": "Bernt Rostad",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Kremostsuppe_(cream_cheese_soup).jpg"
+    "own": true
   },
   "rassolnik": {
     "title": "Рассольник",
@@ -165,11 +137,7 @@
       "tomato cream soup",
       "tomato soup"
     ],
-    "file": "File:Vegan tomato bisque.jpg",
-    "author": "Scudsvlad",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Vegan_tomato_bisque.jpg"
+    "own": true
   },
   "uha": {
     "title": "Уха",
@@ -177,11 +145,7 @@
       "ukha",
       "fish soup russian"
     ],
-    "file": "File:Уха из осетра 01.jpg",
-    "author": "Pannet",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%A3%D1%85%D0%B0_%D0%B8%D0%B7_%D0%BE%D1%81%D0%B5%D1%82%D1%80%D0%B0_01.jpg"
+    "own": true
   },
   "okroshka": {
     "title": "Окрошка",
@@ -244,11 +208,7 @@
       "julienne mushrooms cocotte",
       "julienne dish mushrooms"
     ],
-    "file": "File:Julienne 18.jpg",
-    "author": "Мария Воронина",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Julienne_18.jpg"
+    "own": true
   },
   "kotlety": {
     "title": "Котлеты",
@@ -264,11 +224,7 @@
       "meatballs tomato sauce",
       "tefteli"
     ],
-    "file": "File:Liat Portal for Foodie Disorder - Meatballs in tomato sauce.jpg",
-    "author": "HaJunkiyada",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Meatballs_in_tomato_sauce.jpg"
+    "own": true
   },
   "makarony_po_flotski": {
     "title": "Макароны по-флотски",
@@ -308,11 +264,7 @@
       "roast pork",
       "baked pork loin"
     ],
-    "file": "File:Roast Pork with gravy, May 2024.jpg",
-    "author": "Ralff Nestor Nacor",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Roast_Pork_with_gravy,_May_2024.jpg"
+    "own": true
   },
   "pechen_v_smetane": {
     "title": "Печень в сметане",
@@ -351,11 +303,7 @@
       "battered cod",
       "fish in batter"
     ],
-    "file": "File:Beer Battered Cod - The Hummingbird 2026-05-05.jpg",
-    "author": "Andy Li",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Beer_Battered_Cod_-_The_Hummingbird_2026-05-05.jpg"
+    "own": true
   },
   "ryba_pod_marinadom": {
     "title": "Рыба под маринадом",
@@ -364,7 +312,8 @@
       "fish carrot marinade",
       "fish under marinade"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "krevetki_chesnok": {
     "title": "Креветки с чесноком",
@@ -475,7 +424,8 @@
       "braised cabbage",
       "stewed cabbage"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "pure": {
     "title": "Картофельное пюре",
@@ -497,11 +447,7 @@
     "queries": [
       "shakshuka"
     ],
-    "file": "File:Shakshuka by Calliopejen1.jpg",
-    "author": "Calliopejen1",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Shakshuka_by_Calliopejen1.jpg"
+    "own": true
   },
   "tvorozhnaya_zapekanka": {
     "title": "Творожная запеканка",
@@ -510,11 +456,7 @@
       "cottage cheese casserole",
       "zapekanka"
     ],
-    "file": "File:Recipes cottage cheese pie named misa.jpg",
-    "author": "FDominec",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Recipes_cottage_cheese_pie_named_misa.jpg"
+    "own": true
   },
   "griby_zharenye": {
     "title": "Жареные грибы",
@@ -538,11 +480,7 @@
       "vinegret salad",
       "beetroot vinaigrette salad"
     ],
-    "file": "File:Vinaigrette salad.jpg",
-    "author": "Oleg Brovko",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Vinaigrette_salad.jpg"
+    "own": true
   },
   "grecheskiy": {
     "title": "Греческий салат",
@@ -574,22 +512,14 @@
       "cucumber tomato salad",
       "tomato cucumber salad"
     ],
-    "file": "File:Cucumber onion and tomato salad with mint coriander and lemon.jpg",
-    "author": "Voxbyrox",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Cucumber_onion_and_tomato_salad_with_mint_coriander_and_lemon.jpg"
+    "own": true
   },
   "salat_shpinat_avokado": {
     "title": "Шпинат и авокадо",
     "queries": [
       "spinach avocado salad"
     ],
-    "file": "File:Liat Portal for Foodie Disorder - Healthy Breakfast with Boiled Egg, Avocado, and Israeli Salad.jpg",
-    "author": "HaJunkiyada",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Healthy_Breakfast_with_Boiled_Egg,_Avocado,_and_Israeli_Salad.jpg"
+    "own": true
   },
   "salat_iz_kapusty": {
     "title": "Капуста с морковью",
@@ -597,11 +527,7 @@
       "cabbage carrot salad",
       "coleslaw"
     ],
-    "file": "File:Vegetable salad 13.jpg",
-    "author": "BogTar201213",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Vegetable_salad_13.jpg"
+    "own": true
   },
   "sharlotka": {
     "title": "Шарлотка",
@@ -609,11 +535,7 @@
       "sharlotka",
       "apple sponge cake"
     ],
-    "file": "File:Кусні шарлотки.JPG",
-    "author": "Turzh",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D1%83%D1%81%D0%BD%D1%96_%D1%88%D0%B0%D1%80%D0%BB%D0%BE%D1%82%D0%BA%D0%B8.JPG"
+    "own": true
   },
   "bananovyi_hleb": {
     "title": "Банановый хлеб",
@@ -644,11 +566,7 @@
       "apple galette",
       "apple puff pastry"
     ],
-    "file": "File:Apple galette (3926990412).jpg",
-    "author": "Karen and Brad Emerson",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Apple_galette_(3926990412).jpg"
+    "own": true
   },
   "blinchiki_s_tvorogom": {
     "title": "Блинчики с творогом",
@@ -712,11 +630,7 @@
       "solyanka soup",
       "Солянка сборная мясная"
     ],
-    "file": "File:Soljanka with olives.jpg",
-    "author": "Ogre",
-    "license": "Public domain",
-    "licenseUrl": "",
-    "page": "https://commons.wikimedia.org/wiki/File:Soljanka_with_olives.jpg"
+    "own": true
   },
   "gorohovyi_sup": {
     "title": "Гороховый суп с копчёностями",
@@ -733,11 +647,7 @@
       "green borscht",
       "Зелёные щи со щавелем"
     ],
-    "file": "File:Zupa szczawiowa z jajkiem - 2023.05.22.jpg",
-    "author": "Aw58",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Zupa_szczawiowa_z_jajkiem_-_2023.05.22.jpg"
+    "own": true
   },
   "shchi_kislye": {
     "title": "Щи из квашеной капусты",
@@ -746,11 +656,7 @@
       "shchi",
       "Щи из квашеной капусты"
     ],
-    "file": "File:020260320 Sauerkraut soup.jpg",
-    "author": "Auctor quaerendae",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:020260320_Sauerkraut_soup.jpg"
+    "own": true
   },
   "svekolnik": {
     "title": "Холодный свекольник",
@@ -759,11 +665,7 @@
       "svekolnik",
       "Холодный свекольник"
     ],
-    "file": "File:Šaltibarščiai (cold beet soup).jpg",
-    "author": "Continentaleurope",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%C5%A0altibar%C5%A1%C4%8Diai_(cold_beet_soup).jpg"
+    "own": true
   },
   "okroshka_kvas": {
     "title": "Окрошка на квасе",
@@ -780,11 +682,7 @@
       "fish soup potatoes",
       "Суп из рыбных консервов"
     ],
-    "file": "File:Fish-and-vegetables-soup.jpg",
-    "author": "Aneth David (SLU)",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Fish-and-vegetables-soup.jpg"
+    "own": true
   },
   "sup_frikadelki": {
     "title": "Суп с фрикадельками",
@@ -792,11 +690,7 @@
       "meatball soup",
       "Суп с фрикадельками"
     ],
-    "file": "File:Meat ball soup.JPG",
-    "author": "Biso",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:Meat_ball_soup.JPG"
+    "own": true
   },
   "molochnyi_sup": {
     "title": "Молочный суп с вермишелью",
@@ -813,11 +707,7 @@
       "dumpling soup chicken",
       "Суп с клёцками"
     ],
-    "file": "File:ChickenDumplings.jpg",
-    "author": "Jonathunder",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:ChickenDumplings.jpg"
+    "own": true
   },
   "fasolevyi_sup": {
     "title": "Фасолевый суп",
@@ -833,11 +723,7 @@
       "cauliflower soup",
       "Суп с цветной капустой"
     ],
-    "file": "File:Vegan Cream of Cauliflower soup (Gluten Free Vegan Girl) (8389035765).jpg",
-    "author": "Lablascovegmenu",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Vegan_Cream_of_Cauliflower_soup_(Gluten_Free_Vegan_Girl)_(8389035765).jpg"
+    "own": true
   },
   "kulesh": {
     "title": "Кулеш с салом",
@@ -855,11 +741,7 @@
       "pelmeni soup",
       "Суп с пельменями"
     ],
-    "file": "File:Pelmeni2.jpg",
-    "author": "Kagor",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:Pelmeni2.jpg"
+    "own": true
   },
   "grechnevyi_sup": {
     "title": "Гречневый суп с курицей",
@@ -911,7 +793,8 @@
       "zharkoye",
       "Жаркое в горшочках"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "kartoshka_s_myasom": {
     "title": "Тушёная картошка с мясом",
@@ -927,7 +810,8 @@
       "zrazy",
       "Картофельные зразы с мясом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "grechka_po_kupecheski": {
     "title": "Гречка по-купечески",
@@ -960,7 +844,8 @@
       "fish cakes",
       "Рыбные котлеты"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "ryba_v_smetane": {
     "title": "Рыба в сметане",
@@ -968,7 +853,8 @@
       "fish sour cream sauce",
       "Рыба в сметане"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "seledka_pod_shuboy": {
     "title": "Сельдь под шубой",
@@ -977,11 +863,7 @@
       "herring under fur coat",
       "Сельдь под шубой"
     ],
-    "file": "File:Selidi pod shuboi.jpg",
-    "author": "User:Zserghei",
-    "license": "Public domain",
-    "licenseUrl": "",
-    "page": "https://commons.wikimedia.org/wiki/File:Selidi_pod_shuboi.jpg"
+    "own": true
   },
   "mimoza": {
     "title": "Салат «Мимоза»",
@@ -997,7 +879,8 @@
       "zrazy egg",
       "Мясные зразы с яйцом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "kurinye_kotlety_rublenye": {
     "title": "Рубленые куриные котлеты",
@@ -1047,7 +930,8 @@
       "boiled fish egg sauce",
       "Рыба по-польски"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "skumbriya_zapechennaya": {
     "title": "Скумбрия в духовке",
@@ -1055,11 +939,7 @@
       "baked mackerel",
       "Скумбрия в духовке"
     ],
-    "file": "File:Baked Mackereel.jpg",
-    "author": "Леонид Котов",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Baked_Mackereel.jpg"
+    "own": true
   },
   "mintay_s_ovoshami": {
     "title": "Минтай, тушённый с овощами",
@@ -1212,11 +1092,7 @@
       "fried eggs sausage",
       "Яичница с колбасой"
     ],
-    "file": "File:Sausage and lunch meats with fried eggs from Man Fong Canteen.jpg",
-    "author": "Peachyeung316",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Sausage_and_lunch_meats_with_fried_eggs_from_Man_Fong_Canteen.jpg"
+    "own": true
   },
   "omlet_detsad": {
     "title": "Высокий омлет как в детском саду",
@@ -1233,11 +1109,7 @@
       "varenyky potato",
       "Вареники с картошкой"
     ],
-    "file": "File:Varenyky with Potatoes - 2026 -04.jpg",
-    "author": "DemieK07",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Varenyky_with_Potatoes_-_2026_-04.jpg"
+    "own": true
   },
   "pelmeni_domashnie": {
     "title": "Домашние пельмени",
@@ -1253,11 +1125,7 @@
       "varenyky cottage cheese",
       "Вареники с творогом"
     ],
-    "file": "File:20. varenyky with cheese - add butter.jpg",
-    "author": "Валентина Тимків",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:20._varenyky_with_cheese_-_add_butter.jpg"
+    "own": true
   },
   "svekla_s_chesnokom": {
     "title": "Свёкла с чесноком и майонезом",
@@ -1265,7 +1133,8 @@
       "beetroot garlic salad",
       "Свёкла с чесноком и майонезом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "svekla_s_chernoslivom": {
     "title": "Свёкла с черносливом и орехами",
@@ -1273,7 +1142,8 @@
       "beetroot prunes walnuts",
       "Свёкла с черносливом и орехами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "morkov_po_koreyski": {
     "title": "Морковь по-корейски",
@@ -1289,11 +1159,7 @@
       "squid salad",
       "Салат с кальмарами"
     ],
-    "file": "File:Thai squid and noodle salad (8619316942).jpg",
-    "author": "pelican",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Thai_squid_and_noodle_salad_(8619316942).jpg"
+    "own": true
   },
   "stolichnyi": {
     "title": "Салат «Столичный»",
@@ -1301,11 +1167,7 @@
       "stolichny salad",
       "Салат Столичный"
     ],
-    "file": "File:Russian Olivier salad.jpg",
-    "author": "AlMare",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
-    "page": "https://commons.wikimedia.org/wiki/File:Russian_Olivier_salad.jpg"
+    "own": true
   },
   "salat_fasol_suhariki": {
     "title": "Салат с фасолью и сухариками",
@@ -1313,7 +1175,8 @@
       "bean salad croutons",
       "Салат с фасолью и сухариками"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "vitaminnyi": {
     "title": "Салат «Витаминный»",
@@ -1321,11 +1184,7 @@
       "cabbage carrot apple salad",
       "Салат Витаминный"
     ],
-    "file": "File:Салат \"Витаминный\".jpg",
-    "author": "Книжная пыль",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B0%D0%BB%D0%B0%D1%82_%22%D0%92%D0%B8%D1%82%D0%B0%D0%BC%D0%B8%D0%BD%D0%BD%D1%8B%D0%B9%22.jpg"
+    "own": true
   },
   "yaichnyi_salat": {
     "title": "Салат из яиц с огурцом и зелёным луком",
@@ -1333,11 +1192,7 @@
       "egg cucumber salad",
       "Салат из яиц с огурцом и зелёным луком"
     ],
-    "file": "File:Salad with bryndza 05.jpg",
-    "author": "JTs",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Salad_with_bryndza_05.jpg"
+    "own": true
   },
   "salat_redis": {
     "title": "Салат из редиски со сметаной",
@@ -1345,7 +1200,8 @@
       "radish salad",
       "Салат из редиски со сметаной"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_pekinka": {
     "title": "Салат из пекинской капусты",
@@ -1353,7 +1209,8 @@
       "napa cabbage salad",
       "Салат из пекинской капусты"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_kurica_ananas": {
     "title": "Салат с курицей и ананасами",
@@ -1361,7 +1218,8 @@
       "chicken pineapple salad",
       "Салат с курицей и ананасами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "seledka_s_kartoshkoy": {
     "title": "Селёдка с картошкой и луком",
@@ -1369,11 +1227,7 @@
       "herring potatoes",
       "Селёдка с картошкой и луком"
     ],
-    "file": "File:Soused herring, served with potato salad and cucumber.jpg",
-    "author": "W.carter",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Soused_herring,_served_with_potato_salad_and_cucumber.jpg"
+    "own": true
   },
   "salat_kvashenaya_kapusta": {
     "title": "Квашеная капуста с луком и маслом",
@@ -1381,11 +1235,7 @@
       "sauerkraut salad",
       "Квашеная капуста с луком и маслом"
     ],
-    "file": "File:Kvaschennaja-kapusta.jpg",
-    "author": "Loyna",
-    "license": "CC BY-SA 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-    "page": "https://commons.wikimedia.org/wiki/File:Kvaschennaja-kapusta.jpg"
+    "own": true
   },
   "evreyskiy_salat": {
     "title": "Закуска из плавленого сыра с чесноком",
@@ -1419,7 +1269,8 @@
       "sprats sandwich",
       "Бутерброды со шпротами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "sosiski_v_teste": {
     "title": "Сосиски в слоёном тесте",
@@ -1427,11 +1278,7 @@
       "sausage puff pastry",
       "Сосиски в слоёном тесте"
     ],
-    "file": "File:-2019-12-23 Homemade sausage rolls, Trimingham (1).JPG",
-    "author": "Kolforn",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:-2019-12-23_Homemade_sausage_rolls,_Trimingham_(1).JPG"
+    "own": true
   },
   "grenki_chesnochnye": {
     "title": "Чесночные гренки из чёрного хлеба",
@@ -1481,7 +1328,8 @@
       "processed cheese soup",
       "Суп с плавленым сыром"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "kurinye_bedra_chesnok": {
     "title": "Куриные бёдра в чесночной сметане",
@@ -1541,11 +1389,7 @@
       "fish solyanka",
       "Рыбная солянка"
     ],
-    "file": "File:Селянка из рыб.jpg",
-    "author": "Eraevsky",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B5%D0%BB%D1%8F%D0%BD%D0%BA%D0%B0_%D0%B8%D0%B7_%D1%80%D1%8B%D0%B1.jpg"
+    "own": true
   },
   "gribnaya_pohlebka": {
     "title": "Грибная похлёбка с перловкой",
@@ -1596,7 +1440,8 @@
       "fried fish",
       "Жареная рыба с луком"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "pechenochnye_oladi": {
     "title": "Печёночные оладьи",
@@ -1649,11 +1494,7 @@
       "minced schnitzel",
       "Рубленый шницель"
     ],
-    "file": "File:2022-02-16 Schnitzel mit Pommes in der Cafeteria der Kaufmännischen Schule Tauberbischofsheim 01.jpg",
-    "author": "Triplec85",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:2022-02-16_Schnitzel_mit_Pommes_in_der_Cafeteria_der_Kaufm%C3%A4nnischen_Schule_Tauberbischofsheim_01.jpg"
+    "own": true
   },
   "kapusta_s_yaicom": {
     "title": "Жареная капуста с яйцом",
@@ -1722,11 +1563,7 @@
       "beetroot spread",
       "Свекольная икра"
     ],
-    "file": "File:Свекольная икра 01.jpg",
-    "author": "Pannet",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B2%D0%B5%D0%BA%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B8%D0%BA%D1%80%D0%B0_01.jpg"
+    "own": true
   },
   "belyashi": {
     "title": "Беляши",
@@ -1759,7 +1596,8 @@
       "cabbage pie",
       "Заливной пирог с капустой"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "zalivnoy_pirog_ryba": {
     "title": "Заливной пирог с рыбными консервами",
@@ -1767,7 +1605,8 @@
       "fish pie",
       "Заливной пирог с рыбными консервами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "grenki_s_syrom": {
     "title": "Гренки с яйцом и сыром",
@@ -1793,7 +1632,8 @@
       "mushroom cabbage soup",
       "Постные щи с грибами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "lazanya": {
     "title": "Лазанья болоньезе",
@@ -1962,11 +1802,7 @@
       "salade nicoise",
       "Салат нисуаз"
     ],
-    "file": "File:Salade nicoise.jpg",
-    "author": "Canterel",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Salade_nicoise.jpg"
+    "own": true
   },
   "gaspacho": {
     "title": "Гаспачо",
@@ -1982,11 +1818,7 @@
       "spanish tortilla",
       "Тортилья по-испански"
     ],
-    "file": "File:Tortilla Española.jpg",
-    "author": "Juan Emilio Prades Bel",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tortilla_Espa%C3%B1ola.jpg"
+    "own": true
   },
   "paelya": {
     "title": "Паэлья с курицей и креветками",
@@ -2018,11 +1850,7 @@
       "tartiflette",
       "Тартифлет"
     ],
-    "file": "File:Une tartiflette sortie du four.jpg",
-    "author": "Benoît Prieur",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Une_tartiflette_sortie_du_four.jpg"
+    "own": true
   },
   "rizotto_s_kuricey": {
     "title": "Ризотто с курицей",
@@ -2038,11 +1866,7 @@
       "saltimbocca",
       "Сальтимбокка из курицы"
     ],
-    "file": "File:Saltimbocca 01.jpg",
-    "author": "Arnaud 25",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Saltimbocca_01.jpg"
+    "own": true
   },
   "polpette": {
     "title": "Итальянские фрикадельки в томате",
@@ -2131,11 +1955,7 @@
       "shashlik pork",
       "Шашлык из свинины в духовке"
     ],
-    "file": "File:Shashlik made of pork.jpg",
-    "author": "Limited fantasy",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Shashlik_made_of_pork.jpg"
+    "own": true
   },
   "kyufta_bozbash": {
     "title": "Кюфта-бозбаш",
@@ -2159,11 +1979,7 @@
       "shurpa",
       "Шурпа"
     ],
-    "file": "File:Chorba cooked in the home kitchen.jpg",
-    "author": "Bgelo777",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Chorba_cooked_in_the_home_kitchen.jpg"
+    "own": true
   },
   "manty": {
     "title": "Манты",
@@ -2187,11 +2003,7 @@
       "samsa",
       "Самса из слоёного теста"
     ],
-    "file": "File:Samsa at Gülhan Restaurant, Beijing (20210402171539).jpg",
-    "author": "N509FZ",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Samsa_at_G%C3%BClhan_Restaurant,_Beijing_(20210402171539).jpg"
+    "own": true
   },
   "achik_chuchuk": {
     "title": "Ачик-чучук",
@@ -2224,11 +2036,7 @@
       "tabbouleh",
       "Табуле"
     ],
-    "file": "File:Flickr - cyclonebill - Tabbouleh.jpg",
-    "author": "cyclonebill",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Flickr_-_cyclonebill_-_Tabbouleh.jpg"
+    "own": true
   },
   "baba_ganush": {
     "title": "Баба гануш",
@@ -2260,11 +2068,7 @@
       "shawarma",
       "Домашняя шаурма"
     ],
-    "file": "File:Shawarma-sandwich-01.jpg",
-    "author": "Vera Yu and David Li",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Shawarma-sandwich-01.jpg"
+    "own": true
   },
   "mudzhaddara": {
     "title": "Мджадара",
@@ -2312,11 +2116,7 @@
       "satsivi",
       "Сациви из курицы"
     ],
-    "file": "File:Satsivi a València.jpg",
-    "author": "Francesc Fort",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Satsivi_a_Val%C3%A8ncia.jpg"
+    "own": true
   },
   "kurica_tikka_masala": {
     "title": "Курица тикка масала",
@@ -2373,7 +2173,8 @@
       "egg fried rice",
       "Жареный рис с яйцом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "pad_tay": {
     "title": "Пад тай",
@@ -2389,11 +2190,7 @@
       "tom yum",
       "Том ям с креветками"
     ],
-    "file": "File:Tom Yum Soup.JPG",
-    "author": "David",
-    "license": "Public domain",
-    "licenseUrl": "",
-    "page": "https://commons.wikimedia.org/wiki/File:Tom_Yum_Soup.JPG"
+    "own": true
   },
   "kung_pao": {
     "title": "Курица гунбао",
@@ -2409,11 +2206,7 @@
       "sweet and sour pork",
       "Свинина в кисло-сладком соусе"
     ],
-    "file": "File:菠萝咕噜肉.jpg",
-    "author": "Walter Grassroot",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%E8%8F%A0%E8%90%9D%E5%92%95%E5%99%9C%E8%82%89.jpg"
+    "own": true
   },
   "udon_s_kuricey": {
     "title": "Удон с курицей и овощами",
@@ -2421,11 +2214,7 @@
       "yaki udon",
       "Удон с курицей и овощами"
     ],
-    "file": "File:Yaki-udon.jpg",
-    "author": "Flickr.com user \"Blue Lotus\"",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Yaki-udon.jpg"
+    "own": true
   },
   "okonomiyaki": {
     "title": "Окономияки",
@@ -2441,11 +2230,7 @@
       "yakitori",
       "Якитори"
     ],
-    "file": "File:Yakitori - Tora.jpg",
-    "author": "Francesc Fort",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Yakitori_-_Tora.jpg"
+    "own": true
   },
   "fo_bo": {
     "title": "Фо бо",
@@ -2478,11 +2263,7 @@
       "thai green curry",
       "Тайский карри с курицей"
     ],
-    "file": "File:Thai green chicken curry and roti.jpg",
-    "author": "Takeaway",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Thai_green_chicken_curry_and_roti.jpg"
+    "own": true
   },
   "bibimbap": {
     "title": "Пибимпап",
@@ -2514,11 +2295,7 @@
       "egg drop soup",
       "Китайский яичный суп"
     ],
-    "file": "File:Egg drop soup.jpg",
-    "author": "неизвестен",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Egg_drop_soup.jpg"
+    "own": true
   },
   "kapusta_po_kitayski": {
     "title": "Пекинская капуста по-китайски",
@@ -2535,11 +2312,7 @@
       "tom kha kai",
       "Том кха кай"
     ],
-    "file": "File:Tom kha gai2.jpg",
-    "author": "lydiajoy1",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tom_kha_gai2.jpg"
+    "own": true
   },
   "losos_teriyaki": {
     "title": "Лосось терияки",
@@ -2564,11 +2337,7 @@
       "tofu stir fry",
       "Тофу с овощами в соевом соусе"
     ],
-    "file": "File:Tofu stir-fry.jpeg",
-    "author": "неизвестен",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tofu_stir-fry.jpeg"
+    "own": true
   },
   "pakora": {
     "title": "Овощные пакоры",
@@ -2608,11 +2377,7 @@
       "tacos",
       "Тако с фаршем"
     ],
-    "file": "File:001 Tacos de carnitas, carne asada y al pastor.jpg",
-    "author": "Larry Miller",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:001_Tacos_de_carnitas,_carne_asada_y_al_pastor.jpg"
+    "own": true
   },
   "kesadilya": {
     "title": "Кесадилья с курицей",
@@ -2660,11 +2425,7 @@
       "fish chowder",
       "Рыбный чаудер"
     ],
-    "file": "File:Fishchowder.jpg",
-    "author": "Nate Steiner",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Fishchowder.jpg"
+    "own": true
   },
   "sendvich_klab": {
     "title": "Клаб-сэндвич",
@@ -2672,11 +2433,7 @@
       "club sandwich",
       "Клаб-сэндвич"
     ],
-    "file": "File:Club sandwiches in hong kong.jpg",
-    "author": "Peachyeung316",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Club_sandwiches_in_hong_kong.jpg"
+    "own": true
   },
   "kurinye_krylya_bbq": {
     "title": "Куриные крылышки барбекю",
@@ -2692,11 +2449,7 @@
       "swedish meatballs",
       "Шведские фрикадельки"
     ],
-    "file": "File:Swedish Meatballs IKEA Kota Baru Parahyangan.jpg",
-    "author": "Vincenty846",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Swedish_Meatballs_IKEA_Kota_Baru_Parahyangan.jpg"
+    "own": true
   },
   "shnicel": {
     "title": "Шницель",
@@ -2705,11 +2458,7 @@
       "schnitzel",
       "Шницель"
     ],
-    "file": "File:2022-12-29 Wiener Schnitzel im Hotel Kaiserin Elisabeth.jpg",
-    "author": "Burkhard Mücke",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:2022-12-29_Wiener_Schnitzel_im_Hotel_Kaiserin_Elisabeth.jpg"
+    "own": true
   },
   "kartofelnyi_salat_nemeckiy": {
     "title": "Немецкий картофельный салат",
@@ -2757,11 +2506,7 @@
       "souvlaki",
       "Сувлаки"
     ],
-    "file": "File:Souvlaki in Athens.JPG",
-    "author": "Miyagawa",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Souvlaki_in_Athens.JPG"
+    "own": true
   },
   "fasolada": {
     "title": "Фасолада",
@@ -2777,11 +2522,7 @@
       "shopska salad",
       "Шопский салат"
     ],
-    "file": "File:Chopska.jpg",
-    "author": "Popo le Chien",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Chopska.jpg"
+    "own": true
   },
   "kolduny": {
     "title": "Колдуны",
@@ -2814,11 +2555,7 @@
       "scotch egg",
       "Шотландские яйца"
     ],
-    "file": "File:Texas folklife festival scotch 2013.jpg",
-    "author": "Larry D. Moore",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Texas_folklife_festival_scotch_2013.jpg"
+    "own": true
   },
   "ris_s_fasolyu": {
     "title": "Рис с фасолью по-карибски",
@@ -2924,7 +2661,8 @@
       "roasted pepper salad",
       "Салат из печёного перца"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "merdzhimek": {
     "title": "Мерджимек чорбасы",
@@ -3069,11 +2807,7 @@
       "thai beef salad",
       "Тайский салат с говядиной"
     ],
-    "file": "File:Thai Beef Salad (28864041891).jpg",
-    "author": "Sharon Chen",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Thai_Beef_Salad_(28864041891).jpg"
+    "own": true
   },
   "nasi_goreng": {
     "title": "Наси горенг",
@@ -3089,11 +2823,7 @@
       "chicken satay",
       "Куриное сате с арахисовым соусом"
     ],
-    "file": "File:CHICKEN SATAY.jpg",
-    "author": "Elly Suhailee",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:CHICKEN_SATAY.jpg"
+    "own": true
   },
   "tazhin": {
     "title": "Тажин с курицей и курагой",
@@ -3102,11 +2832,7 @@
       "tagine",
       "Тажин с курицей и курагой"
     ],
-    "file": "File:Moroccan food-Chicken tagine with preserved lemons and olives-01.jpg",
-    "author": "Foodista",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Moroccan_food-Chicken_tagine_with_preserved_lemons_and_olives-01.jpg"
+    "own": true
   },
   "harira": {
     "title": "Харира",
@@ -3165,7 +2891,8 @@
       "steamed fish vegetables",
       "Рыба на пару с овощами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "treska_s_pomidorami": {
     "title": "Треска, запечённая с помидорами",
@@ -3173,7 +2900,8 @@
       "baked cod tomatoes",
       "Треска, запечённая с помидорами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "mintay_v_folge": {
     "title": "Минтай в фольге с морковью",
@@ -3198,11 +2926,7 @@
       "tuna bean salad",
       "Салат с тунцом и белой фасолью"
     ],
-    "file": "File:Insalata di Fagioli e Tonno – Bohnensalat mit Thunfisch (7327273414).jpg",
-    "author": "Katrin Gilger",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Insalata_di_Fagioli_e_Tonno_%E2%80%93_Bohnensalat_mit_Thunfisch_(7327273414).jpg"
+    "own": true
   },
   "salat_kinoa_avokado": {
     "title": "Салат с киноа и авокадо",
@@ -3210,7 +2934,8 @@
       "quinoa avocado salad",
       "Салат с киноа и авокадо"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "boul_kinoa_kurica": {
     "title": "Боул с киноа и курицей",
@@ -3251,11 +2976,7 @@
       "smoothie bowl",
       "Смузи-боул с бананом и ягодами"
     ],
-    "file": "File:Green smoothie bowl.jpg",
-    "author": "Miscellaneous contributor",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Green_smoothie_bowl.jpg"
+    "own": true
   },
   "grechka_s_ovoshami": {
     "title": "Гречка с овощами",
@@ -3287,7 +3008,8 @@
       "beet feta salad",
       "Салат со свёклой и фетой"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_kurica_avokado": {
     "title": "Салат с курицей и авокадо",
@@ -3295,11 +3017,7 @@
       "chicken avocado salad",
       "Салат с курицей и авокадо"
     ],
-    "file": "File:Salad of Poached Chicken with Avocado, Rocket Peach and Radish (67408669).jpg",
-    "author": "Alpha",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Salad_of_Poached_Chicken_with_Avocado,_Rocket_Peach_and_Radish_(67408669).jpg"
+    "own": true
   },
   "kurica_brokkoli_soya": {
     "title": "Курица с брокколи в соевом соусе",
@@ -3316,7 +3034,8 @@
       "turkey meatballs tomato",
       "Тефтели из индейки в томате"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "farshirovannye_kabachki": {
     "title": "Кабачки, фаршированные мясом",
@@ -3356,7 +3075,8 @@
       "green beans egg",
       "Стручковая фасоль с яйцом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "kabachkovaya_lazanya": {
     "title": "Лазанья из кабачков",
@@ -3372,11 +3092,7 @@
       "cucumber yogurt salad",
       "Огурцы в йогурте с укропом"
     ],
-    "file": "File:Таратур 01.jpg",
-    "author": "АннаМариа",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%B0%D1%80%D0%B0%D1%82%D1%83%D1%80_01.jpg"
+    "own": true
   },
   "kurinyi_sup_ovoshi": {
     "title": "Лёгкий куриный суп с овощами",
@@ -3490,7 +3206,8 @@
       "bean salad pickles",
       "Фасолевый салат с солёными огурцами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "postnye_bliny": {
     "title": "Постные блины на воде",
@@ -3555,7 +3272,8 @@
       "pumpkin lentil soup",
       "Суп из тыквы с красной чечевицей"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "gribnoy_sup_lapsha": {
     "title": "Грибной суп с лапшой",
@@ -3580,7 +3298,8 @@
       "corn cucumber salad",
       "Салат с кукурузой и огурцом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "pashtet_fasol": {
     "title": "Паштет из фасоли с орехами",
@@ -3596,7 +3315,8 @@
       "potato mushroom casserole",
       "Постная картофельная запеканка с грибами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "risovaya_lapsha_ovoshi": {
     "title": "Рисовая лапша с овощами",
@@ -3638,11 +3358,7 @@
       "scrambled eggs",
       "Сливочная яичница-болтунья"
     ],
-    "file": "File:Scrambed eggs.jpg",
-    "author": "Takeaway",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Scrambed_eggs.jpg"
+    "own": true
   },
   "yayca_pashot_tost": {
     "title": "Яйцо пашот на тосте",
@@ -3650,11 +3366,7 @@
       "poached egg toast",
       "Яйцо пашот на тосте"
     ],
-    "file": "File:-2019-07-11 Poached egg with watercress on toast, Cromer.JPG",
-    "author": "Kolforn",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:-2019-07-11_Poached_egg_with_watercress_on_toast,_Cromer.JPG"
+    "own": true
   },
   "tost_losos": {
     "title": "Тост с творожным сыром и лососем",
@@ -3662,7 +3374,8 @@
       "salmon cream cheese toast",
       "Тост с творожным сыром и лососем"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "sendvich_tunec": {
     "title": "Сэндвич с тунцом",
@@ -3670,11 +3383,7 @@
       "tuna sandwich",
       "Сэндвич с тунцом"
     ],
-    "file": "File:Tuna salad sandwich (1).jpg",
-    "author": "jeffreyw",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tuna_salad_sandwich_(1).jpg"
+    "own": true
   },
   "lapsha_s_yaicom": {
     "title": "Лапша с яйцом и зелёным луком",
@@ -3732,11 +3441,7 @@
       "noodle soup egg",
       "Быстрый суп с вермишелью и яйцом"
     ],
-    "file": "File:07994 chicken soup, with egg noodles, Sanok.JPG",
-    "author": "Silar",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:07994_chicken_soup,_with_egg_noodles,_Sanok.JPG"
+    "own": true
   },
   "omlet_v_lavashe": {
     "title": "Омлет в лаваше",
@@ -3761,11 +3466,7 @@
       "egg in a hole",
       "Яйцо в хлебе"
     ],
-    "file": "File:EggToast.jpg",
-    "author": "Jonathunder",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:EggToast.jpg"
+    "own": true
   },
   "salat_pomidory_luk": {
     "title": "Помидоры с луком и маслом",
@@ -3773,11 +3474,7 @@
       "tomato onion salad",
       "Помидоры с луком и маслом"
     ],
-    "file": "File:Tomato-onion salad in Ankara.jpg",
-    "author": "E4024",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tomato-onion_salad_in_Ankara.jpg"
+    "own": true
   },
   "salat_vetchina": {
     "title": "Салат с ветчиной и огурцом",
@@ -3785,7 +3482,8 @@
       "ham salad",
       "Салат с ветчиной и огурцом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "ris_s_yaicom": {
     "title": "Рис с яйцом и соевым соусом",
@@ -3802,11 +3500,7 @@
       "cheese sticks",
       "Сырные палочки в лаваше"
     ],
-    "file": "File:Pepper Jack cheese sticks.jpg",
-    "author": "@joefoodie",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Pepper_Jack_cheese_sticks.jpg"
+    "own": true
   },
   "tost_banan": {
     "title": "Тост с арахисовой пастой и бананом",
@@ -3814,11 +3508,7 @@
       "peanut butter banana toast",
       "Тост с арахисовой пастой и бананом"
     ],
-    "file": "File:Peanut butter and banana on toasted homemade bread - Massachusetts.jpg",
-    "author": "Daderot",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Peanut_butter_and_banana_on_toasted_homemade_bread_-_Massachusetts.jpg"
+    "own": true
   },
   "tvorozhnyi_krem": {
     "title": "Творожный крем с ягодами",
@@ -3826,11 +3516,7 @@
       "cottage cheese berries",
       "Творожный крем с ягодами"
     ],
-    "file": "File:Summer Desert (176103799).jpeg",
-    "author": "Anna",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Summer_Desert_(176103799).jpeg"
+    "own": true
   },
   "lenivaya_ovsyanka": {
     "title": "Ленивая овсянка в банке",
@@ -3846,11 +3532,7 @@
       "fried cheese",
       "Жареный сыр в панировке"
     ],
-    "file": "File:Abkhazian fried cheese.jpg",
-    "author": "Alex Ostrovski",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Abkhazian_fried_cheese.jpg"
+    "own": true
   },
   "griby_s_yaicom": {
     "title": "Грибы с яйцом на сковороде",
@@ -3866,11 +3548,7 @@
       "tomato soup bowl",
       "Томатный суп из банки томатов"
     ],
-    "file": "File:Tomato soup.jpg",
-    "author": "неизвестен",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tomato_soup.jpg"
+    "own": true
   },
   "krevetki_slivki": {
     "title": "Креветки в сливочно-чесночном соусе",
@@ -3914,11 +3592,7 @@
       "tuna egg salad",
       "Салат с тунцом и яйцом"
     ],
-    "file": "File:Yellowfin tuna steak with walnut sauce and hard-boiled eggs, on mixed greens - Massachusetts.jpg",
-    "author": "Daderot",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Yellowfin_tuna_steak_with_walnut_sauce_and_hard-boiled_eggs,_on_mixed_greens_-_Massachusetts.jpg"
+    "own": true
   },
   "zharenye_pelmeni": {
     "title": "Жареные пельмени с луком",
@@ -3926,11 +3600,7 @@
       "fried dumplings",
       "Жареные пельмени с луком"
     ],
-    "file": "File:Fried Pork Dumplings with Sauce (Taiwan).jpg",
-    "author": "Ralff Nestor Nacor",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Fried_Pork_Dumplings_with_Sauce_(Taiwan).jpg"
+    "own": true
   },
   "shashlychki_v_yogurte": {
     "title": "Куриные шашлычки в йогурте",
@@ -3938,7 +3608,8 @@
       "chicken skewers yogurt",
       "Куриные шашлычки в йогурте"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_brokkoli_yaico": {
     "title": "Салат из брокколи с яйцом",
@@ -3946,11 +3617,7 @@
       "broccoli salad",
       "Салат из брокколи с яйцом"
     ],
-    "file": "File:Broccoli Salad (4847896907).jpg",
-    "author": "Vegan Feast Catering",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Broccoli_Salad_(4847896907).jpg"
+    "own": true
   },
   "rybnye_kotlety_pp": {
     "title": "Рыбные котлеты с кабачком в духовке",
@@ -3958,7 +3625,8 @@
       "baked fish cakes",
       "Рыбные котлеты с кабачком в духовке"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "losos_skovoroda": {
     "title": "Лосось с хрустящей кожей на сковороде",
@@ -3982,7 +3650,8 @@
       "napa cabbage chicken salad",
       "Салат из пекинской капусты с курицей"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "zapekanka_cvetnaya_kapusta": {
     "title": "Запеканка из цветной капусты с сыром",
@@ -3990,11 +3659,7 @@
       "cauliflower gratin",
       "Запеканка из цветной капусты с сыром"
     ],
-    "file": "File:Cauliflower Au Gratin (4527747147).jpg",
-    "author": "Vegan Feast Catering",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Cauliflower_Au_Gratin_(4527747147).jpg"
+    "own": true
   },
   "shpinatnye_oladi": {
     "title": "Шпинатные оладьи с творогом",
@@ -4002,11 +3667,7 @@
       "spinach pancakes",
       "Шпинатные оладьи с творогом"
     ],
-    "file": "File:Spinach pancake with curd.jpg",
-    "author": "Herne14",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Spinach_pancake_with_curd.jpg"
+    "own": true
   },
   "syrniki_v_duhovke": {
     "title": "Сырники в духовке без муки",
@@ -4014,7 +3675,8 @@
       "baked syrniki",
       "Сырники в духовке без муки"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "zelenyi_smuzi": {
     "title": "Зелёный смузи с бананом и шпинатом",
@@ -4022,11 +3684,7 @@
       "green smoothie",
       "Зелёный смузи с бананом и шпинатом"
     ],
-    "file": "File:Green smoothie (8222465502).jpg",
-    "author": "Lablascovegmenu",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Green_smoothie_(8222465502).jpg"
+    "own": true
   },
   "kapusta_s_ogurcom": {
     "title": "Молодая капуста с огурцом и укропом",
@@ -4042,11 +3700,7 @@
       "cold cucumber soup",
       "Холодный суп из огурцов на кефире"
     ],
-    "file": "File:TaratorBg.jpg",
-    "author": "Ikonact",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:TaratorBg.jpg"
+    "own": true
   },
   "shpinatnyi_sup": {
     "title": "Шпинатный крем-суп",
@@ -4054,11 +3708,7 @@
       "spinach soup",
       "Шпинатный крем-суп"
     ],
-    "file": "File:Watercress and spinach soup 2.jpg",
-    "author": "Amelia Crook",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Watercress_and_spinach_soup_2.jpg"
+    "own": true
   },
   "gorohovoe_pyure": {
     "title": "Гороховое пюре с жареным луком",
@@ -4100,11 +3750,7 @@
       "tofu scramble",
       "Тофу-скрэмбл"
     ],
-    "file": "File:Tofu Scramble in New Orleans.jpg",
-    "author": "Bart Everson",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Tofu_Scramble_in_New_Orleans.jpg"
+    "own": true
   },
   "salat_nut": {
     "title": "Салат с нутом, огурцом и помидором",
@@ -4112,11 +3758,7 @@
       "chickpea salad",
       "Салат с нутом, огурцом и помидором"
     ],
-    "file": "File:Colorful healthy Chickpea Salad - 49859083608.jpg",
-    "author": "FitTasteTic",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Colorful_healthy_Chickpea_Salad_-_49859083608.jpg"
+    "own": true
   },
   "baklazhany_zapechennye": {
     "title": "Баклажаны, запечённые половинками",
@@ -4140,11 +3782,7 @@
       "carrot salad",
       "Морковный салат с чесноком"
     ],
-    "file": "File:Korean-style carrot.jpg",
-    "author": "Off-shell",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Korean-style_carrot.jpg"
+    "own": true
   },
   "svekla_zapechennaya": {
     "title": "Свёкла, запечённая с чесноком",
@@ -4152,11 +3790,7 @@
       "roasted beets",
       "Свёкла, запечённая с чесноком"
     ],
-    "file": "File:Roasted carrots and beets in lemon ginger glaze (3805656296).jpg",
-    "author": "Karen and Brad Emerson",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Roasted_carrots_and_beets_in_lemon_ginger_glaze_(3805656296).jpg"
+    "own": true
   },
   "kabachki_s_syrom": {
     "title": "Кабачки с сыром в духовке",
@@ -4224,11 +3858,7 @@
       "meatball soup",
       "Суп с фрикадельками из индейки"
     ],
-    "file": "File:Meat ball soup.JPG",
-    "author": "Biso",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:Meat_ball_soup.JPG"
+    "own": true
   },
   "kurinye_kotlety_shpinat": {
     "title": "Куриные котлеты со шпинатом",
@@ -4245,7 +3875,8 @@
       "cod spinach cream",
       "Треска в сливочном соусе со шпинатом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_avokado_yaico": {
     "title": "Салат из авокадо, яйца и огурца",
@@ -4253,11 +3884,7 @@
       "avocado egg salad",
       "Салат из авокадо, яйца и огурца"
     ],
-    "file": "File:Liat Portal for Foodie Disorder - Homemade avocado sandwich with egg and chopped salad.jpg",
-    "author": "HaJunkiyada",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Homemade_avocado_sandwich_with_egg_and_chopped_salad.jpg"
+    "own": true
   },
   "ovsyanka_tykva": {
     "title": "Овсяная каша с тыквой",
@@ -4274,11 +3901,7 @@
       "zucchini soup",
       "Суп-пюре из кабачков"
     ],
-    "file": "File:Zucchini soup.JPG",
-    "author": "Sb2s3",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Zucchini_soup.JPG"
+    "own": true
   },
   "sup_chechevica_shpinat": {
     "title": "Суп с зелёной чечевицей и шпинатом",
@@ -4286,11 +3909,7 @@
       "lentil spinach soup",
       "Суп с зелёной чечевицей и шпинатом"
     ],
-    "file": "File:Palak Dal Bhaji from Nagpur.JPG",
-    "author": "Dheerajk88",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Palak_Dal_Bhaji_from_Nagpur.JPG"
+    "own": true
   },
   "gulyash_indeyka": {
     "title": "Гуляш из индейки",
@@ -4315,11 +3934,7 @@
       "huevos rancheros",
       "Уэвос ранчерос"
     ],
-    "file": "File:Ela huevos rancheros.jpg",
-    "author": "Elchavobeer",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "page": "https://commons.wikimedia.org/wiki/File:Ela_huevos_rancheros.jpg"
+    "own": true
   },
   "tykvennye_oladi": {
     "title": "Тыквенные оладьи",
@@ -4327,11 +3942,7 @@
       "pumpkin pancakes",
       "Тыквенные оладьи"
     ],
-    "file": "File:Vegan Pumpkin Buckwheat Pancakes (4107572982).jpg",
-    "author": "Veganbaking.net",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Vegan_Pumpkin_Buckwheat_Pancakes_(4107572982).jpg"
+    "own": true
   },
   "frittata_kabachok": {
     "title": "Фриттата с кабачком и сыром",
@@ -4348,7 +3959,8 @@
       "cottage cheese herbs",
       "Творог с зеленью и чесноком"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_pekinka_yabloko": {
     "title": "Салат из пекинской капусты с яблоком",
@@ -4356,7 +3968,8 @@
       "napa cabbage apple slaw",
       "Салат из пекинской капусты с яблоком"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "fasol_s_gribami": {
     "title": "Тушёная фасоль с грибами",
@@ -4373,7 +3986,8 @@
       "mushroom solyanka",
       "Постная солянка с грибами"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "struchkovaya_fasol_tomat": {
     "title": "Стручковая фасоль с помидорами и чесноком",
@@ -4381,7 +3995,8 @@
       "green beans tomatoes",
       "Стручковая фасоль с помидорами и чесноком"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "baklazhany_po_koreyski": {
     "title": "Баклажаны по-корейски",
@@ -4398,7 +4013,8 @@
       "pumpkin carrot salad",
       "Салат из сырой тыквы с морковью"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "kalmar_farshirovannyi": {
     "title": "Кальмары, фаршированные рисом и грибами",
@@ -4414,11 +4030,7 @@
       "fish baked potatoes",
       "Рыба, запечённая с картофелем"
     ],
-    "file": "File:Small potatoes, baked, with tuna fish, cheddar cheese, and black pepper - Massachusetts.jpg",
-    "author": "Daderot",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Small_potatoes,_baked,_with_tuna_fish,_cheddar_cheese,_and_black_pepper_-_Massachusetts.jpg"
+    "own": true
   },
   "skumbriya_solenaya": {
     "title": "Скумбрия домашнего посола",
@@ -4426,11 +4038,7 @@
       "salted mackerel",
       "Скумбрия домашнего посола"
     ],
-    "file": "File:Godeungeo jaban (salted chub mackerel).jpg",
-    "author": "국립국어원",
-    "license": "CC BY-SA 2.0 kr",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Godeungeo_jaban_(salted_chub_mackerel).jpg"
+    "own": true
   },
   "omlet_roll": {
     "title": "Омлетный ролл с ветчиной и сыром",
@@ -4446,7 +4054,8 @@
       "chicken grape salad",
       "Салат с курицей и виноградом"
     ],
-    "none": true
+    "none": true,
+    "own": true
   },
   "salat_grusha_syr": {
     "title": "Салат с грушей и сыром",
@@ -4454,11 +4063,7 @@
       "pear cheese salad",
       "Салат с грушей и сыром"
     ],
-    "file": "File:Grilled pears and blue cheese, walnut and baby leaves salad.jpg",
-    "author": "Tzahy Lerner",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Grilled_pears_and_blue_cheese,_walnut_and_baby_leaves_salad.jpg"
+    "own": true
   },
   "salat_morkov_apelsin": {
     "title": "Салат из моркови и апельсина",
@@ -4466,11 +4071,7 @@
       "carrot orange salad",
       "Салат из моркови и апельсина"
     ],
-    "file": "File:Sałatka marchewkowa.jpg",
-    "author": "BogTar201213",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Sa%C5%82atka_marchewkowa.jpg"
+    "own": true
   },
   "kuskus_sladkiy": {
     "title": "Сладкий кускус с изюмом и орехами",
@@ -4494,11 +4095,7 @@
       "sauteed spinach",
       "Шпинат с чесноком"
     ],
-    "file": "File:Willi's Seafood & Raw Bar - March 2025 - Sarah Stierch 01.jpg",
-    "author": "Missvain",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "page": "https://commons.wikimedia.org/wiki/File:Willi%27s_Seafood_%26_Raw_Bar_-_March_2025_-_Sarah_Stierch_01.jpg"
+    "own": true
   },
   "lenivye_pelmeni": {
     "title": "Ленивые пельмени",

@@ -159,22 +159,29 @@ ${lines.join('\n')}
 
 // Список авторов рядом с фото: лицензии CC BY и CC BY-SA требуют указывать
 // автора и там, где распространяются сами файлы, — то есть и в репозитории.
+// Нет сторонних снимков — нет и файла: пустая таблица авторов только путает.
+const creditsFile = path.join(ASSETS, 'CREDITS.md');
 const credits = Object.entries(sources)
   .filter(([id, entry]) => entry.author && fs.existsSync(path.join(ASSETS, `${id}.webp`)))
   .map(([id, entry]) => `| ${id}.webp | ${entry.author.replace(/\|/g, '/')} | [${entry.license}](${entry.licenseUrl}) | [Commons](${entry.page}) |`);
-fs.writeFileSync(
-  path.join(ASSETS, 'CREDITS.md'),
-  `# Фото блюд
+if (credits.length === 0) {
+  fs.rmSync(creditsFile, { force: true });
+} else {
+  fs.writeFileSync(
+    creditsFile,
+    `# Сторонние фото блюд
 
-Снимки взяты с Wikimedia Commons и уменьшены до 480×360 с кадрированием. Каждый файл
-распространяется на условиях своей лицензии, указанной ниже; для CC BY-SA производные
-изображения распространяются на тех же условиях. Список генерирует \`scripts/photos/fetch.mjs\`.
+Большинство снимков в этой папке сделаны для приложения. Перечисленные ниже взяты
+с Wikimedia Commons и уменьшены до 480×360 с кадрированием. Каждый такой файл
+распространяется на условиях своей лицензии; для CC BY-SA производные изображения
+распространяются на тех же условиях. Список генерирует \`scripts/photos/fetch.mjs\`.
 
 | Файл | Автор | Лицензия | Источник |
 |---|---|---|---|
 ${credits.join('\n')}
 `,
-);
+  );
+}
 
 const total = fs.readdirSync(ASSETS).reduce((sum, name) => sum + fs.statSync(path.join(ASSETS, name)).size, 0);
 console.log(`фото: ${lines.length}, всего ${(total / 1024).toFixed(0)} КБ`);
