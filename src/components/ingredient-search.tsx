@@ -13,6 +13,8 @@ type IngredientSearchProps = {
   /** Уже добавленные продукты — не предлагаем их повторно. */
   exclude: ReadonlySet<string>;
   placeholder?: string;
+  /** Сразу открыть клавиатуру — когда человек пришёл именно ради поиска. */
+  autoFocus?: boolean;
 };
 
 const MAX_RESULTS = 8;
@@ -22,6 +24,7 @@ export function IngredientSearch({
   onPick,
   exclude,
   placeholder = 'Добавить продукт вручную',
+  autoFocus = false,
 }: IngredientSearchProps) {
   const theme = useTheme();
   const [query, setQuery] = useState('');
@@ -49,6 +52,7 @@ export function IngredientSearch({
           placeholder={placeholder}
           placeholderTextColor={theme.textSecondary}
           autoCorrect={false}
+          autoFocus={autoFocus}
           style={[styles.input, { color: theme.text }]}
         />
         {query.length > 0 ? (

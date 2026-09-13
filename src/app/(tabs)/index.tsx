@@ -200,7 +200,7 @@ export default function FridgeScreen() {
           <EmptyState
             icon="mic-outline"
             title="Холодильник пуст"
-            description="Нажмите «Продиктовать» и перечислите вслух, что у вас есть: «молоко, три яйца, помидоры и куриное филе»."
+            description="Нажмите «Продиктовать» и перечислите вслух, что у вас есть: «молоко, три яйца, помидоры и куриное филе». Или добавьте продукты вручную."
           />
         }
         renderSectionHeader={({ section }) => (
@@ -239,7 +239,20 @@ export default function FridgeScreen() {
             onPress={confirmDelete}
           />
         ) : (
-          <PrimaryButton title="Продиктовать" icon="mic" onPress={() => router.push('/voice')} />
+          <>
+            <PrimaryButton title="Продиктовать" icon="mic" onPress={() => router.push('/voice')} />
+            {/* Для тех, кому сейчас неудобно говорить вслух или у кого не работает микрофон. */}
+            <Pressable
+              accessibilityRole="button"
+              hitSlop={Spacing.two}
+              onPress={() => router.push({ pathname: '/voice', params: { mode: 'manual' } })}
+              style={({ pressed }) => [styles.manualButton, { opacity: pressed ? 0.6 : 1 }]}>
+              <Ionicons name="create-outline" size={16} color={theme.accent} />
+              <ThemedText type="small" style={[styles.textButton, { color: theme.accent }]}>
+                Добавить вручную
+              </ThemedText>
+            </Pressable>
+          </>
         )}
       </View>
     </View>
@@ -349,7 +362,15 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.three,
   },
   footer: {
+    gap: Spacing.two,
     padding: Spacing.three,
     borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  manualButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    gap: Spacing.one,
+    paddingVertical: Spacing.one,
   },
 });

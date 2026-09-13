@@ -4,7 +4,7 @@ import {
   useSpeechRecognitionEvent,
   type ExpoSpeechRecognitionErrorCode,
 } from 'expo-speech-recognition';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
@@ -53,8 +53,10 @@ export default function VoiceScreen() {
   const router = useRouter();
   const theme = useTheme();
   const addItems = useFridge((state) => state.addItems);
+  // «Добавить вручную» из холодильника: микрофон не нужен — сразу к списку и поиску.
+  const manual = useLocalSearchParams<{ mode?: string }>().mode === 'manual';
 
-  const [phase, setPhase] = useState<Phase>('idle');
+  const [phase, setPhase] = useState<Phase>(manual ? 'review' : 'idle');
   const [transcript, setTranscript] = useState('');
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [unrecognized, setUnrecognized] = useState<string[]>([]);
@@ -149,6 +151,7 @@ export default function VoiceScreen() {
       style={[styles.screen, { backgroundColor: theme.background }]}>
       {phase === 'review' ? (
         <ReviewPhase
+          manual={manual}
           drafts={drafts}
           unrecognized={unrecognized}
           error={error}
@@ -252,6 +255,7 @@ function RecordPhase({
 }
 
 function ReviewPhase({
+  manual,
   drafts,
   unrecognized,
   error,
@@ -264,6 +268,8 @@ function ReviewPhase({
   onRecordMore,
   onSubmit,
 }: {
+  /** Пришли без диктовки: поиск наверху и с клавиатурой, без «ничего не распознал». */
+  manual: boolean;
   drafts: DraftItem[];
   unrecognized: string[];
   error: string | null;
@@ -299,6 +305,15 @@ function ReviewPhase({
           </View>
         ) : null}
 
+        {manual ? (
+          <IngredientSearch
+            onPick={onAddManual}
+            exclude={alreadyAdded}
+            placeholder="Какой продукт добавить?"
+            autoFocus
+          />
+        ) : null}
+
         {drafts.length > 0 ? (
           <>
             <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
@@ -316,7 +331,7 @@ function ReviewPhase({
               ))}
             </View>
           </>
-        ) : (
+        ) : manual && !transcript ? null : (
           <EmptyState
             icon="help-circle-outline"
             title="Ничего не распознал"
@@ -350,12 +365,12 @@ function ReviewPhase({
           </View>
         ) : null}
 
-        <IngredientSearch onPick={onAddManual} exclude={alreadyAdded} />
+        {manual ? null : <IngredientSearch onPick={onAddManual} exclude={alreadyAdded} />}
       </ScrollView>
 
       <View style={[styles.footer, { borderTopColor: theme.border }]}>
         <PrimaryButton
-          title="Продиктовать ещё"
+          title={transcript ? 'Продиктовать ещё' : 'Продиктовать'}
           icon="mic-outline"
           variant="outline"
           onPress={onRecordMore}
