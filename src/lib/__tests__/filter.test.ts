@@ -1,6 +1,12 @@
 import { RECIPES, getRecipe } from '@/data/recipes';
 
-import { EMPTY_FILTERS, filterRecipes, isFilterActive } from '../recipe-filter';
+import {
+  countSelectedFilters,
+  EMPTY_FILTERS,
+  FILTER_GROUPS,
+  filterRecipes,
+  isFilterActive,
+} from '../recipe-filter';
 import { formatServingsFor } from '../format';
 import { scaleAmount, scaleRecipe } from '../scale';
 
@@ -47,13 +53,55 @@ describe('поиск рецептов', () => {
     expect(found.every((recipe) => recipe.timeMinutes <= 15)).toBe(true);
   });
 
-  it('несколько тегов складываются: нужен рецепт со всеми', () => {
+  it('теги из разных групп складываются: нужен рецепт со всеми', () => {
     const found = filterRecipes(RECIPES, { ...EMPTY_FILTERS, tags: ['суп', 'постное'] });
 
     expect(found.length).toBeGreaterThan(0);
     expect(
       found.every((recipe) => recipe.tags.includes('суп') && recipe.tags.includes('постное')),
     ).toBe(true);
+  });
+});
+
+describe('окно фильтров', () => {
+  it('внутри группы теги складываются через «или»', () => {
+    const breakfast = filterRecipes(RECIPES, { ...EMPTY_FILTERS, tags: ['завтрак'] });
+    const dinner = filterRecipes(RECIPES, { ...EMPTY_FILTERS, tags: ['ужин'] });
+    const both = filterRecipes(RECIPES, { ...EMPTY_FILTERS, tags: ['завтрак', 'ужин'] });
+
+    expect(both.length).toBeGreaterThanOrEqual(Math.max(breakfast.length, dinner.length));
+    expect(
+      both.every((recipe) => recipe.tags.includes('завтрак') || recipe.tags.includes('ужин')),
+    ).toBe(true);
+  });
+
+  it('группы между собой сужают выдачу', () => {
+    const found = filterRecipes(RECIPES, {
+      ...EMPTY_FILTERS,
+      tags: ['завтрак', 'обед', 'вегетарианское'],
+      maxMinutes: 30,
+    });
+
+    expect(found.length).toBeGreaterThan(0);
+    expect(
+      found.every(
+        (recipe) =>
+          (recipe.tags.includes('завтрак') || recipe.tags.includes('обед')) &&
+          recipe.tags.includes('вегетарианское') &&
+          recipe.timeMinutes <= 30,
+      ),
+    ).toBe(true);
+  });
+
+  it('каждый тег из окна есть хотя бы у одного рецепта', () => {
+    for (const tag of FILTER_GROUPS.flatMap((group) => group.tags)) {
+      expect(RECIPES.some((recipe) => recipe.tags.includes(tag))).toBe(true);
+    }
+  });
+
+  it('счётчик на кнопке учитывает теги и время, но не поиск', () => {
+    expect(countSelectedFilters(EMPTY_FILTERS)).toBe(0);
+    expect(countSelectedFilters({ query: 'суп', tags: ['обед', 'пп'], maxMinutes: 15 })).toBe(3);
   });
 });
 

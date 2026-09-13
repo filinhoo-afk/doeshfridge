@@ -28,6 +28,8 @@ export default function RecipesScreen() {
 
   const searching = isFilterActive(filters);
 
+  const foundRecipes = useMemo(() => filterRecipes(RECIPES, filters), [filters]);
+
   const sections = useMemo<Section[]>(() => {
     const available = availableIds(items);
     const options = { assumePantry, expiring: expiringSoon(items) };
@@ -35,9 +37,7 @@ export default function RecipesScreen() {
     // С фильтрами показываем всю базу, а не только то, что собирается из
     // холодильника: человек ищет рецепт, а не подбор под содержимое полки.
     if (searching) {
-      const found = sortMatches(
-        filterRecipes(RECIPES, filters).map((recipe) => matchRecipe(recipe, available, options)),
-      );
+      const found = sortMatches(foundRecipes.map((recipe) => matchRecipe(recipe, available, options)));
       return found.length > 0 ? [{ title: `Найдено: ${found.length}`, data: found }] : [];
     }
 
@@ -52,7 +52,7 @@ export default function RecipesScreen() {
       { title: 'Не хватает одного', data: groups.missingOne },
       { title: 'Почти получается', data: groups.almost },
     ].filter((section) => section.data.length > 0);
-  }, [items, assumePantry, filters, searching]);
+  }, [items, assumePantry, foundRecipes, searching]);
 
   if (!hydrated) {
     return <View style={[styles.screen, { backgroundColor: theme.background }]} />;
