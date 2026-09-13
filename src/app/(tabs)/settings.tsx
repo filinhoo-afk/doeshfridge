@@ -1,8 +1,10 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, AppState, Linking, ScrollView, StyleSheet, Switch } from 'react-native';
+import { Alert, AppState, Linking, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 
 import { ListGroup, ListRow } from '@/components/list-group';
+import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { INGREDIENTS } from '@/data/ingredients';
 import { RECIPE_PHOTOS } from '@/data/recipe-photos';
@@ -17,6 +19,45 @@ import {
 } from '@/lib/notifications';
 import { REMINDER_HOUR } from '@/lib/reminders';
 import { useFridge } from '@/store/fridge';
+import { usePreferences, type ThemePreference } from '@/store/preferences';
+
+const THEME_OPTIONS: { value: ThemePreference; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { value: 'system', label: 'Системная', icon: 'phone-portrait-outline' },
+  { value: 'light', label: 'Светлая', icon: 'sunny-outline' },
+  { value: 'dark', label: 'Тёмная', icon: 'moon-outline' },
+];
+
+/** Три кнопки в ряд: выбранная — на мягкой оранжевой подложке. */
+function ThemePicker() {
+  const theme = useTheme();
+  const current = usePreferences((state) => state.theme);
+  const setTheme = usePreferences((state) => state.setTheme);
+
+  return (
+    <View style={styles.themePicker}>
+      {THEME_OPTIONS.map((option) => {
+        const selected = option.value === current;
+        const color = selected ? theme.accent : theme.textSecondary;
+        return (
+          <Pressable
+            key={option.value}
+            accessibilityRole="radio"
+            accessibilityState={{ selected }}
+            onPress={() => setTheme(option.value)}
+            style={({ pressed }) => [
+              styles.themeOption,
+              { backgroundColor: selected ? theme.accentSoft : 'transparent', opacity: pressed ? 0.7 : 1 },
+            ]}>
+            <Ionicons name={option.icon} size={20} color={color} />
+            <ThemedText type="small" style={[styles.themeLabel, { color }]}>
+              {option.label}
+            </ThemedText>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
 
 const PANTRY = INGREDIENTS.filter((ingredient) => ingredient.pantry).map((ingredient) => ingredient.name);
 const PANTRY_NAMES = PANTRY.join(', ');
@@ -100,6 +141,10 @@ export default function SettingsScreen() {
     <ScrollView
       style={{ backgroundColor: theme.background }}
       contentContainerStyle={styles.content}>
+      <ListGroup title="Оформление">
+        <ThemePicker />
+      </ListGroup>
+
       <ListGroup title="Напоминания">
         <ListRow
           title="Сроки годности"
@@ -181,5 +226,20 @@ const styles = StyleSheet.create({
   content: {
     padding: Spacing.three,
     gap: Spacing.four,
+  },
+  themePicker: {
+    flexDirection: 'row',
+    gap: Spacing.one,
+    padding: Spacing.one,
+  },
+  themeOption: {
+    flex: 1,
+    alignItems: 'center',
+    gap: Spacing.half,
+    borderRadius: Spacing.two,
+    paddingVertical: Spacing.two,
+  },
+  themeLabel: {
+    fontWeight: '600',
   },
 });

@@ -7,8 +7,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useExpiryReminders } from '@/hooks/use-expiry-reminders';
 import { usePhotoCache } from '@/hooks/use-photo-cache';
 import { useTheme } from '@/hooks/use-theme';
+import { usePreferences } from '@/store/preferences';
 
 export default function RootLayout() {
+  // Подписка поднимает хранилище настроек при запуске: сохранённая тема
+  // применяется сразу, даже если в настройки сегодня не заходили.
+  usePreferences((state) => state.theme);
   const colorScheme = useColorScheme();
   const theme = useTheme();
   useExpiryReminders();
