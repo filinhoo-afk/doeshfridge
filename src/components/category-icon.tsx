@@ -6,7 +6,7 @@ import { useCategoryColors } from '@/hooks/use-theme';
 
 /**
  * В Ionicons нет ни коровы, ни колоса, поэтому для категорий — Material Community Icons.
- * Иконки проверены в мелком размере: сыр читался как кнопка «play», ножка — как ключ.
+ * Иконки проверены в мелком размере: сыр читался как кнопка «play», ножка — как ключ, солонка — как карандаш.
  */
 const ICONS: Record<Category, keyof typeof MaterialCommunityIcons.glyphMap> = {
   молочное: 'cow',
@@ -16,7 +16,7 @@ const ICONS: Record<Category, keyof typeof MaterialCommunityIcons.glyphMap> = {
   зелень: 'leaf',
   фрукты: 'fruit-cherries',
   крупы: 'barley',
-  бакалея: 'shaker-outline',
+  бакалея: 'sack',
   заморозка: 'snowflake',
 };
 

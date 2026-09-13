@@ -3,12 +3,15 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { CategoryIcon } from '@/components/category-icon';
+import { ListGroup } from '@/components/list-group';
 import { PrimaryButton } from '@/components/primary-button';
 import { RecipeHero } from '@/components/recipe-photo';
 import { StepperButton } from '@/components/stepper-button';
+import { Tag, TagRow } from '@/components/tag';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
-import { ingredientName, isPantry } from '@/data/ingredients';
+import { getIngredient, ingredientName, isPantry } from '@/data/ingredients';
 import { getRecipe } from '@/data/recipes';
 import { useTheme } from '@/hooks/use-theme';
 import { formatMinutes, formatQuantity, formatServings, formatServingsFor } from '@/lib/format';
@@ -91,6 +94,19 @@ export default function RecipeScreen() {
     );
   };
 
+  const missingCount = match.missing.length;
+  const readiness =
+    missingCount === 0
+      ? { label: 'всё есть', tone: 'success' as const, icon: 'checkmark-circle-outline' as const }
+      : {
+          label:
+            missingCount === 1
+              ? `не хватает: ${ingredientName(match.missing[0])}`
+              : `не хватает ${missingCount}`,
+          tone: 'warning' as const,
+          icon: 'cart-outline' as const,
+        };
+
   return (
     <>
       <Stack.Screen
@@ -109,20 +125,26 @@ export default function RecipeScreen() {
       />
       <ScrollView
         style={{ backgroundColor: theme.background }}
-        contentContainerStyle={styles.content}>
+        contentContainerStyle={styles.scroll}>
+        {/* Фото вне отступов: от края до края, как обложка. */}
         <RecipeHero recipeId={recipe.id} />
-        <View style={styles.header}>
-          <ThemedText type="subtitle">{recipe.title}</ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
-            {recipe.description}
-          </ThemedText>
-          <View style={styles.meta}>
-            <MetaItem icon="time-outline" text={formatMinutes(recipe.timeMinutes)} />
-            <View style={styles.servings}>
-              <Ionicons name="people-outline" size={14} color={theme.textSecondary} />
-              <ThemedText type="small" themeColor="textSecondary" style={styles.servingsValue}>
-                {formatServings(servings)}
-              </ThemedText>
+
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <ThemedText type="subtitle">{recipe.title}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {recipe.description}
+            </ThemedText>
+            <TagRow>
+              <Tag icon="time-outline" label={formatMinutes(recipe.timeMinutes)} />
+              <Tag icon={readiness.icon} label={readiness.label} tone={readiness.tone} />
+            </TagRow>
+          </View>
+
+          <ListGroup>
+            <View style={styles.servingsRow}>
+              <Ionicons name="people-outline" size={20} color={theme.accent} />
+              <ThemedText style={styles.grow}>{formatServings(servings)}</ThemedText>
               <StepperButton
                 icon="remove"
                 accessibilityLabel="Меньше порций"
@@ -134,113 +156,94 @@ export default function RecipeScreen() {
                 onPress={() => setChosenServings(Math.min(MAX_SERVINGS, servings + 1))}
               />
             </View>
-          </View>
-        </View>
+          </ListGroup>
 
-        {recipe.equipment?.length ? (
-          <View style={styles.section}>
-            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-              ПОНАДОБИТСЯ
-            </ThemedText>
-            <ThemedText>{recipe.equipment.join(', ')}</ThemedText>
-          </View>
-        ) : null}
-
-        <View style={styles.section}>
-          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-            ИНГРЕДИЕНТЫ
-          </ThemedText>
-
-          {servings !== recipe.servings ? (
-            <ThemedText type="small" themeColor="textSecondary">
-              Количества пересчитаны на {formatServingsFor(servings)}. В шагах ниже остались
-              исходные — рецепт написан на {formatServingsFor(recipe.servings)}.
-            </ThemedText>
+          {recipe.equipment?.length ? (
+            <ListGroup title="Понадобится">
+              <View style={styles.padded}>
+                <TagRow>
+                  {recipe.equipment.map((tool) => (
+                    <Tag key={tool} label={tool} />
+                  ))}
+                </TagRow>
+              </View>
+            </ListGroup>
           ) : null}
 
-          {scaled.ingredients.map((ingredient) => {
-            const pantry = assumePantry && isPantry(ingredient.ingredientId);
-            const present = available.has(ingredient.ingredientId);
-            const counted = !ingredient.optional && !pantry;
-            const amount = formatQuantity(ingredient.amount ?? null, ingredient.unit ?? null);
+          <ListGroup
+            title="Ингредиенты"
+            footer={
+              servings !== recipe.servings
+                ? `Количества пересчитаны на ${formatServingsFor(servings)}. В шагах ниже остались исходные — рецепт написан на ${formatServingsFor(recipe.servings)}.`
+                : undefined
+            }>
+            {scaled.ingredients.map((ingredient) => {
+              const pantry = assumePantry && isPantry(ingredient.ingredientId);
+              const present = available.has(ingredient.ingredientId);
+              const counted = !ingredient.optional && !pantry;
+              const amount = formatQuantity(ingredient.amount ?? null, ingredient.unit ?? null);
+              const category = getIngredient(ingredient.ingredientId)?.category;
 
-            return (
-              <View key={ingredient.ingredientId} style={styles.ingredientRow}>
-                {/* Галочка только у того, что реально есть: ставить её
-                    необязательному ингредиенту, которого нет, — обман. */}
-                <Ionicons
-                  name={present ? 'checkmark-circle' : 'ellipse-outline'}
-                  size={20}
-                  color={present ? theme.success : counted ? theme.warning : theme.textSecondary}
-                />
-                <ThemedText
-                  style={[styles.ingredientName, !present && counted && { color: theme.warning }]}>
-                  {ingredientName(ingredient.ingredientId)}
-                </ThemedText>
-                <ThemedText type="small" themeColor="textSecondary">
-                  {ingredient.optional ? 'по желанию' : pantry && !present ? 'есть дома' : amount}
-                </ThemedText>
-              </View>
-            );
-          })}
-        </View>
+              return (
+                <View key={ingredient.ingredientId} style={styles.ingredientRow}>
+                  {category ? <CategoryIcon category={category} /> : null}
+                  <ThemedText style={[styles.grow, !present && counted && { color: theme.warning }]}>
+                    {ingredientName(ingredient.ingredientId)}
+                  </ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {ingredient.optional ? 'по желанию' : pantry && !present ? 'есть дома' : amount}
+                  </ThemedText>
+                  {/* Галочка только у того, что реально есть: ставить её
+                      необязательному ингредиенту, которого нет, — обман. */}
+                  <Ionicons
+                    name={present ? 'checkmark-circle' : counted ? 'cart-outline' : 'ellipse-outline'}
+                    size={18}
+                    color={present ? theme.success : counted ? theme.warning : theme.border}
+                  />
+                </View>
+              );
+            })}
+          </ListGroup>
 
-        {recipe.prep?.length ? (
-          <View style={styles.section}>
-            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-              ПОДГОТОВКА
-            </ThemedText>
-            {recipe.prep.map((line) => (
-              <ThemedText key={line}>{line}</ThemedText>
-            ))}
-          </View>
-        ) : null}
+          {recipe.prep?.length ? (
+            <ListGroup title="Подготовка">
+              {recipe.prep.map((line) => (
+                <View key={line} style={styles.textRow}>
+                  <View style={[styles.dot, { backgroundColor: theme.accent }]} />
+                  <ThemedText style={styles.grow}>{line}</ThemedText>
+                </View>
+              ))}
+            </ListGroup>
+          ) : null}
 
-        <View style={styles.section}>
-          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-            ПРИГОТОВЛЕНИЕ
-          </ThemedText>
-
-          {recipe.steps.map((step, index) => (
-            <View key={step} style={styles.stepRow}>
-              <View style={[styles.stepNumber, { backgroundColor: theme.backgroundElement }]}>
-                <ThemedText type="smallBold">{index + 1}</ThemedText>
-              </View>
-              <ThemedText style={styles.stepText}>{step}</ThemedText>
-            </View>
-          ))}
-        </View>
-
-        {recipe.tips?.length ? (
-          <View style={styles.section}>
-            <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
-              СОВЕТЫ
-            </ThemedText>
-            {recipe.tips.map((tip) => (
-              <View key={tip} style={styles.tipRow}>
-                <ThemedText themeColor="accent">•</ThemedText>
-                <ThemedText style={styles.stepText}>{tip}</ThemedText>
+          <ListGroup title="Приготовление">
+            {recipe.steps.map((step, index) => (
+              <View key={step} style={styles.textRow}>
+                <View style={[styles.stepNumber, { backgroundColor: theme.accentSoft }]}>
+                  <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                    {index + 1}
+                  </ThemedText>
+                </View>
+                <ThemedText style={styles.grow}>{step}</ThemedText>
               </View>
             ))}
-          </View>
-        ) : null}
+          </ListGroup>
 
-        <PrimaryButton title="Приготовил" icon="checkmark-done" onPress={confirmCooked} />
+          {recipe.tips?.length ? (
+            <ListGroup title="Советы">
+              {recipe.tips.map((tip) => (
+                <View key={tip} style={styles.textRow}>
+                  <Ionicons name="bulb-outline" size={20} color={theme.warning} />
+                  <ThemedText style={styles.grow}>{tip}</ThemedText>
+                </View>
+              ))}
+            </ListGroup>
+          ) : null}
+
+          <PrimaryButton title="Приготовил" icon="checkmark-done" onPress={confirmCooked} />
+        </View>
       </ScrollView>
     </>
-  );
-}
-
-function MetaItem({ icon, text }: { icon: keyof typeof Ionicons.glyphMap; text: string }) {
-  const theme = useTheme();
-
-  return (
-    <View style={styles.metaItem}>
-      <Ionicons name={icon} size={14} color={theme.textSecondary} />
-      <ThemedText type="small" themeColor="textSecondary">
-        {text}
-      </ThemedText>
-    </View>
   );
 }
 
@@ -250,6 +253,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scroll: {
+    paddingBottom: Spacing.four,
+  },
   content: {
     padding: Spacing.three,
     gap: Spacing.four,
@@ -257,55 +263,45 @@ const styles = StyleSheet.create({
   header: {
     gap: Spacing.two,
   },
-  meta: {
+  servingsRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.three,
+    minHeight: 52,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
   },
-  servings: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  servingsValue: {
-    minWidth: 72,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-  },
-  section: {
-    gap: Spacing.two,
-  },
-  sectionTitle: {
-    letterSpacing: 0.6,
+  padded: {
+    padding: Spacing.three,
   },
   ingredientRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.two,
+    gap: Spacing.three,
+    minHeight: 48,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
   },
-  ingredientName: {
-    flex: 1,
-  },
-  stepRow: {
+  textRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing.two,
-    paddingBottom: Spacing.two,
+    gap: Spacing.three,
+    padding: Spacing.three,
   },
   stepNumber: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tipRow: {
-    flexDirection: 'row',
-    gap: Spacing.two,
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginTop: Spacing.two,
   },
-  stepText: {
+  grow: {
     flex: 1,
   },
 });

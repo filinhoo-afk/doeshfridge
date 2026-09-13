@@ -17,7 +17,10 @@ export function EmptyState({ icon, title, description }: EmptyStateProps) {
 
   return (
     <View style={styles.container}>
-      <Ionicons name={icon} size={48} color={theme.textSecondary} />
+      {/* Иконка в оранжевом круге: пустой экран — приглашение что-то сделать, а не серое «ничего». */}
+      <View style={[styles.circle, { backgroundColor: theme.accentSoft }]}>
+        <Ionicons name={icon} size={36} color={theme.accent} />
+      </View>
       <ThemedText style={styles.title}>{title}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary" style={styles.description}>
         {description}
@@ -27,6 +30,14 @@ export function EmptyState({ icon, title, description }: EmptyStateProps) {
 }
 
 const styles = StyleSheet.create({
+  circle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.two,
+  },
   container: {
     alignItems: 'center',
     gap: Spacing.two,

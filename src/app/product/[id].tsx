@@ -3,13 +3,14 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { CategoryIcon } from '@/components/category-icon';
 import { ExpiryBadge } from '@/components/expiry-badge';
 import { ExpirySheet, type ExpirySheetResult } from '@/components/expiry-sheet';
 import { PrimaryButton } from '@/components/primary-button';
 import { StepperButton } from '@/components/stepper-button';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
-import { ingredientName } from '@/data/ingredients';
+import { getIngredient, ingredientName } from '@/data/ingredients';
 import { formatExpiryDate } from '@/data/shelf-life';
 import { useTheme } from '@/hooks/use-theme';
 import { sortByExpiry, totalQuantity, type Batch } from '@/lib/batches';
@@ -45,7 +46,9 @@ export default function ProductScreen() {
   const total = totalQuantity(item.batches);
   const step = quantityStep(item.unit);
 
+  const category = getIngredient(item.ingredientId)?.category;
   const summary = [
+    category,
     total !== null ? `всего ${formatQuantity(total, item.unit)}` : 'количество не указано',
     batches.length > 1 ? `${batches.length} ${plural(batches.length, 'партия', 'партии', 'партий')}` : null,
   ]
@@ -102,11 +105,14 @@ export default function ProductScreen() {
     <>
       <Stack.Screen options={{ title: name }} />
       <ScrollView style={{ backgroundColor: theme.background }} contentContainerStyle={styles.content}>
-        <View>
-          <ThemedText type="subtitle">{name}</ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
-            {summary}
-          </ThemedText>
+        <View style={styles.titleBlock}>
+          {category ? <CategoryIcon category={category} size={56} /> : null}
+          <View style={styles.grow}>
+            <ThemedText type="subtitle">{name}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {summary}
+            </ThemedText>
+          </View>
         </View>
 
         <View style={styles.list}>
@@ -206,6 +212,11 @@ const styles = StyleSheet.create({
   content: {
     padding: Spacing.three,
     gap: Spacing.four,
+  },
+  titleBlock: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
   },
   list: {
     gap: Spacing.two,

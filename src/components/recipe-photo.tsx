@@ -46,7 +46,10 @@ export function RecipeThumb({ recipeId, size = 64 }: { recipeId: string; size?: 
   return <Image source={photo.source} style={box} contentFit="cover" transition={150} />;
 }
 
-/** Большое фото на экране рецепта с подписью автора — этого требуют лицензии CC BY. */
+/**
+ * Большое фото на экране рецепта, от края до края экрана. У стороннего снимка —
+ * подпись автора: этого требуют лицензии CC BY.
+ */
 export function RecipeHero({ recipeId }: { recipeId: string }) {
   const photo = RECIPE_PHOTOS[recipeId];
   if (!photo) {
@@ -67,7 +70,8 @@ export function RecipeHero({ recipeId }: { recipeId: string }) {
         <Pressable
           accessibilityRole="link"
           accessibilityHint="Открывает страницу фото на Wikimedia Commons"
-          onPress={() => void Linking.openURL(credit.page)}>
+          onPress={() => void Linking.openURL(credit.page)}
+          style={styles.credit}>
           <ThemedText type="small" themeColor="textSecondary" numberOfLines={1}>
             Фото: {credit.author} · {credit.license}
           </ThemedText>
@@ -92,6 +96,8 @@ const styles = StyleSheet.create({
   heroImage: {
     width: '100%',
     aspectRatio: 4 / 3,
-    borderRadius: Spacing.three,
+  },
+  credit: {
+    paddingHorizontal: Spacing.three,
   },
 });

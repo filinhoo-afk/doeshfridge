@@ -62,7 +62,7 @@ export default function WelcomeScreen() {
 
         {STEPS.map((step) => (
           <View key={step.title} style={styles.step}>
-            <View style={[styles.icon, { backgroundColor: theme.backgroundElement }]}>
+            <View style={[styles.icon, { backgroundColor: theme.accentSoft }]}>
               <Ionicons name={step.icon} size={22} color={theme.accent} />
             </View>
             <View style={styles.stepText}>
