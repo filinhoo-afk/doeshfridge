@@ -348,3 +348,20 @@ export function expiryDigest(items: FridgeItem[], now: Date = new Date()): Expir
   const byDays = (a: DigestEntry, b: DigestEntry) => a.days - b.days;
   return { expired: expired.sort(byDays), soon: soon.sort(byDays) };
 }
+
+/**
+ * Сколько продуктов просрочено и сколько скоро истечёт — для заголовка свёрнутой
+ * категории. Считаются продукты, а не партии, и каждый один раз — по худшей партии:
+ * колбаса с просроченной и свежей партией — это «просрочено», а не оба сразу.
+ */
+export function expiryCounts(
+  items: FridgeItem[],
+  now: Date = new Date(),
+): { expired: number; soon: number } {
+  const digest = expiryDigest(items, now);
+  const expired = new Set(digest.expired.map((entry) => entry.itemId));
+  const soon = new Set(
+    digest.soon.map((entry) => entry.itemId).filter((itemId) => !expired.has(itemId)),
+  );
+  return { expired: expired.size, soon: soon.size };
+}

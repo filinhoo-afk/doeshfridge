@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, SectionList, StyleSheet, View } from 'react-native';
@@ -13,9 +14,18 @@ import { useTheme } from '@/hooks/use-theme';
 import { useWelcome } from '@/hooks/use-welcome';
 import { nearestDated } from '@/lib/batches';
 import { formatProducts } from '@/lib/format';
-import { expiryDigest, useFridge, type FridgeItem } from '@/store/fridge';
+import { expiryCounts, expiryDigest, useFridge, type FridgeItem } from '@/store/fridge';
+import { useFridgeView } from '@/store/fridge-view';
 
-type Section = { title: Category; data: FridgeItem[] };
+type CategoryGroup = { title: Category; data: FridgeItem[] };
+
+type Section = CategoryGroup & {
+  /** Продуктов в категории — и тогда, когда она свёрнута и `data` пустой. */
+  count: number;
+  collapsed: boolean;
+  expired: number;
+  soon: number;
+};
 
 /** Сколько названий показывать в подтверждении, остальные — «и ещё N». */
 const NAMES_IN_ALERT = 5;
@@ -33,7 +43,7 @@ function byExpiry(a: FridgeItem, b: FridgeItem): number {
   return second ? 1 : 0;
 }
 
-function groupByCategory(items: FridgeItem[]): Section[] {
+function groupByCategory(items: FridgeItem[]): CategoryGroup[] {
   const groups = new Map<Category, FridgeItem[]>();
 
   for (const item of items) {
@@ -70,16 +80,36 @@ export default function FridgeScreen() {
   const hydrated = useFridge((state) => state.hydrated);
   const removeItems = useFridge((state) => state.removeItems);
   const removeExpired = useFridge((state) => state.removeExpired);
+  const collapsed = useFridgeView((state) => state.collapsed);
+  const viewHydrated = useFridgeView((state) => state.hydrated);
+  const toggleCategory = useFridgeView((state) => state.toggleCategory);
 
   useWelcome();
 
   // null — обычный режим, множество — режим выбора с отмеченными продуктами.
   const [selected, setSelected] = useState<Set<string> | null>(null);
+  const selecting = selected !== null;
 
-  const sections = useMemo(() => groupByCategory(items), [items]);
+  const groups = useMemo(() => groupByCategory(items), [items]);
+  const sections = useMemo<Section[]>(
+    () =>
+      groups.map((group) => {
+        // В режиме выбора всё развёрнуто: «Выбрать все» не должно отмечать то, чего не видно.
+        const isCollapsed = !selecting && collapsed.includes(group.title);
+        return {
+          ...group,
+          ...expiryCounts(group.data),
+          count: group.data.length,
+          collapsed: isCollapsed,
+          data: isCollapsed ? [] : group.data,
+        };
+      }),
+    [groups, collapsed, selecting],
+  );
   const digest = useMemo(() => expiryDigest(items), [items]);
 
-  if (!hydrated) {
+  // Ждём и вид: иначе свёрнутые категории на мгновение показались бы развёрнутыми.
+  if (!hydrated || !viewHydrated) {
     return <View style={[styles.screen, { backgroundColor: theme.background }]} />;
   }
 
@@ -174,9 +204,11 @@ export default function FridgeScreen() {
           />
         }
         renderSectionHeader={({ section }) => (
-          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionHeader}>
-            {section.title.toUpperCase()}
-          </ThemedText>
+          <CategoryHeader
+            section={section}
+            selecting={selecting}
+            onPress={() => toggleCategory(section.title)}
+          />
         )}
         renderItem={({ item, index, section }) => (
           <ProductRow
@@ -211,6 +243,54 @@ export default function FridgeScreen() {
         )}
       </View>
     </View>
+  );
+}
+
+/**
+ * Заголовок категории: нажатие сворачивает её. У свёрнутой видно, сколько внутри
+ * продуктов и не истекает ли что-то, — иначе сворачивание прятало бы сроки.
+ */
+function CategoryHeader({
+  section,
+  selecting,
+  onPress,
+}: {
+  section: Section;
+  selecting: boolean;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  const alerts = section.collapsed
+    ? [
+        section.expired > 0 ? { text: `просрочено: ${section.expired}`, color: theme.danger } : null,
+        section.soon > 0 ? { text: `скоро истекает: ${section.soon}`, color: theme.warning } : null,
+      ].filter((alert) => alert !== null)
+    : [];
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ expanded: !section.collapsed, disabled: selecting }}
+      disabled={selecting}
+      onPress={onPress}
+      style={({ pressed }) => [styles.sectionHeader, { opacity: pressed ? 0.6 : 1 }]}>
+      <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
+        {section.title.toUpperCase()} · {section.count}
+      </ThemedText>
+      {alerts.map((alert) => (
+        <ThemedText key={alert.text} type="small" numberOfLines={1} style={{ color: alert.color }}>
+          {alert.text}
+        </ThemedText>
+      ))}
+      <View style={styles.grow} />
+      {selecting ? null : (
+        <Ionicons
+          name={section.collapsed ? 'chevron-down' : 'chevron-up'}
+          size={16}
+          color={theme.textSecondary}
+        />
+      )}
+    </Pressable>
   );
 }
 
@@ -255,8 +335,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
+  },
+  sectionTitle: {
     letterSpacing: 0.6,
   },
   separator: {

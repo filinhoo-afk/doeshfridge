@@ -3,6 +3,7 @@ import { expiryInDays } from '@/data/shelf-life';
 import { sortByExpiry, totalQuantity } from '@/lib/batches';
 import {
   expiringSoon,
+  expiryCounts,
   expiryDigest,
   itemsUsedByRecipe,
   migrateFridge,
@@ -286,5 +287,21 @@ describe('itemsUsedByRecipe', () => {
 
     expect(used).toEqual(expect.arrayContaining(['egg', 'apple']));
     expect(used).not.toContain('flour');
+  });
+});
+
+describe('expiryCounts', () => {
+  it('считает продукты, а не партии, и каждый по худшей партии', () => {
+    useFridge.getState().addItems([
+      { ingredientId: 'sausage', quantity: 3, unit: 'шт' },
+      { ingredientId: 'milk', quantity: 900, unit: 'мл' },
+      { ingredientId: 'egg', quantity: 10, unit: 'шт' },
+    ]);
+    dateSome('sausage', -1, 1);
+    dateSome('sausage', 2, 1); // та же колбаса — уже посчитана как просроченная
+    dateSome('milk', 1, null);
+    dateSome('egg', 10, null); // далеко — не в счёт
+
+    expect(expiryCounts(useFridge.getState().items)).toEqual({ expired: 1, soon: 1 });
   });
 });
