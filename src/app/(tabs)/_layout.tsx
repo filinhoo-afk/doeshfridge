@@ -1,7 +1,21 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
+import { StyleSheet, View, type ColorValue } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
+
+type IconName = keyof typeof Ionicons.glyphMap;
+
+/** Иконка вкладки: у активной — мягкая оранжевая подложка, как у системных вкладок Android. */
+function TabIcon({ name, focused, color }: { name: IconName; focused: boolean; color: ColorValue }) {
+  const theme = useTheme();
+
+  return (
+    <View style={[styles.pill, focused && { backgroundColor: theme.accentSoft }]}>
+      <Ionicons name={name} size={22} color={color} />
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   const theme = useTheme();
@@ -20,7 +34,9 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Холодильник',
-          tabBarIcon: ({ color, size }) => <Ionicons name="basket" size={size} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'basket' : 'basket-outline'} focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -28,23 +44,47 @@ export default function TabsLayout() {
         options={{
           title: 'Что приготовить',
           tabBarLabel: 'Рецепты',
-          tabBarIcon: ({ color, size }) => <Ionicons name="restaurant" size={size} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              name={focused ? 'restaurant' : 'restaurant-outline'}
+              focused={focused}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
           title: 'Избранное',
-          tabBarIcon: ({ color, size }) => <Ionicons name="heart" size={size} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'heart' : 'heart-outline'} focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: 'Настройки',
-          tabBarIcon: ({ color, size }) => <Ionicons name="settings" size={size} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              name={focused ? 'settings' : 'settings-outline'}
+              focused={focused}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  pill: {
+    width: 56,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

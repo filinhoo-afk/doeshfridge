@@ -8,7 +8,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { formatMinutes, formatProducts } from '@/lib/format';
 import type { RecipeMatch, UrgentIngredient } from '@/lib/match';
 
-import { RecipeThumb } from './recipe-photo';
+import { RecipeCover } from './recipe-photo';
+import { Tag, TagRow } from './tag';
 import { ThemedText } from './themed-text';
 
 type RecipeCardProps = {
@@ -16,7 +17,7 @@ type RecipeCardProps = {
   onPress: (recipeId: string) => void;
   /** Показать сердечко у названия. */
   favorite?: boolean;
-  /** Строка-пометка внизу, например «готовили 5 раз». */
+  /** Пометка среди меток, например «готовили 5 раз». */
   note?: string;
 };
 
@@ -32,9 +33,21 @@ function urgentLine(urgent: UrgentIngredient[]): string {
   return `скоро испортится: ${shown.join(', ')}${rest > 0 ? ` и ещё ${rest}` : ''}`;
 }
 
+/**
+ * Карточка рецепта: фото на всю ширину — после перехода на единый стиль снимков
+ * именно они делают список живым, — а под ним название и цветные метки.
+ * Готовность цветом: зелёная «всё есть», жёлтая — чего не хватает.
+ */
 export function RecipeCard({ match, onPress, favorite = false, note }: RecipeCardProps) {
   const theme = useTheme();
   const { recipe, have, missing, urgent } = match;
+
+  const readiness =
+    missing.length === 0
+      ? { label: 'всё есть', tone: 'success' as const }
+      : missing.length === 1
+        ? { label: `не хватает: ${ingredientName(missing[0])}`, tone: 'warning' as const }
+        : { label: `не хватает ${missing.length}`, tone: 'warning' as const };
 
   return (
     <Pressable
@@ -42,76 +55,61 @@ export function RecipeCard({ match, onPress, favorite = false, note }: RecipeCar
       onPress={() => onPress(recipe.id)}
       style={({ pressed }) => [
         styles.card,
-        { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },
+        { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.8 : 1 },
       ]}>
-      <View style={styles.top}>
-        <RecipeThumb recipeId={recipe.id} />
-        <View style={[styles.body, styles.grow]}>
-          <View style={styles.titleRow}>
-            <ThemedText style={[styles.title, styles.grow]}>{recipe.title}</ThemedText>
-            {favorite ? (
-              <Ionicons name="heart" size={16} color={theme.accent} accessibilityLabel="В избранном" />
-            ) : null}
-          </View>
-          <ThemedText type="small" themeColor="textSecondary">
-            {recipe.description}
-          </ThemedText>
-        </View>
-      </View>
+      <RecipeCover recipeId={recipe.id} />
 
-      <View style={styles.meta}>
-        <View style={styles.metaItem}>
-          <Ionicons name="time-outline" size={14} color={theme.textSecondary} />
-          <ThemedText type="small" themeColor="textSecondary">
-            {formatMinutes(recipe.timeMinutes)}
-          </ThemedText>
+      <View style={styles.body}>
+        <View style={styles.titleRow}>
+          <ThemedText style={[styles.title, styles.grow]}>{recipe.title}</ThemedText>
+          {favorite ? (
+            <Ionicons name="heart" size={18} color={theme.accent} accessibilityLabel="В избранном" />
+          ) : null}
         </View>
-        <View style={styles.metaItem}>
-          <Ionicons name="basket-outline" size={14} color={theme.textSecondary} />
+        <ThemedText type="small" themeColor="textSecondary" numberOfLines={2}>
+          {recipe.description}
+        </ThemedText>
+
+        <TagRow>
+          <Tag icon="time-outline" label={formatMinutes(recipe.timeMinutes)} />
+          <Tag
+            icon={missing.length === 0 ? 'checkmark-circle-outline' : 'cart-outline'}
+            label={readiness.label}
+            tone={readiness.tone}
+          />
+          {have.length > 0 ? (
+            <Tag icon="basket-outline" label={`из холодильника: ${formatProducts(have.length)}`} />
+          ) : null}
+          {note ? <Tag icon="repeat-outline" label={note} /> : null}
+        </TagRow>
+
+        {missing.length > 1 ? (
           <ThemedText type="small" themeColor="textSecondary">
-            задействует {formatProducts(have.length)}
+            нужно купить: {missing.map(ingredientName).join(', ')}
           </ThemedText>
-        </View>
-        {note ? (
-          <View style={styles.metaItem}>
-            <Ionicons name="repeat-outline" size={14} color={theme.textSecondary} />
-            <ThemedText type="small" themeColor="textSecondary">
-              {note}
+        ) : null}
+
+        {urgent.length > 0 ? (
+          <View style={styles.urgent}>
+            <Ionicons name="hourglass-outline" size={14} color={theme.warning} />
+            <ThemedText type="small" themeColor="warning" style={styles.grow}>
+              {urgentLine(urgent)}
             </ThemedText>
           </View>
         ) : null}
       </View>
-
-      {urgent.length > 0 ? (
-        <View style={styles.metaItem}>
-          <Ionicons name="hourglass-outline" size={14} color={theme.warning} />
-          <ThemedText type="small" themeColor="warning" style={styles.grow}>
-            {urgentLine(urgent)}
-          </ThemedText>
-        </View>
-      ) : null}
-
-      {missing.length > 0 ? (
-        <ThemedText type="small" themeColor="warning">
-          не хватает: {missing.map(ingredientName).join(', ')}
-        </ThemedText>
-      ) : null}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    gap: Spacing.one,
     borderRadius: Spacing.three,
-    padding: Spacing.three,
-  },
-  top: {
-    flexDirection: 'row',
-    gap: Spacing.three,
+    overflow: 'hidden',
   },
   body: {
-    gap: Spacing.one,
+    gap: Spacing.two,
+    padding: Spacing.three,
   },
   titleRow: {
     flexDirection: 'row',
@@ -119,15 +117,10 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   title: {
+    fontSize: 17,
     fontWeight: '700',
   },
-  meta: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.three,
-    paddingTop: Spacing.one,
-  },
-  metaItem: {
+  urgent: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.one,

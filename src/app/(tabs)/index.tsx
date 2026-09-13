@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, SectionList, StyleSheet, View } from 'react-native';
 
+import { CategoryIcon } from '@/components/category-icon';
 import { EmptyState } from '@/components/empty-state';
 import { ExpiryBanner } from '@/components/expiry-banner';
 import { PrimaryButton } from '@/components/primary-button';
@@ -287,6 +288,7 @@ function CategoryHeader({
       disabled={selecting}
       onPress={onPress}
       style={({ pressed }) => [styles.sectionHeader, { opacity: pressed ? 0.6 : 1 }]}>
+      <CategoryIcon category={section.title} />
       <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
         {section.title.toUpperCase()} · {section.count}
       </ThemedText>

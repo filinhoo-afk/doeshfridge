@@ -6,6 +6,7 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { searchIngredients } from '@/lib/ingredient-index';
 
+import { CategoryIcon } from './category-icon';
 import { ThemedText } from './themed-text';
 
 type IngredientSearchProps = {
@@ -74,11 +75,12 @@ export function IngredientSearch({
           accessibilityRole="button"
           onPress={() => pick(ingredient.id)}
           style={({ pressed }) => [styles.result, { opacity: pressed ? 0.6 : 1 }]}>
-          <Ionicons name="add-circle-outline" size={18} color={theme.accent} />
+          <CategoryIcon category={ingredient.category} size={28} />
           <ThemedText style={styles.resultName}>{ingredient.name}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
             {ingredient.category}
           </ThemedText>
+          <Ionicons name="add-circle-outline" size={20} color={theme.accent} />
         </Pressable>
       ))}
     </View>

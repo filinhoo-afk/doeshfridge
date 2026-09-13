@@ -8,7 +8,28 @@ import { useTheme } from '@/hooks/use-theme';
 
 import { ThemedText } from './themed-text';
 
-/** Квадратное превью для карточки; без фото — нейтральная заглушка. */
+/**
+ * Фото на всю ширину карточки рецепта. Кадр 2:1 из снимка 4:3 — блюдо стоит в
+ * центре, так что обрезаются только края стола. Без фото ничего не рисует.
+ */
+export function RecipeCover({ recipeId }: { recipeId: string }) {
+  const photo = RECIPE_PHOTOS[recipeId];
+  if (!photo) {
+    return null;
+  }
+
+  return (
+    <Image
+      source={photo.source}
+      style={styles.cover}
+      contentFit="cover"
+      transition={150}
+      accessibilityIgnoresInvertColors
+    />
+  );
+}
+
+/** Квадратное превью для списков; без фото — нейтральная заглушка. */
 export function RecipeThumb({ recipeId, size = 64 }: { recipeId: string; size?: number }) {
   const theme = useTheme();
   const photo = RECIPE_PHOTOS[recipeId];
@@ -60,6 +81,10 @@ const styles = StyleSheet.create({
   placeholder: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  cover: {
+    width: '100%',
+    aspectRatio: 2,
   },
   hero: {
     gap: Spacing.one,
