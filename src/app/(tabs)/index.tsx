@@ -178,15 +178,22 @@ export default function FridgeScreen() {
             {section.title.toUpperCase()}
           </ThemedText>
         )}
-        renderItem={({ item }) => (
+        renderItem={({ item, index, section }) => (
           <ProductRow
             item={item}
+            first={index === 0}
+            last={index === section.data.length - 1}
             selecting={selected !== null}
             selected={selected?.has(item.id) ?? false}
             onPress={(id) => (selected ? toggle(id) : router.push(`/product/${id}`))}
           />
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        // Разделитель внутри блока категории: на подложке строк, с отступом слева.
+        ItemSeparatorComponent={() => (
+          <View style={{ backgroundColor: theme.backgroundElement }}>
+            <View style={[styles.separator, { backgroundColor: theme.border }]} />
+          </View>
+        )}
       />
 
       <View
@@ -253,7 +260,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   separator: {
-    height: Spacing.two,
+    height: StyleSheet.hairlineWidth,
+    marginLeft: Spacing.three,
   },
   footer: {
     padding: Spacing.three,

@@ -1,9 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, AppState, Linking, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { Alert, AppState, Linking, ScrollView, StyleSheet, Switch } from 'react-native';
 
-import { PrimaryButton } from '@/components/primary-button';
-import { ThemedText } from '@/components/themed-text';
+import { ListGroup, ListRow } from '@/components/list-group';
 import { Spacing } from '@/constants/theme';
 import { INGREDIENTS } from '@/data/ingredients';
 import { RECIPE_PHOTOS } from '@/data/recipe-photos';
@@ -19,9 +18,8 @@ import {
 import { REMINDER_HOUR } from '@/lib/reminders';
 import { useFridge } from '@/store/fridge';
 
-const PANTRY_NAMES = INGREDIENTS.filter((ingredient) => ingredient.pantry)
-  .map((ingredient) => ingredient.name)
-  .join(', ');
+const PANTRY = INGREDIENTS.filter((ingredient) => ingredient.pantry).map((ingredient) => ingredient.name);
+const PANTRY_NAMES = PANTRY.join(', ');
 
 const PHOTO_COUNT = Object.values(RECIPE_PHOTOS).filter((photo) => photo.credit).length;
 
@@ -65,6 +63,10 @@ export default function SettingsScreen() {
 
   const [permission, setPermission] = useReminderPermission();
   const [testSent, setTestSent] = useState(false);
+  // Список базовых продуктов длинный — по умолчанию свёрнут.
+  const [pantryOpen, setPantryOpen] = useState(false);
+
+  const switchColors = { false: theme.backgroundSelected, true: theme.accent };
 
   const toggleReminders = (value: boolean) => {
     setRemindersEnabled(value);
@@ -98,104 +100,79 @@ export default function SettingsScreen() {
     <ScrollView
       style={{ backgroundColor: theme.background }}
       contentContainerStyle={styles.content}>
-      <View style={[styles.card, { backgroundColor: theme.backgroundElement }]}>
-        <View style={styles.switchRow}>
-          <View style={styles.switchLabel}>
-            <ThemedText style={styles.title}>Напоминания о сроках</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              В день срока — «доешь сегодня», наутро после — «пора выбросить». Не больше одной
-              сводки в день, в {REMINDER_HOUR}:00.
-            </ThemedText>
-          </View>
-          <Switch
-            value={remindersEnabled}
-            onValueChange={toggleReminders}
-            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
-            thumbColor={theme.background}
-          />
-        </View>
-
+      <ListGroup title="Напоминания">
+        <ListRow
+          title="Сроки годности"
+          // Неразрывный пробел: время не отрывается от предлога при переносе.
+          subtitle={`В день срока и наутро после, в\u00A0${REMINDER_HOUR}:00`}
+          onPress={() => toggleReminders(!remindersEnabled)}
+          accessory={
+            <Switch
+              value={remindersEnabled}
+              onValueChange={toggleReminders}
+              trackColor={switchColors}
+              thumbColor={theme.background}
+            />
+          }
+        />
         {remindersEnabled && permission === 'denied' ? (
-          <View style={styles.block}>
-            <ThemedText type="small" themeColor="warning">
-              Уведомления запрещены в настройках Android — напоминания не придут.
-            </ThemedText>
-            <PrimaryButton
-              title="Открыть настройки Android"
-              icon="open-outline"
-              variant="outline"
-              onPress={() => void Linking.openSettings()}
-            />
-          </View>
+          <ListRow
+            title="Уведомления запрещены"
+            subtitle="Напоминания не придут. Открыть настройки Android"
+            tone="danger"
+            trailingIcon="open-outline"
+            onPress={() => void Linking.openSettings()}
+          />
         ) : null}
-
         {remindersEnabled && permission !== 'denied' ? (
-          <View style={styles.block}>
-            <PrimaryButton
-              title="Прислать пробное уведомление"
-              icon="notifications-outline"
-              variant="outline"
-              onPress={() => void sendTest()}
+          <ListRow
+            title="Прислать пробное"
+            subtitle={testSent ? 'Придёт через несколько секунд' : undefined}
+            tone="accent"
+            onPress={() => void sendTest()}
+          />
+        ) : null}
+      </ListGroup>
+
+      <ListGroup title="Подбор рецептов">
+        <ListRow
+          title="Базовые продукты"
+          subtitle="Считать, что всегда есть"
+          onPress={() => setAssumePantry(!assumePantry)}
+          accessory={
+            <Switch
+              value={assumePantry}
+              onValueChange={setAssumePantry}
+              trackColor={switchColors}
+              thumbColor={theme.background}
             />
-            {testSent ? (
-              <ThemedText type="small" themeColor="textSecondary">
-                Придёт через несколько секунд — можно свернуть приложение.
-              </ThemedText>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
+          }
+        />
+        <ListRow
+          title={`Какие это продукты — ${PANTRY.length}`}
+          subtitle={pantryOpen ? PANTRY_NAMES : undefined}
+          trailingIcon={pantryOpen ? 'chevron-up' : 'chevron-down'}
+          onPress={() => setPantryOpen(!pantryOpen)}
+        />
+      </ListGroup>
 
-      <View style={[styles.card, { backgroundColor: theme.backgroundElement }]}>
-        <View style={styles.switchRow}>
-          <View style={styles.switchLabel}>
-            <ThemedText style={styles.title}>Базовые продукты всегда есть</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              Соль, мука, масло и специи не считаются недостающими при подборе рецептов.
-            </ThemedText>
-          </View>
-          <Switch
-            value={assumePantry}
-            onValueChange={setAssumePantry}
-            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
-            thumbColor={theme.background}
-          />
-        </View>
-        <ThemedText type="small" themeColor="textSecondary">
-          {PANTRY_NAMES}
-        </ThemedText>
-      </View>
-
-      <View style={[styles.card, { backgroundColor: theme.backgroundElement }]}>
-        <ThemedText style={styles.title}>База</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {RECIPES.length} рецептов и {INGREDIENTS.length} продуктов в справочнике. Всё хранится на
-          устройстве: без аккаунта, без интернета, без отправки данных куда-либо.
-        </ThemedText>
+      <ListGroup
+        title="Приложение"
+        footer={`${RECIPES.length} рецептов и ${INGREDIENTS.length} продуктов. Всё хранится на телефоне — без аккаунта и интернета.`}>
+        <ListRow title="Как это работает" onPress={() => router.push('/welcome')} />
         {PHOTO_COUNT > 0 ? (
-          <PrimaryButton
-            title="Авторы фото блюд"
-            icon="images-outline"
-            variant="outline"
-            onPress={() => router.push('/photo-credits')}
-          />
+          <ListRow title="Авторы фото блюд" onPress={() => router.push('/photo-credits')} />
         ) : null}
-      </View>
+      </ListGroup>
 
-      <PrimaryButton
-        title="Как это работает"
-        icon="help-circle-outline"
-        variant="outline"
-        onPress={() => router.push('/welcome')}
-      />
-
-      <PrimaryButton
-        title="Очистить холодильник"
-        icon="trash-outline"
-        variant="danger"
-        disabled={items.length === 0}
-        onPress={confirmClear}
-      />
+      <ListGroup>
+        <ListRow
+          title="Очистить холодильник"
+          tone="danger"
+          disabled={items.length === 0}
+          onPress={confirmClear}
+        />
+      </ListGroup>
     </ScrollView>
   );
 }
@@ -203,26 +180,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   content: {
     padding: Spacing.three,
-    gap: Spacing.three,
-  },
-  card: {
-    gap: Spacing.two,
-    borderRadius: Spacing.three,
-    padding: Spacing.three,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-  },
-  switchLabel: {
-    flex: 1,
-    gap: Spacing.one,
-  },
-  block: {
-    gap: Spacing.two,
-  },
-  title: {
-    fontWeight: '600',
+    gap: Spacing.four,
   },
 });

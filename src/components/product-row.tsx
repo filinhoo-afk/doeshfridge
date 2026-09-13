@@ -15,9 +15,12 @@ import { ThemedText } from './themed-text';
 type ProductRowProps = {
   item: FridgeItem;
   onPress: (id: string) => void;
-  /** Режим выбора: вместо стрелки в карточку — отметка. */
+  /** Режим выбора: слева появляется отметка. */
   selecting?: boolean;
   selected?: boolean;
+  /** Положение в категории: у первой и последней строки скруглены углы блока. */
+  first?: boolean;
+  last?: boolean;
 };
 
 /** «ещё 2 партии · последняя до 11 окт». Последняя дата — только если сроки есть у всех. */
@@ -33,7 +36,19 @@ function otherBatchesLine(item: FridgeItem): string | null {
   return allDated && latest ? `${text} · последняя ${formatExpiryDate(latest, { short: true })}` : text;
 }
 
-export function ProductRow({ item, onPress, selecting = false, selected = false }: ProductRowProps) {
+/**
+ * Строка продукта внутри блока категории. Всё главное — в одну строку: название,
+ * количество и, если срок близко, цветная метка справа. Вторая строка появляется,
+ * только когда есть что сказать: дальний срок или другие партии.
+ */
+export function ProductRow({
+  item,
+  onPress,
+  selecting = false,
+  selected = false,
+  first = false,
+  last = false,
+}: ProductRowProps) {
   const theme = useTheme();
   const name = ingredientName(item.ingredientId);
   const quantity = formatQuantity(totalQuantity(item.batches), item.unit);
@@ -46,7 +61,13 @@ export function ProductRow({ item, onPress, selecting = false, selected = false 
     item.batches.length > 1 && nearest && nearest.quantity !== null
       ? formatQuantity(nearest.quantity, item.unit)
       : undefined;
-  const others = otherBatchesLine(item);
+
+  const details = [
+    nearestDate && !soon ? formatExpiryDate(nearestDate, { short: true }) : null,
+    otherBatchesLine(item),
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <Pressable
@@ -56,6 +77,8 @@ export function ProductRow({ item, onPress, selecting = false, selected = false 
       onPress={() => onPress(item.id)}
       style={({ pressed }) => [
         styles.row,
+        first && styles.first,
+        last && styles.last,
         {
           backgroundColor: selected ? theme.backgroundSelected : theme.backgroundElement,
           opacity: pressed ? 0.7 : 1,
@@ -64,35 +87,36 @@ export function ProductRow({ item, onPress, selecting = false, selected = false 
       {selecting ? (
         <Ionicons
           name={selected ? 'checkmark-circle' : 'ellipse-outline'}
-          size={24}
+          size={22}
           color={selected ? theme.accent : theme.textSecondary}
         />
       ) : null}
 
       <View style={styles.info}>
         <View style={styles.titleRow}>
-          <ThemedText style={styles.name}>{name}</ThemedText>
+          <ThemedText style={styles.name} numberOfLines={1}>
+            {name}
+          </ThemedText>
           {quantity ? (
             <ThemedText type="small" themeColor="textSecondary">
               {quantity}
             </ThemedText>
           ) : null}
+          <View style={styles.grow} />
+          {/* Обёртка: метка сама прижимается к верху (alignSelf), а здесь нужна середина строки. */}
+          {soon ? (
+            <View>
+              <ExpiryBadge expiresAt={nearestDate} prefix={prefix} />
+            </View>
+          ) : null}
         </View>
 
-        {soon ? <ExpiryBadge expiresAt={nearestDate} prefix={prefix} /> : null}
-        {nearestDate && !soon ? (
-          <ThemedText type="small" themeColor="textSecondary">
-            {formatExpiryDate(nearestDate, { short: true })}
-          </ThemedText>
-        ) : null}
-        {others ? (
-          <ThemedText type="small" themeColor="textSecondary">
-            {others}
+        {details ? (
+          <ThemedText type="small" themeColor="textSecondary" numberOfLines={1}>
+            {details}
           </ThemedText>
         ) : null}
       </View>
-
-      {selecting ? null : <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />}
     </Pressable>
   );
 }
@@ -102,21 +126,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
-    borderRadius: Spacing.three,
+    minHeight: 48,
     paddingVertical: Spacing.two,
-    paddingLeft: Spacing.three,
-    paddingRight: Spacing.two,
+    paddingHorizontal: Spacing.three,
+  },
+  first: {
+    borderTopLeftRadius: Spacing.three,
+    borderTopRightRadius: Spacing.three,
+  },
+  last: {
+    borderBottomLeftRadius: Spacing.three,
+    borderBottomRightRadius: Spacing.three,
   },
   info: {
     flex: 1,
-    gap: Spacing.one,
+    gap: Spacing.half,
   },
   titleRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     gap: Spacing.two,
   },
   name: {
+    flexShrink: 1,
     fontWeight: '600',
+  },
+  grow: {
+    flex: 1,
   },
 });
